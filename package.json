@@ -1,0 +1,39 @@
+{
+  "name": "mock-module",
+  "version": "1.0.0",
+  "description": "Easy and es6 compatible mocking tool",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run test:pick -- '_tests/**/*spec.js'",
+    "test:pick": "BABEL_ENV=test mocha --compilers js:babel-core/register",
+    "build": "babel src -d lib",
+    "prepublish": "npm run build",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix"
+  },
+  "keywords": [
+    "mock",
+    "es6",
+    "javascript",
+    "node.js"
+  ],
+  "author": "Anton Korzunov (thekashey@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "wipe-node-cache": "^1.0.2",
+    "lodash.some": "^4.6.0",
+    "lodash.template": "^4.4.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-eslint": "^7.2.3",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.16.0",
+    "babel-register": "6.18.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "eslint": "^3.19.0",
+    "eslint-plugin-mocha": "^4.9.0"
+  }
+}
