@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import mockModule from '../src/index';
+import rewiremock from '../src/index';
 import {addPlugin, _clearPlugins} from '../src/plugins';
 
 import relativePlugin from '../src/plugins/relative';
@@ -13,10 +13,10 @@ describe('es6 modules ', () => {
 
     it('should overload with node plugin: ', () => {
         addPlugin(relativePlugin);
-        mockModule('./foo')
+        rewiremock('./foo')
             .withDefault(()=>'aa');
 
-        mockModule('./bar')
+        rewiremock('./bar')
             .with({
                 bar: ()=>'bb',
                 baz: ()=>'cc',
@@ -25,21 +25,21 @@ describe('es6 modules ', () => {
         const unmockedBaz = require('./lib/es6/test').default;
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should overload with node plugin: ', () => {
         addPlugin(relativePlugin);
-        mockModule('./foo')
+        rewiremock('./foo')
             .with(()=>'aa');
 
-        mockModule('./bar')
+        rewiremock('./bar')
             .es6()
             .with({
                 bar: ()=>'bb',
@@ -49,22 +49,22 @@ describe('es6 modules ', () => {
         const unmockedBaz = require('./lib/es6/test').default;
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should fail with callThought: ', () => {
         addPlugin(relativePlugin);
-        mockModule('./foo')
+        rewiremock('./foo')
             .callThought()
             .with(()=>'aa');
 
-        mockModule('./bar')
+        rewiremock('./bar')
             .es6()
             .with({
                 bar: ()=>'bb',
@@ -74,22 +74,22 @@ describe('es6 modules ', () => {
         const unmockedBaz = require('./lib/es6/test').default;
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('foobbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should fail with callThought: ', () => {
         addPlugin(relativePlugin);
-        mockModule('./foo')
+        rewiremock('./foo')
             .callThought()
             .withDefault(()=>'aa');
 
-        mockModule('./bar')
+        rewiremock('./bar')
             .es6()
             .with({
                 bar: ()=>'bb',
@@ -99,12 +99,12 @@ describe('es6 modules ', () => {
         const unmockedBaz = require('./lib/es6/test').default;
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 

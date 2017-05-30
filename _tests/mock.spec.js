@@ -1,77 +1,77 @@
 import {expect} from 'chai';
 
-import mockModule from '../src/index';
+import rewiremock from '../src/index';
 import { addPlugin, _clearPlugins } from '../src/plugins';
 
 import nodePlugin from '../src/plugins/nodejs';
 import relativePlugin from '../src/plugins/relative';
 import aliasPlugin, {configure as configureWebpackAlias} from '../src/plugins/webpack-alias';
 
-describe('mockModule ', () => {
+describe('rewiremock ', () => {
     it('should not overload: ', () => {
-        mockModule('./lib/a/foo')
+        rewiremock('./lib/a/foo')
             .with(()=>'aa');
 
-        mockModule('./lib/a/../b/bar')
+        rewiremock('./lib/a/../b/bar')
             .with(()=>'bb');
 
-        mockModule('./lib/a/../b/baz')
+        rewiremock('./lib/a/../b/baz')
             .with(()=>'cc');
 
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('foobarbaz');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
     });
 
     it('should overload with node plugin: ', () => {
         addPlugin(nodePlugin);
-        mockModule('./lib/a/foo')
+        rewiremock('./lib/a/foo')
             .with(()=>'aa');
 
-        mockModule('./lib/a/../b/bar')
+        rewiremock('./lib/a/../b/bar')
             .with(()=>'bb');
 
-        mockModule('./lib/a/../b/baz')
+        rewiremock('./lib/a/../b/baz')
             .with(()=>'cc');
 
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should overload with relative plugin: ', () => {
         addPlugin(relativePlugin);
-        mockModule('./foo')
+        rewiremock('./foo')
             .with(()=>'aa');
 
-        mockModule('../b/bar')
+        rewiremock('../b/bar')
             .with(()=>'bb');
 
-        mockModule('../b/baz')
+        rewiremock('../b/baz')
             .with(()=>'cc');
 
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
@@ -79,24 +79,24 @@ describe('mockModule ', () => {
         configureWebpackAlias('_tests/webpack.config.js');
 
         addPlugin(aliasPlugin);
-        mockModule('my-absolute-test-lib/foo')
+        rewiremock('my-absolute-test-lib/foo')
             .with(()=>'aa');
 
-        mockModule('same-folder-lib/bar')
+        rewiremock('same-folder-lib/bar')
             .with(()=>'bb');
 
-        mockModule('../b/baz')
+        rewiremock('../b/baz')
             .with(()=>'cc');
 
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 

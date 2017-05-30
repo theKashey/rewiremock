@@ -1,5 +1,5 @@
 {
-  "name": "mock-module",
+  "name": "rewiremock",
   "version": "1.0.0",
   "description": "Easy and es6 compatible mocking tool",
   "main": "lib/index.js",

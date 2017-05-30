@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import mockModule from '../src/index';
+import rewiremock from '../src/index';
 import { addPlugin, _clearPlugins } from '../src/plugins';
 import relativePlugin from '../src/plugins/relative';
 
@@ -12,12 +12,12 @@ describe('nested ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
@@ -29,12 +29,12 @@ describe('nested ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        mockModule.enable();
+        rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 });

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import mockModule from '../src/index';
+import rewiremock from '../src/index';
 import { addPlugin, _clearPlugins } from '../src/plugins';
 
 import nodePlugin from '../src/plugins/nodejs';
@@ -8,8 +8,8 @@ import nodePlugin from '../src/plugins/nodejs';
 describe('isolation ', () => {
     it('should trigger error: ', () => {
         addPlugin(nodePlugin);
-        mockModule.enable();
-        mockModule.isolation();
+        rewiremock.enable();
+        rewiremock.isolation();
 
         try {
             require('./lib/a/test.js');
@@ -17,67 +17,67 @@ describe('isolation ', () => {
         } catch(e){
 
         }
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('work in isolation: ', () => {
         addPlugin(nodePlugin);
-        mockModule.passBy(/node_modules/);
-        mockModule('./lib/a/foo')
+        rewiremock.passBy(/node_modules/);
+        rewiremock('./lib/a/foo')
             .with(()=>'aa');
 
-        mockModule('./lib/a/../b/bar')
+        rewiremock('./lib/a/../b/bar')
             .with(()=>'bb');
 
-        mockModule('./lib/a/../b/baz')
+        rewiremock('./lib/a/../b/baz')
             .with(()=>'cc');
 
-        mockModule.enable();
-        mockModule.isolation();
+        rewiremock.enable();
+        rewiremock.isolation();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabbcc');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should passby modules: ', () => {
         addPlugin(nodePlugin);
-        mockModule.passBy(/node_modules/);
-        mockModule('./lib/a/foo')
+        rewiremock.passBy(/node_modules/);
+        rewiremock('./lib/a/foo')
             .with(()=>'aa');
 
-        mockModule.passBy(module => module.indexOf('b/bar')>=0);
-        mockModule.passBy(/b\/baz/);
+        rewiremock.passBy(module => module.indexOf('b/bar')>=0);
+        rewiremock.passBy(/b\/baz/);
 
-        mockModule.enable();
-        mockModule.isolation();
+        rewiremock.enable();
+        rewiremock.isolation();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabarbaz');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
     it('should nest passby: ', () => {
         addPlugin(nodePlugin);
-        mockModule.passBy(/node_modules/);
-        mockModule('./lib/a/foo')
+        rewiremock.passBy(/node_modules/);
+        rewiremock('./lib/a/foo')
             .with(()=>'aa');
 
-        mockModule.passBy(/test.js/);
+        rewiremock.passBy(/test.js/);
 
-        mockModule.enable();
-        mockModule.isolation();
+        rewiremock.enable();
+        rewiremock.isolation();
 
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabarbaz');
-        mockModule.disable();
-        mockModule.clear();
+        rewiremock.disable();
+        rewiremock.clear();
         _clearPlugins();
     });
 
