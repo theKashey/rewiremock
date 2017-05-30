@@ -1,6 +1,7 @@
-# rewiremock [![Build Status](https://secure.travis-ci.org/thekashey/rewiremock.svg)](http://travis-ci.org/thekashey/rewiremock)
+# rewiremock [![Build Status](https://secure.travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
 
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
+
 Rewiremock was initially named as mockImports or mockModule. But was renamed for WireMock.
  
 We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing micking library.
