@@ -88,13 +88,32 @@ function mockLoader(request, parent, isMain) {
 
 /** main **/
 
+/**
+ * @name rewiremock
+ * @param {String} module name
+ * @return {rewiremock}
+ */
 function mockModule(module) {
     currentModule = convertName(module, parentModule);
     resetMock(currentModule);
     return mockModule;
 }
 
+/**
+ * @name rewiremock.resolve
+ * @param {String} module name
+ * @return {String} converted module name
+ */
+mockModule.resolve = (module) =>
+    convertName(module, parentModule);
+
 /** mocks **/
+
+/**
+ * Enabled call thought original module
+ * @name rewiremock.callThought
+ * @return {rewiremock}
+ */
 mockModule.callThought = () => {
     Object.defineProperty(getMock(currentModule), "__MI_allowCallThought", {
         value: true
@@ -102,6 +121,10 @@ mockModule.callThought = () => {
     return mockModule;
 };
 
+/**
+ * Setting es6 behavior for a current module
+ * @return {rewiremock}
+ */
 mockModule.es6 = () => {
     Object.defineProperty(getMock(currentModule), "__esModule", {
         value: true
@@ -109,16 +132,31 @@ mockModule.es6 = () => {
     return mockModule;
 };
 
+/**
+ * Setting es6 behavior for a current module and overriding default export
+ * @param stub
+ * @return {rewiremock}
+ */
 mockModule.withDefault = (stub) => {
     modifyMock(currentModule, {default: stub});
     return mockModule.es6();
 };
 
+/**
+ * Overriding export of a module
+ * @param stubs
+ * @return {rewiremock}
+ */
 mockModule.with = (stubs) => {
     modifyMock(currentModule, stubs);
     return mockModule;
 };
 
+/**
+ * Overriding export of one module by another
+ * @param {String} name
+ * @return {rewiremock}
+ */
 mockModule.by = (name)=> {
     Object.defineProperty(getMock(currentModule), "__MI_overrideBy", {
         value: convertName(name, parentModule)
@@ -128,14 +166,24 @@ mockModule.by = (name)=> {
 
 /** flags **/
 
+/**
+ * Activates module isolation
+ */
 mockModule.isolation = () => {
     isolation = true;
 };
 
+/**
+ * Deactivates isolation
+ */
 mockModule.withoutIsolation = () => {
     isolation = false;
 };
 
+/**
+ * Adding new passby record
+ * @param {String|RegEx|Function} pattern
+ */
 mockModule.passBy = (pattern) => {
     passBy.push(pattern);
 };
@@ -145,22 +193,35 @@ const overrideEntryPoint = (parent) => {
 };
 
 /** interface **/
+
+/**
+ * enabled rewiremock
+ */
 mockModule.enable = () => {
     Module._load = mockLoader;
     wipeCache();
 };
 
+/**
+ * disabled rewiremock
+ */
 mockModule.disable = () => {
     Module._load = originalLoader;
     mockModule.withoutIsolation();
     mockModule.flush();
 };
 
+/**
+ * flushes all active overrides
+ */
 mockModule.flush = () => {
     wipeCache(mockedModules);
     mockedModules = {};
 };
 
+/**
+ * flushes anything
+ */
 mockModule.clear = () => {
     resetMocks();
     passBy = [];

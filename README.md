@@ -2,11 +2,6 @@
 
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
 
-Rewiremock was initially named as mockImports or mockModule. But was renamed for WireMock.
- 
-We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing micking library.
-We are rewrite mock...
-
 Simple es6-friendly mocking library inspired by the best libraries:
 - [mockery](https://github.com/mfncooper/mockery) - the library I like more.
 - [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever.
@@ -14,6 +9,16 @@ Simple es6-friendly mocking library inspired by the best libraries:
 
 By its nature rewiremock has same behavior as Mockery. But it can have any behavior.
 It covers _any_ cases.
+
+Rewiremock is an evolution of my way of explorations: 
+the better [proxyquire](https://github.com/theKashey/proxyquire), 
+the way of[resolveQuire](https://github.com/theKashey/resolveQuire),
+and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-webpack-alias).
+
+Rewiremock was initially named as mockImports or mockModule. But was renamed for WireMock.
+
+We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing micking library.
+
 
 # Idealogy
 - be simply
