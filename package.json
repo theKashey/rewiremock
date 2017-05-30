@@ -1,6 +1,6 @@
 {
   "name": "rewiremock",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy and es6 compatible mocking tool",
   "main": "lib/index.js",
   "scripts": {

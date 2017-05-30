@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import rewiremock from '../src/index';
-import { addPlugin, _clearPlugins } from '../src/plugins';
+import rewiremock, {addPlugin} from '../src/index';
+import {_clearPlugins} from '../src/plugins';
 import relativePlugin from '../src/plugins/relative';
 
 describe('nested ', () => {
