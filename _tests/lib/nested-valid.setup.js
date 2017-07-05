@@ -1,11 +1,13 @@
 //import rewiremock from '../../nested';
-import rewiremock from '../../src/nested';
+//import rewiremock from '../../src/nested';
 
-rewiremock('./foo')
-    .with(()=>'aa');
+module.exports = (rewiremock) => {
+    rewiremock('./foo')
+        .with(() => 'aa');
 
-rewiremock('../b/bar')
-    .with(()=>'bb');
+    rewiremock('../b/bar')
+        .with(() => 'bb');
 
-rewiremock('../b/baz')
-    .with(()=>'cc');
+    rewiremock('../b/baz')
+        .with(() => 'cc');
+};

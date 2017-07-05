@@ -1,51 +1,41 @@
 import {parse, join} from 'path';
-import {magicProps} from './_common';
-
-let mocks = {};
-
-const modifyMock = (name, stubs) => {
-    const stubType = typeof stubs;
-    const oldMock = mocks[name];
-    if (stubType === 'object') {
-        mocks[name] = {
-            ...mocks[name],
-            ...stubs
-        };
-    } else {
-        mocks[name] = stubs;
-    }
-
-    magicProps.forEach(key => {
-        if (oldMock.hasOwnProperty(key)) {
-            mocks[name][key] = oldMock[key];
-        }
-    })
-};
+import getScope from './globals';
 
 const genMock = (name) => {
-    const mock = {};
-    Object.defineProperty(mock, "__MI_name", {
-        value: name
-    });
-    return mock;
-}
-
-const resetMock = (name) => mocks[name] = genMock(name);
-
-const resetMocks = () => (mocks = {});
-
-const getMock = (name) => {
-    const fn = parse(name);
-    const shortName = join(fn.dir, fn.name);
-    return mocks[name] || mocks[shortName];
+    return {
+        name,
+        value: {}
+    };
 };
 
-const getAllMocks = () => mocks;
+const resetMock = (name) => getScope().mocks[name] = genMock(name);
+
+const getMock = (name, scope = getScope()) => {
+    const {mocks} = scope;
+    const fn = parse(name);
+    const shortName = join(fn.dir, fn.name);
+    const mock = mocks[name] || mocks[shortName];
+    if (!mock && scope.parentScope) {
+        return getMock(name, scope.parentScope);
+    }
+    return mock;
+};
+
+const getAllMocks = () => {
+    const result = {};
+    const collect = (scope) => {
+        const mocks = scope.mocks;
+        Object.keys(scope.mocks).forEach(key => result[key]=mocks[key]);
+        if (scope.parentScope) {
+            collect(scope.parentScope);
+        }
+    };
+    collect(getScope());
+    return result;
+};
 
 export {
-    modifyMock,
     getMock,
     getAllMocks,
-    resetMock,
-    resetMocks
+    resetMock
 }

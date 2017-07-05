@@ -11,7 +11,7 @@ describe('es6 modules ', () => {
         expect(unmockedBaz()).to.be.equal('foobarbaz');
     });
 
-    it('should overload with node plugin: ', () => {
+    it('should overload default export with node plugin: ', () => {
         addPlugin(relativePlugin);
         rewiremock('./foo')
             .withDefault(()=>'aa');
@@ -34,7 +34,7 @@ describe('es6 modules ', () => {
         _clearPlugins();
     });
 
-    it('should overload with node plugin: ', () => {
+    it('should overload not-default export with node plugin: ', () => {
         addPlugin(relativePlugin);
         rewiremock('./foo')
             .with(()=>'aa');
@@ -51,6 +51,7 @@ describe('es6 modules ', () => {
 
         rewiremock.enable();
 
+        console.log('prepare');
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('aabbcc');
         rewiremock.disable();

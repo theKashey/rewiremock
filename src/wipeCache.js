@@ -2,7 +2,6 @@ import wipe from 'wipe-node-cache';
 import {getAllMocks} from './mocks';
 import {shouldWipe} from './plugins'
 
-
 const primaryResolver = (stubs, moduleName) =>
     stubs[moduleName];
 
@@ -15,6 +14,7 @@ const resolver = (stubs, moduleName) => {
 };
 
 const wipeCache = (primaryCache = {}) => {
+    console.log(getAllMocks());
     wipe(primaryCache, primaryResolver);
     wipe(getAllMocks(), resolver);
 };

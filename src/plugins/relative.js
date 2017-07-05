@@ -1,11 +1,23 @@
 import {isAbsolute} from 'path';
-import createPlugin, {standardWipeCheck} from './_common';
+import createPlugin, { YES, PASS, NO } from './_common';
+
+const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;
+
+const relativeWipeCheck = (stubs, moduleName) => {
+    if (Object
+            .keys(stubs)
+            .find(key => moduleName.indexOf(trimKey(key)) >= 0)
+    ) {
+        return YES;
+    }
+};
+
 
 const fileNameTransformer = (fileName/*, module*/) => fileName;
-const wipeCheck = (stubs, moduleName) => standardWipeCheck(stubs, moduleName);
+const wipeCheck = (stubs, moduleName) => relativeWipeCheck(stubs, moduleName);
 
 const shouldMock = (mock, request, parent, topModule) => {
-    return isAbsolute(mock.__MI_name) || parent.parent === topModule
+    return parent.parent === topModule ? PASS : NO;
 };
 
 const plugin = createPlugin({

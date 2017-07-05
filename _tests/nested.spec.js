@@ -15,7 +15,7 @@ describe('nested ', () => {
         rewiremock.enable();
 
         const mockedBaz = require('./lib/a/test.js');
-        expect(mockedBaz()).to.be.equal('aabbcc');
+        expect(mockedBaz()).to.be.equal('foobarbaz');
         rewiremock.disable();
         rewiremock.clear();
         _clearPlugins();
@@ -24,7 +24,7 @@ describe('nested ', () => {
     it('should load external nested setup: ', () => {
         addPlugin(relativePlugin);
 
-        require('./lib/nested-valid.setup');
+        (require('./lib/nested-valid.setup'))(rewiremock);
 
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');

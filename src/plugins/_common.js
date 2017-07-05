@@ -15,6 +15,9 @@ const createPlugin = (plugin) => ({
 });
 
 const standardWipeCheck = (stubs, moduleName) => {
+    if(moduleName.indexOf('node_')==-1){
+        console.log('should i',moduleName);
+    }
     if (extensions.find(ext => stubs[moduleName + ext]) !== undefined) {
         return YES;
     }

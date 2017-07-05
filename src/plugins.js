@@ -1,8 +1,20 @@
+import getScope from './globals';
 import {YES, NO, PASS} from './plugins/_common';
-let plugins = [];
+
+const plugins = () => {
+    const result = [];
+    const collect = (scope) => {
+        result.push(...scope.plugins);
+        if (scope.parentScope) {
+            collect(scope.parentScope);
+        }
+    };
+    collect(getScope());
+    return result;
+};
 
 const convertName = (fileName, parentModule) => (
-    plugins.reduce(
+    plugins().reduce(
         (name, plugin) => {
             if (plugin.fileNameTransformer) {
                 return plugin.fileNameTransformer(name, parentModule) || name
@@ -22,24 +34,24 @@ const triResult = (values, defaultValue) => {
 };
 
 const shouldMock = (mock, request, parent, topModule) => (
-    triResult(plugins.map(
+    triResult(plugins().map(
         plugin =>
             plugin.shouldMock ? plugin.shouldMock(mock, request, parent, topModule) : PASS
     ), true)
 );
 
 const shouldWipe = (stubs, moduleName) => (
-    triResult(plugins.map(
+    triResult(plugins().map(
         plugin =>
             plugin.wipeCheck ? plugin.wipeCheck(stubs, moduleName) : PASS
     ), false)
 );
 
 const addPlugin = (plugin) => {
-    plugins.push(plugin);
+    getScope().plugins.push(plugin);
 };
 
-const _clearPlugins = () => (plugins = []);
+const _clearPlugins = () => (getScope().plugins = []);
 
 export  {
     convertName,
