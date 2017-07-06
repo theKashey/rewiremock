@@ -77,8 +77,6 @@ function mockLoader(request, parent, isMain) {
                 });
             }
             return mockResult(request, mock.value);
-        } else {
-
         }
     }
 

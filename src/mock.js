@@ -1,4 +1,5 @@
 import {convertName} from './plugins';
+import getScope from './globals';
 
 class ModuleMock {
     constructor(mock) {
@@ -58,7 +59,7 @@ class ModuleMock {
      * @return {ModuleMock}
      */
     by(name) {
-        this.mock.overrideBy = convertName(name, parentModule);
+        this.mock.overrideBy = convertName(name, getScope().parentModule);
         return this;
     }
 
@@ -73,12 +74,12 @@ class ModuleMock {
     }
 
     toBeUsed() {
-        this.mock.toBeUsed = true;
+        this.mock.flag_toBeUsed = true;
         return this;
     }
 
     notToBeUsed() {
-        this.mock.toBeUsed = false;
+        this.mock.flag_toBeUsed = false;
         return this;
     }
 }

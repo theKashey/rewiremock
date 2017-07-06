@@ -27,6 +27,8 @@ _clearPlugins();
 const addPlugin = API.addPlugin;
 const removePlugin = API.removePlugin;
 
+addPlugin(plugins.toBeUsed);
+
 export {
     addPlugin,
     removePlugin,

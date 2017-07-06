@@ -1,4 +1,3 @@
-import {isAbsolute} from 'path';
 import createPlugin, { YES, PASS, NO } from './_common';
 
 const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;

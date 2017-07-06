@@ -1,10 +1,10 @@
-import {isAbsolute} from 'path';
 import getScope from '../globals';
 import createPlugin from './_common';
 
 const onDisable = (mock) => {
-    if (mock.toBeUsed && !getScope().mockedModules[mock.name]) {
-        throw new Error(mock.name + ' set toBeUsed, but was unused')
+    const name = mock.mock.name;
+    if (mock.flag_toBeUsed && !getScope().mockedModules[name]) {
+        throw new Error(name + ' set toBeUsed, but was unused')
     }
 };
 

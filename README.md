@@ -140,9 +140,11 @@ Currently .inScope is the only API capable to handle es6 dynamic imports.
  - relative. A bit sily, proxyquire-like behavior. Will override only first level deps, and will wipe a lot of modules from a cache.
  - nodejs. Common support to `usual` node.js application. Will absolutize all paths. Will wipe cache very accurately. 
  - webpack-alias. Enabled you to use webpack aliases as module names.
- - childOnly. Only first level dependencies will be mocked.
+ - childOnly. Only first level dependencies will be mocked. 
+ - protectNodeModules. Ensures that any module from node_modules will not be wiped from a cache.
+ - toBeUsed. Adds feature. The only plugin enabled by default.
  - disabledByDefault. All mocks will be disabled on create and at the end of each cycle.
- - protectNodeModules. Ensures that any module from node_modules will not be wiped from a cache.  
+ - usedByDefault. All mocks to be used by fact (reverse isolation)  
  ```javascript
  import rewiremock, { addPlugin, removePlugin, plugins } from 'rewiremock';     
  

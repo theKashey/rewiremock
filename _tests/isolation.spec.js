@@ -92,12 +92,11 @@ describe('isolation ', () => {
         expect(mockedBaz()).to.be.equal('foobarbaz');
         try {
             rewiremock.disable();
-            expect('should not be called')
+            expect('should not be called').to.equal.false();
         } catch (e) {
 
         }
         rewiremock.clear();
         _clearPlugins();
     });
-
 });

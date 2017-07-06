@@ -1,4 +1,3 @@
-import {isAbsolute} from 'path';
 import createPlugin, {NO} from './_common';
 
 const wipeCheck = (stubs, moduleName) => {
