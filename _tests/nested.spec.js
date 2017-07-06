@@ -4,7 +4,7 @@ import {_clearPlugins} from '../src/plugins';
 import relativePlugin from '../src/plugins/relative';
 
 describe('nested ', () => {
-    it('should fail to load mocks: ', () => {
+    it('should fail to load mocks (interference/isolation): ', () => {
         addPlugin(relativePlugin);
 
         require('./lib/nested-broken.setup');

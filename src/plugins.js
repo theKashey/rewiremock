@@ -34,7 +34,9 @@ const triResult = (values, defaultValue) => {
 };
 
 const shouldMock = (mock, request, parent, topModule) => (
-    triResult(plugins().map(
+    mock.disabled
+        ? false
+        : triResult(plugins().map(
         plugin =>
             plugin.shouldMock ? plugin.shouldMock(mock, request, parent, topModule) : PASS
     ), true)
@@ -47,8 +49,30 @@ const shouldWipe = (stubs, moduleName) => (
     ), false)
 );
 
+const onMockCreate = (mock) => (
+    plugins().reduce(
+        (mock, plugin) => {
+            if (plugin.onMockCreate) {
+                return plugin.onMockCreate(mock) || mock
+            }
+            return mock;
+        }, mock)
+);
+
+const onDisable = (mocks) => {
+    const plugs = plugins();
+    Object.keys(mocks).forEach(mockName => {
+        const mock = mocks[mockName];
+        plugs.forEach(plugin => plugin.onDisable && plugin.onDisable(mock._parent))
+    });
+};
+
 const addPlugin = (plugin) => {
     getScope().plugins.push(plugin);
+};
+
+const removePlugin = (plugin) => {
+    getScope().plugins = getScope().plugins.filter(plug => (plug !== plugin));
 };
 
 const _clearPlugins = () => (getScope().plugins = []);
@@ -57,8 +81,11 @@ export  {
     convertName,
     shouldWipe,
     shouldMock,
+    onMockCreate,
+    onDisable,
 
     addPlugin,
+    removePlugin,
 
     _clearPlugins
 }

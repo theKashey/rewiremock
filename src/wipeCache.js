@@ -14,7 +14,6 @@ const resolver = (stubs, moduleName) => {
 };
 
 const wipeCache = (primaryCache = {}) => {
-    console.log(getAllMocks());
     wipe(primaryCache, primaryResolver);
     wipe(getAllMocks(), resolver);
 };

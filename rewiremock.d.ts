@@ -1,14 +1,52 @@
+interface ModuleMock {
+    /**
+     * Enabled call thought original module
+     */
+    callThought(): ModuleMock,
+
+    /**
+     * Setting es6 bahavior for a module
+     */
+    es6(): ModuleMock,
+
+    /**
+     * Setting es6 behavior for a current module and overriding default export
+     */
+    withDefault(stubs: any): ModuleMock,
+
+    /**
+     * Overriding export of a module
+     */
+    with(stubs: any): ModuleMock,
+
+    /**
+     * Overriding export of one module by another
+     */
+    by(module: string): ModuleMock,
+
+    enable(): ModuleMock,
+    disable(): ModuleMock,
+
+    /**
+     * Force mock to be used, or throw an error otherwise
+     */
+    toBeUsed(): ModuleMock,
+
+    noToBeUsed(): ModuleMock
+}
 /**
  * @name rewiremock
  * @class
  * Proxies imports/require in order to allow overriding dependencies during testing.
  */
 interface rewiremock {
-    (module: string): rewiremock;
+    (module: string): ModuleMock;
 
 
     enable();
     disable();
+
+    inScope(loader: Function, creator: Function): Promise<any>;
 
     flush();
     clear();
@@ -17,31 +55,6 @@ interface rewiremock {
      * @param module
      */
     resolve(module: string): string,
-
-    /**
-     * Enabled call thought original module
-     */
-    callThought(): rewiremock,
-
-    /**
-     * Setting es6 bahavior for a module
-     */
-    es6(): rewiremock,
-
-    /**
-     * Setting es6 behavior for a current module and overriding default export
-     */
-    withDefault(stubs: any): rewiremock,
-
-    /**
-     * Overriding export of a module
-     */
-    with(stubs: any): rewiremock,
-
-    /**
-     * Overriding export of one module by another
-     */
-    by(module: string): rewiremock,
 
     /**
      * Activates module isolation

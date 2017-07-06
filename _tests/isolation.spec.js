@@ -14,7 +14,7 @@ describe('isolation ', () => {
         try {
             require('./lib/a/test.js');
             expect("should not be called").to.be.equal(false);
-        } catch(e){
+        } catch (e) {
 
         }
         rewiremock.disable();
@@ -26,13 +26,13 @@ describe('isolation ', () => {
         addPlugin(nodePlugin);
         rewiremock.passBy(/node_modules/);
         rewiremock('./lib/a/foo')
-            .with(()=>'aa');
+            .with(() => 'aa');
 
         rewiremock('./lib/a/../b/bar')
-            .with(()=>'bb');
+            .with(() => 'bb');
 
         rewiremock('./lib/a/../b/baz')
-            .with(()=>'cc');
+            .with(() => 'cc');
 
         rewiremock.enable();
         rewiremock.isolation();
@@ -48,9 +48,9 @@ describe('isolation ', () => {
         addPlugin(nodePlugin);
         rewiremock.passBy(/node_modules/);
         rewiremock('./lib/a/foo')
-            .with(()=>'aa');
+            .with(() => 'aa');
 
-        rewiremock.passBy(module => module.indexOf('b/bar')>=0);
+        rewiremock.passBy(module => module.indexOf('b/bar') >= 0);
         rewiremock.passBy(/b\/baz/);
 
         rewiremock.enable();
@@ -67,7 +67,7 @@ describe('isolation ', () => {
         addPlugin(nodePlugin);
         rewiremock.passBy(/node_modules/);
         rewiremock('./lib/a/foo')
-            .with(()=>'aa');
+            .with(() => 'aa');
 
         rewiremock.passBy(/test.js/);
 
@@ -77,6 +77,25 @@ describe('isolation ', () => {
         const mockedBaz = require('./lib/a/test.js');
         expect(mockedBaz()).to.be.equal('aabarbaz');
         rewiremock.disable();
+        rewiremock.clear();
+        _clearPlugins();
+    });
+
+    it('should inverse isolation by toBeUsed: ', () => {
+        rewiremock('./lib/a/foo')
+            .with(() => 'aa')
+            .toBeUsed();
+
+        rewiremock.enable();
+
+        const mockedBaz = require('./lib/a/test.js');
+        expect(mockedBaz()).to.be.equal('foobarbaz');
+        try {
+            rewiremock.disable();
+            expect('should not be called')
+        } catch (e) {
+
+        }
         rewiremock.clear();
         _clearPlugins();
     });

@@ -33,7 +33,6 @@ const testPassby = (request, module) => {
 
 
 function mockResult(name, data) {
-    console.log('mocking',name,'with',data);
     return data;
 }
 
@@ -78,8 +77,8 @@ function mockLoader(request, parent, isMain) {
                 });
             }
             return mockResult(request, mock.value);
-        }else{
-            console.log('mock', request,'is not mocked')
+        } else {
+
         }
     }
 

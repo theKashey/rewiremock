@@ -12,7 +12,6 @@ const relativeWipeCheck = (stubs, moduleName) => {
     }
 };
 
-
 const fileNameTransformer = (fileName/*, module*/) => fileName;
 const wipeCheck = (stubs, moduleName) => relativeWipeCheck(stubs, moduleName);
 

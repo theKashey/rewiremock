@@ -32,12 +32,15 @@ We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is o
  ## main API
  - rewiremock.enable() - wipes cache and enables interceptor.
  - rewiremock.disable() - wipes cache and disables interceptor.
+ - rewuremock.inScope(loader) - loads a module in sandbox.
  ## mocking API 
  - rewiremock(moduleName: string):rewiremock - set name of overloading module
- - .with(stubs: function | Object) - overloads current module
- - .withDefault(stub: function | Object) - overload `default` es6 export
- - .by(otherModule: string) - overload everything by another module
- - .callThought() - first load original module, and next extend it by provided stub.  
+    - .with(stubs: function | Object) - overloads current module
+    - .withDefault(stub: function | Object) - overload `default` es6 export
+    - .by(otherModule: string) - overload everything by another module
+    - .callThought() - first load original module, and next extend it by provided stub.
+    - .enable/disable() - to enable or disable mock (enabled by default).
+    - .toBeUsed() - enables   
  ## isolation API
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - enables isolation
@@ -73,16 +76,18 @@ First - define your mocks. You can do it in any place, this is just a setup.
 ```   
    
 # Running
- Just enable it, and dont forget to disable.
+ There is a simply way to do it: Just enable it, and dont forget to disable.
  ```javascript
   //in mocha tests
   beforeEach( () => rewiremock.enable() );
   //...
-  const someModule = require('someModule');
+  // here you will get some advantage in type casting and autocompleting.
+  // it will actually works...
+  const someModule = require('someModule'); 
   //...
   afterEach( () => rewiremock.disable() );
  ```
- On enable rewiremock will wipe from cache all mocked modules, and all modules which requares them.
+ On enable rewiremock will wipe from cache all mocked modules, and all modules which requires them.
  
  Including your test.
  
@@ -91,36 +96,65 @@ First - define your mocks. You can do it in any place, this is just a setup.
  All test unrelated modules will be keept. Node modules, react, common files - everything.
  
  As result - it will run faster.
+ 
+# inScope
+ And there is a bit harder way to do it - scope.
+ inScope will create new internal scope, next you can add something new to it, and then it will be destroyed.
+ It will also enable/disable rewiremock just in time.
+ 
+ This helps keep tests in isolation.
+ 
+ PS: scopes are nesting each other like javascript prototypes do.
+```javascript
+rewiremock.inScope(
+    () => import('somemodule'), // load a module. Using import or require.
+    // just before it you can specify mocks or anything else
+    (mock) => { 
+        addPlugin(nodePlugin);
+
+        mock('./lib/a/foo').with(() => 'aa');
+        mock('./lib/a/../b/bar').with(() => 'bb');
+        mock('./lib/a/../b/baz').with(() => 'cc');
+    }
+) // at this point scope is dead
+    .then((mockedBaz) => { 
+        expect(mockedBaz()).to.be.equal('aabbcc');
+    });
+```  
+or just 
+```javascript
+rewiremock.inScope(() => import('somemodule')).then(mockedModule => doSomething)  
+```
+or
+```javascript
+rewiremock.inScope(
+    () => import('somemodule').then( mockedModule => doSomething),    
+    (mock) => aPromise   
+);
+
+```
+Currently .inScope is the only API capable to handle es6 dynamic imports.
 
 # Plugins
  By default - rewiremock has limited features. You can extend it behavior by using plugins.
- - nodejs. Common support to `usual` node.js application. Will absolutize all paths.
- - relative. Proxyquire-like behavior. Will overide only first level deps.
- - webpack-alias. Enabled you to use webpack aliases as module names.  
+ - relative. A bit sily, proxyquire-like behavior. Will override only first level deps, and will wipe a lot of modules from a cache.
+ - nodejs. Common support to `usual` node.js application. Will absolutize all paths. Will wipe cache very accurately. 
+ - webpack-alias. Enabled you to use webpack aliases as module names.
+ - childOnly. Only first level dependencies will be mocked.
+ - disabledByDefault. All mocks will be disabled on create and at the end of each cycle.
+ - protectNodeModules. Ensures that any module from node_modules will not be wiped from a cache.  
  ```javascript
- import rewiremock, { addPlugin } from 'rewiremock';     
- import webpackAliasPlugin from 'rewiremock/lib/plugins/webpack-alias';
+ import rewiremock, { addPlugin, removePlugin, plugins } from 'rewiremock';     
  
- addPlugin(webpackAliasPlugin);
- ```
- Bad news - you cannot remove plugin, as you cannot remove mocks. Only reset everything.
- But you should not different setups/plugins in single test.
+ addPlugin(plugins.webpackAlias);
+ removePlugin(plugins.webpackAlias);
+ ``` 
 
 # Nested declarations
- Each time you require rewiremock - you will get brand new rewiremock.
- 
- You cannot declare `mocks library` - it will erase itself.
- 
- But solution exists, and it is simply - 
- ```javascript
- // require rewiremock in test file
-  import rewiremock from 'rewiremock';
-  
- // require nested one in library file
-  import rewiremock from 'rewiremock/nested';
- // now you can defile dictionary or library of mocks 
- ```
- See _test/nested.spec.js.
+ If you import rewiremock from other place, for example to add some defaults mocks - it will not gonna work.
+ Each instance of rewiremock in independent.
+ You have to pass your instance of rewiremock to build a library.
+ PS: note, rewiremock did have nested API, but it were removed.
   
 # Isolation
  Unit testing requires all decencies to be mocked. All!
@@ -143,6 +177,10 @@ First - define your mocks. You can do it in any place, this is just a setup.
  rewiremock.passBy(/node_modules/);
  rewiremock.passBy((name) => name.indexOf('.node')>=0 )
  ```
+ 
+ # Reverse isolation.
+  Sometimes you have to be sure, that you mock is actually was called.
+  Isolation will protect you then you add new dependencies, .toBeUsed protect you from removal.
  
  # Your own setup.
   In most cases you have to:
@@ -227,15 +265,6 @@ Dont forget - you can write your own plugins.
  shouldMock: (mock, requestFilename, parentModule, entryPoint) => boolean
  }
  ```
- 
- ## magic constants
- Rewiremock stores some information in magic, unenumerable, constants:
-  - '__esModule' - standard babel one  
-  - '__MI_overrideBy' - .by command information
-  - '__MI_allowCallThought' - .callThought command information
-  - '__MI_name' - mock original name
-  - '__MI_module' - original module. If exists due to .callThought or .by commands.
-
  
 # Licence
  MIT

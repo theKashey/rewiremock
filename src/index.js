@@ -1,8 +1,11 @@
 import path from 'path'
 import wipe from 'wipe-node-cache';
-delete require.cache[path.join(path.dirname(require.resolve(__filename)),'./mockModule.js')];
-import * as API from './mockModule';
 import {_clearPlugins} from './plugins';
+import plugins from './plugins/index';
+
+delete require.cache[path.join(path.dirname(require.resolve(__filename)), './mockModule.js')];
+import * as API from './mockModule';
+
 
 export const cleanup = () => {
     const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;
@@ -21,5 +24,12 @@ overrideEntryPoint(module);
 API.mockModule.clear();
 _clearPlugins();
 
-export const addPlugin = API.addPlugin;
+const addPlugin = API.addPlugin;
+const removePlugin = API.removePlugin;
+
+export {
+    addPlugin,
+    removePlugin,
+    plugins
+};
 export default API.mockModule;

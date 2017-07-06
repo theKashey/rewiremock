@@ -3,6 +3,7 @@ import {convertName} from './plugins';
 class ModuleMock {
     constructor(mock) {
         this.mock = mock;
+        mock._parent = this;
     }
 
     /**
@@ -68,6 +69,16 @@ class ModuleMock {
 
     enable() {
         this.mock.disabled = false;
+        return this;
+    }
+
+    toBeUsed() {
+        this.mock.toBeUsed = true;
+        return this;
+    }
+
+    notToBeUsed() {
+        this.mock.toBeUsed = false;
         return this;
     }
 }

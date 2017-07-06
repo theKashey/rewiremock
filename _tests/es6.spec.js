@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import rewiremock, {addPlugin} from '../src/index';
+import rewiremock, {addPlugin, plugins} from '../src/index';
 import {_clearPlugins} from '../src/plugins';
 
 import relativePlugin from '../src/plugins/relative';
@@ -12,7 +12,7 @@ describe('es6 modules ', () => {
     });
 
     it('should overload default export with node plugin: ', () => {
-        addPlugin(relativePlugin);
+        addPlugin(plugins.relative);
         rewiremock('./foo')
             .withDefault(()=>'aa');
 

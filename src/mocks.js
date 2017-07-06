@@ -24,11 +24,11 @@ const getMock = (name, scope = getScope()) => {
 const getAllMocks = () => {
     const result = {};
     const collect = (scope) => {
-        const mocks = scope.mocks;
-        Object.keys(scope.mocks).forEach(key => result[key]=mocks[key]);
         if (scope.parentScope) {
             collect(scope.parentScope);
         }
+        const mocks = scope.mocks;
+        Object.keys(scope.mocks).forEach(key => result[key]=mocks[key]);
     };
     collect(getScope());
     return result;
