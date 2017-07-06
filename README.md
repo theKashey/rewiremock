@@ -49,9 +49,9 @@ We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is o
 
 # Not working?
  If something is not working - just check that you:
-  - added some plugin to transform names
+  - added a plugin to transform names (nodejs, webpackAlias or relative)
   - use .toBeUsed for each mocks
-And they actually was mocked. If not - check plugins
+And they actually were mocked. If not - rewiremock will throw an Error.
 
 # Setup
 
