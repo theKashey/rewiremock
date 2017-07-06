@@ -42,11 +42,15 @@ interface ModuleMock {
 interface rewiremock {
     (module: string): ModuleMock;
 
-
     enable();
     disable();
 
-    around(loader: Function, creator: Function): Promise<any>;
+    /**
+     * executes module in a sanbox
+     * @param {Function} loader - loader of target module. You can use import or require. May return a Promise
+     * @param {Function} [creator] - mock creator. You may add any mocks inside.
+     */
+    around<T>(loader: () => T, creator?: Function): Promise<T>;
     inScope(callback);
 
     flush();
