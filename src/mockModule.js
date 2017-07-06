@@ -3,7 +3,13 @@ import wipeCache from './wipeCache';
 import createScope from './scope';
 import {setScope} from './globals';
 import executor, {originalLoader} from './executor';
-import {convertName, onMockCreate, onDisable, addPlugin as addPluginAPI, removePlugin as removePluginAPI} from './plugins';
+import {
+    convertName,
+    onMockCreate,
+    onDisable,
+    addPlugin as addPluginAPI,
+    removePlugin as removePluginAPI
+} from './plugins';
 import {resetMock, getMock, getAllMocks} from './mocks';
 import ModuleMock from './mock';
 
@@ -93,12 +99,23 @@ mockModule.disable = () => {
 };
 
 /**
+ * Creates temporary executing scope. All mocks and plugins you will add in callback will be removed at exit.
+ * @param callback
+ */
+mockModule.inScope = (callback) => {
+    const currentScope = mockScope;
+    updateScope(currentScope);
+    callback();
+    mockScope = currentScope;
+};
+
+/**
  * executes module in sandbox
  * @param {Function} loader loader callback
  * @param {Function} [createCallback] - optional callback to be executed before load.
  * @return {Promise}
  */
-mockModule.inScope = (loader, createCallback) => {
+mockModule.around = (loader, createCallback) => {
     return new Promise((resolve, reject) => {
         const currentScope = mockScope;
         updateScope(currentScope);

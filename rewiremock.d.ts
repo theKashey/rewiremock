@@ -46,7 +46,8 @@ interface rewiremock {
     enable();
     disable();
 
-    inScope(loader: Function, creator: Function): Promise<any>;
+    around(loader: Function, creator: Function): Promise<any>;
+    inScope(callback);
 
     flush();
     clear();

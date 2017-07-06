@@ -32,7 +32,8 @@ We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is o
  ## main API
  - rewiremock.enable() - wipes cache and enables interceptor.
  - rewiremock.disable() - wipes cache and disables interceptor.
- - rewuremock.inScope(loader) - loads a module in sandbox.
+ - rewiremock.inScope(callback) - place callback inside a sandbox.
+ - rewiremock.around(loader, creator) - loads a module in an asynchronous sandbox.
  ## mocking API 
  - rewiremock(moduleName: string):rewiremock - set name of overloading module
     - .with(stubs: function | Object) - overloads current module
@@ -104,6 +105,20 @@ First - define your mocks. You can do it in any place, this is just a setup.
  As result - it will run faster.
  
 # inScope
+ Sometimes you will have independent tests in a single file, and you might need separate mocks for each one.
+ `inScope` execute callback inside sandbox, and all mocks or plugins or anything else you have added will not leaks away.
+ ```javascript
+  rewiremock.inScope( () => {
+    rewiremock('something').with(something);
+    rewiremock.enable();
+    ....
+    rewiremock.disable();
+    // is 'something' mocked? Yes
+  }); 
+  // is 'something' mocked? No
+ ```
+
+# Around
  And there is a bit harder way to do it - scope.
  inScope will create new internal scope, next you can add something new to it, and then it will be destroyed.
  It will also enable/disable rewiremock just in time.
@@ -112,7 +127,7 @@ First - define your mocks. You can do it in any place, this is just a setup.
  
  PS: scopes are nesting each other like javascript prototypes do.
 ```javascript
-rewiremock.inScope(
+rewiremock.around(
     () => import('somemodule'), // load a module. Using import or require.
     // just before it you can specify mocks or anything else
     (mock) => { 
@@ -129,11 +144,11 @@ rewiremock.inScope(
 ```  
 or just 
 ```javascript
-rewiremock.inScope(() => import('somemodule')).then(mockedModule => doSomething)  
+rewiremock.around(() => import('somemodule')).then(mockedModule => doSomething)  
 ```
 or
 ```javascript
-rewiremock.inScope(
+rewiremock.around(
     () => import('somemodule').then( mockedModule => doSomething),    
     (mock) => aPromise   
 );

@@ -6,12 +6,33 @@ import {_clearPlugins} from '../src/plugins';
 import nodePlugin from '../src/plugins/nodejs';
 
 describe('scope ', () => {
-    it('scope load es5: ', () => {
-
+    it('scope test: ', () => {
+        addPlugin(nodePlugin);
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(() => require('./lib/a/test.js'),
+        rewiremock('./lib/a/foo').with(() => 'aa');
+        rewiremock.inScope(() => {
+            rewiremock('./lib/a/../b/bar').with(() => 'bb');
+            rewiremock.enable();
+            const mocked = require('./lib/a/test.js');
+            expect(mocked()).to.be.equal('aabbbaz');
+            rewiremock.disable();
+        });
+
+        rewiremock.enable();
+        const mocked = require('./lib/a/test.js');
+        expect(mocked()).to.be.equal('aabarbaz');
+        rewiremock.disable();
+        rewiremock.clear();
+        _clearPlugins();
+    });
+
+    it('scope load es5: ', () => {
+        const unmockedBaz = require('./lib/a/test.js');
+        expect(unmockedBaz()).to.be.equal('foobarbaz');
+
+        return rewiremock.around(() => require('./lib/a/test.js'),
             (mock) => {
                 addPlugin(nodePlugin);
                 mock('./lib/a/foo').with(() => 'aa');
@@ -27,7 +48,7 @@ describe('scope ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(() => import('./lib/a/test.js'),
+        return rewiremock.around(() => import('./lib/a/test.js'),
             (mock) => {
                 addPlugin(nodePlugin);
 
@@ -44,7 +65,7 @@ describe('scope ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(() => import('./lib/a/test.js'),
+        return rewiremock.around(() => import('./lib/a/test.js'),
             (mock) =>
                 Promise.resolve().then(() => {
                     addPlugin(nodePlugin);
@@ -62,7 +83,7 @@ describe('scope ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(
+        return rewiremock.around(
             () =>
                 import('./lib/a/test.js')
                     .then((mockedBaz) => {
@@ -81,7 +102,7 @@ describe('scope ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(() => import('./lib/a/test.js'),
+        return rewiremock.around(() => import('./lib/a/test.js'),
             (mock) => {
                 addPlugin(nodePlugin);
 
@@ -98,7 +119,7 @@ describe('scope ', () => {
         const unmockedBaz = require('./lib/a/test.js');
         expect(unmockedBaz()).to.be.equal('foobarbaz');
 
-        return rewiremock.inScope(() => import('./lib/a/test.js'))
+        return rewiremock.around(() => import('./lib/a/test.js'))
             .then((mockedBaz) => {
                 expect(mockedBaz()).to.be.equal('foobarbaz');
             });
