@@ -3,25 +3,25 @@
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
 
 Simple es6-friendly mocking library inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - the library I like more.
+- [mockery](https://github.com/mfncooper/mockery) - the library I like the most.
 - [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever.
 - [proxyquire](https://github.com/theKashey/proxyquire) - the one I know better than others.
 
-By its nature rewiremock has same behavior as Mockery. But it can have any behavior.
+By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
 It covers _any_ cases.
 
-Rewiremock is an evolution of my way of explorations: 
+Rewiremock is an evolution of lessons I learned from: 
 the better [proxyquire](https://github.com/theKashey/proxyquire), 
-the way of[resolveQuire](https://github.com/theKashey/resolveQuire),
+the way of [resolveQuire](https://github.com/theKashey/resolveQuire),
 and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-webpack-alias).
 
-Rewiremock was initially named as mockImports or mockModule. But was renamed for WireMock.
+Rewiremock was initially named as mockImports or mockModule. But was renamed to RewireMock.
 
-We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing micking library.
+We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing mocking libraries.
 
 
-# Idealogy
-- be simply
+# Ideology
+- be simple
 - be modular
 - be secure
 - be fast
@@ -40,11 +40,17 @@ We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is o
     - .by(otherModule: string) - overload everything by another module
     - .callThought() - first load original module, and next extend it by provided stub.
     - .enable/disable() - to enable or disable mock (enabled by default).
-    - .toBeUsed() - enables   
+    - .toBeUsed() - enables usage checking  
  ## isolation API
  - rewiremock.isolation() - enables isolation
- - rewiremock.withoutIsolation() - enables isolation
+ - rewiremock.withoutIsolation() - disables isolation
  - rewiremock.passBy(pattern or function) - enables some modules to pass thought isolation.
+
+# Not working?
+ If something is not working - just check that you:
+  - added some plugin to transform names
+  - use .toBeUsed for each mocks
+And they actually was mocked. If not - check plugins
 
 # Setup
 
@@ -76,7 +82,7 @@ First - define your mocks. You can do it in any place, this is just a setup.
 ```   
    
 # Running
- There is a simply way to do it: Just enable it, and dont forget to disable.
+ There is a simply way to do it: Just enable it, and dont forget to disable it later.
  ```javascript
   //in mocha tests
   beforeEach( () => rewiremock.enable() );
@@ -87,13 +93,13 @@ First - define your mocks. You can do it in any place, this is just a setup.
   //...
   afterEach( () => rewiremock.disable() );
  ```
- On enable rewiremock will wipe from cache all mocked modules, and all modules which requires them.
+ Once enabled, rewiremock will wipe all mocked modules from cache, and all modules which require them.
  
  Including your test.
  
- On disable it will repeat operation. 
+ Once disabled it will restore everything. 
  
- All test unrelated modules will be keept. Node modules, react, common files - everything.
+ All unrelated to test dependencies will be kept. Node modules, react, common files - everything.
  
  As result - it will run faster.
  
@@ -136,8 +142,8 @@ rewiremock.inScope(
 Currently .inScope is the only API capable to handle es6 dynamic imports.
 
 # Plugins
- By default - rewiremock has limited features. You can extend it behavior by using plugins.
- - relative. A bit sily, proxyquire-like behavior. Will override only first level deps, and will wipe a lot of modules from a cache.
+ By default - rewiremock has limited features. You can extend its behavior via plugins.
+ - relative. A bit simply, proxyquire-like behavior. Will override only first level deps, and will wipe a lot of modules from a cache.
  - nodejs. Common support to `usual` node.js application. Will absolutize all paths. Will wipe cache very accurately. 
  - webpack-alias. Enabled you to use webpack aliases as module names.
  - childOnly. Only first level dependencies will be mocked. 
@@ -168,9 +174,9 @@ Currently .inScope is the only API capable to handle es6 dynamic imports.
  ```
  Then active - rewiremock will throw error on require of any unknown module.
  
- Unknown is module which is nor mocked, nor marked as passthrough. 
+ Unknown is module which is nor mocked, nor marked as pass-through. 
  
- To enable few modules to in `invisible` to rewiremock run
+ To make few modules to be `invisible` to rewiremock, run
  ```javascript
  rewiremock.passBy(/*pattern or function*/);
  
@@ -182,7 +188,7 @@ Currently .inScope is the only API capable to handle es6 dynamic imports.
  
  # Reverse isolation.
   Sometimes you have to be sure, that you mock is actually was called.
-  Isolation will protect you then you add new dependencies, .toBeUsed protect you from removal.
+  Isolation will protect you then you add new dependencies, `.toBeUsed` protect you from removal.
  
  # Your own setup.
   In most cases you have to:
@@ -194,7 +200,7 @@ Currently .inScope is the only API capable to handle es6 dynamic imports.
    And it is not a good idea to do it in every test you have.
    
    It is better to have one setup file, which will do everything for you
-   * Part one - man in the middle
+   * Part 1 - man in the middle
 ```javascript
   // this is your test file
   
@@ -213,40 +219,40 @@ Currently .inScope is the only API capable to handle es6 dynamic imports.
     addPlugin(something);
     rewiremock('somemodule').with(/*....*/);   
     
-    // but dont forget to add some magic
+    // but don't forget to add some magic
     overrideEntryPoint(module); // <-- set yourself as top module
-    // PS: rewiremock will wipe this module from cache to keep magics alive.
+    // PS: rewiremock will wipe this module from cache to keep magic alive.
        
     export default rewiremock;
 ``` 
  * Part 3 - enjoy.
- You extract some common code into helper. A lot of things become easer.
+ You extract some common code into helper. And things become a lot easier.
    
  # Caching
  
-Other libraries will always do a strange things with a cache:
+Other libraries will always do strange things with cache:
 
 - just wipe everything. Absolutely. 
-As result tests will run slowly, or even did not run at all. 
-Normaly you should not wipe native(.node) modules, and external(node_modules) modules.
+As a result tests will run slow, or not run at all. 
+Normally you should not wipe native(.node) modules, and external(node_modules) modules.
  For example you should not wipe React - _new_ version of React will be incompatible with old one.
 - wipe only listed modules. Exactly.
- Also not a good idea, as long sometimes between first module, and mocked one you can found some sort of middleware.
- Syntax sugar, thirdparty library, helper, and so on.
+ Also not a good idea, as sometimes you can found some sort of middleware between first and mocked module.
+ Syntax sugar, third party library, helper, and so on.
 
-Rewiremock uses a bit different, more smart way:
+Rewiremock is using a bit different, smarter way:
 
 - all files required from original test, while interceptor is active, will bypass cache.
- (proxyquire cant do it, as long it work at more low level API).
-- all files you indicate as mock will be removed from cache. Unfortunately all, no matter of usage.
-- all files which use any wiped ones - will be also removed from a cache.
+ (proxyquire can't do it, as it works at a lower API level).
+- all files you indicate as mocks will be removed from cache. Unfortunately all, in any case.
+- all files which rely on mocks - will also  be removed from cache.
 - repeat.
   
-As result - it will never wipe something it should not.
+As a result - it will not wipe things it should not wipe.
 
-As result - you can mock any file at any level. Sometimes it is usefull.
+As a result - you can mock any file at any level. Sometimes it is useful.
   
-If you __dont want__  this - just add `relative` plugin. It will allow mocking only for modules
+If you __don't want__  this - just add `relative` plugin. It will allow mocking only for modules
 
 >  _required from __module__ with __parent__ equals __entryPoint__._
 
@@ -255,7 +261,7 @@ If you __dont want__  this - just add `relative` plugin. It will allow mocking o
   
   
  # Own plugins
-Dont forget - you can write your own plugins. 
+Don't forget - you can write your own plugins. 
  plugin is an object with fields:
  ```javascript
  {
