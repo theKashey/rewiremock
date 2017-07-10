@@ -56,6 +56,8 @@ function mockLoader(request, parent, isMain) {
         if(shouldMock(mock, request, parent, parentModule)) {
             // this file fill be not cached, but it`s opener - will. And we have to remeber it
             mockedModules[parent.filename] = true;
+            mock.usedAs = (mock.usedAs || []);
+            mock.usedAs.push(baseRequest);
 
             mockedModules[baseRequest] = true;
 
@@ -77,6 +79,8 @@ function mockLoader(request, parent, isMain) {
                 });
             }
             return mockResult(request, mock.value);
+        } else {
+            // why you shouldn't?
         }
     }
 

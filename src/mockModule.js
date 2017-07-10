@@ -7,6 +7,7 @@ import {
     convertName,
     onMockCreate,
     onDisable,
+    onEnable,
     addPlugin as addPluginAPI,
     removePlugin as removePluginAPI
 } from './plugins';
@@ -85,6 +86,7 @@ mockModule.enable = () => {
     scope();
     Module._load = executor;
     wipeCache();
+    onEnable(getAllMocks());
 };
 
 /**
@@ -164,6 +166,8 @@ const removePlugin = (plugin) => {
     scope();
     removePluginAPI(plugin);
 };
+
+mockModule.addPlugin = addPlugin;
 
 export {
     mockModule,

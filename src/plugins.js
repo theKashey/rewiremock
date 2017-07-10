@@ -67,6 +67,14 @@ const onDisable = (mocks) => {
     });
 };
 
+const onEnable = (mocks) => {
+    const plugs = plugins();
+    Object.keys(mocks).forEach(mockName => {
+        const mock = mocks[mockName];
+        plugs.forEach(plugin => plugin.onEnable && plugin.onEnable(mock._parent))
+    });
+};
+
 const addPlugin = (plugin) => {
     getScope().plugins.push(plugin);
 };
@@ -82,7 +90,9 @@ export  {
     shouldWipe,
     shouldMock,
     onMockCreate,
+
     onDisable,
+    onEnable,
 
     addPlugin,
     removePlugin,
