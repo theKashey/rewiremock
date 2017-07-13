@@ -1,4 +1,3 @@
-import getScope from '../globals';
 import createPlugin from './_common';
 
 const onEnable = ({mock}) => {

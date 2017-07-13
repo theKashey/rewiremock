@@ -55,11 +55,15 @@ class ModuleMock {
 
     /**
      * Overriding export of one module by another
-     * @param {String} name
+     * @param {String|Function} newTarget
      * @return {ModuleMock}
      */
-    by(name) {
-        this.mock.overrideBy = convertName(name, getScope().parentModule);
+    by(newTarget) {
+        if (typeof newTarget == 'string') {
+            this.mock.overrideBy = convertName(newTarget, getScope().parentModule);
+        } else {
+            this.mock.overrideBy = newTarget;
+        }
         return this;
     }
 

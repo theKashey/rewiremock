@@ -53,7 +53,7 @@ function mockLoader(request, parent, isMain) {
     const mock = getMock(baseRequest) || getMock(request);
 
     if (mock) {
-        if(shouldMock(mock, request, parent, parentModule)) {
+        if (shouldMock(mock, request, parent, parentModule)) {
             // this file fill be not cached, but it`s opener - will. And we have to remeber it
             mockedModules[parent.filename] = true;
             mock.usedAs = (mock.usedAs || []);
@@ -61,21 +61,33 @@ function mockLoader(request, parent, isMain) {
 
             mockedModules[baseRequest] = true;
 
-            if (mock.overrideBy) {
-                if (!mock.module) {
-                    mock.module = originalLoader(mock.overrideBy, parent, isMain)
+            if (mock.allowCallThought) {
+                if (!mock.original) {
+                    mock.original = originalLoader(request, parent, isMain);
                 }
-                return mockResult(request, mock.module);
+            }
+
+            if (mock.overrideBy) {
+                if (!mock.override) {
+                    if (typeof mock.overrideBy === 'string') {
+                        mock.override = originalLoader(mock.overrideBy, parent, isMain)
+                    } else {
+                        mock.override = mock.overrideBy({
+                            name: request,
+                            fullName: baseRequest,
+                            parent: parent,
+                            original: mock.original
+                        });
+                    }
+                }
+                return mockResult(request, mock.override);
             }
 
             if (mock.allowCallThought) {
-                if (!mock.module) {
-                    mock.module = originalLoader(request, parent, isMain);
-                }
                 return mockResult(request, {
-                    ...mock.module,
+                    ...mock.original,
                     ...mock.value,
-                    __esModule: mock.module.__esModule
+                    __esModule: mock.original.__esModule
                 });
             }
             return mockResult(request, mock.value);
