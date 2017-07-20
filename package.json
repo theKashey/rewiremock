@@ -1,7 +1,7 @@
 {
   "name": "rewiremock",
-  "version": "1.3.3",
-  "description": "Easy and es6 compatible mocking tool",
+  "version": "1.3.4",
+  "description": "Easy and es6 compatible di/mocking tool.",
   "main": "lib/index.js",
   "module": "src/index.js",
   "types": "rewiremock.d.ts",
@@ -14,10 +14,18 @@
     "lint:fix": "eslint src tests --fix"
   },
   "keywords": [
-    "mock",
     "es6",
-    "javascript",
-    "node.js"
+    "require",
+    "dependency",
+    "injection",
+    "dependency injection",
+    "mock dependency",
+    "di",
+    "inject",
+    "swap",
+    "test",
+    "mock",
+    "stub"
   ],
   "author": "Anton Korzunov (thekashey@gmail.com)",
   "license": "MIT",

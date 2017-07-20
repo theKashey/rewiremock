@@ -8,23 +8,20 @@ Simple es6-friendly mocking library inspired by the best libraries:
 - [proxyquire](https://github.com/theKashey/proxyquire) - the one I know better than others.
 
 By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
-It covers _any_ cases.
+It covers _any_ cases. It is the right way to mock your dependencies or perform dependency injection.
+ 
 
 Rewiremock is an evolution of lessons I learned from: 
 the better [proxyquire](https://github.com/theKashey/proxyquire), 
 the way of [resolveQuire](https://github.com/theKashey/resolveQuire),
 and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-webpack-alias).
 
-Rewiremock was initially named as mockImports or mockModule. But was renamed to RewireMock.
-
-We shall not use that name, but [rewire](https://github.com/jhnns/rewire) - is one of existing mocking libraries.
-
-
 # Ideology
-- be simple
-- be modular
-- be secure
-- be fast
+- be right, and enable `true` testing experience.
+- be simple, and ease to use.
+- be modular, to cover all cases.
+- be secure, and isolate target under test.
+- be fast, to be faster.
 
 # API
  see d.ts file, or JSDoc in javascript sources.
@@ -111,11 +108,13 @@ First - define your mocks. You can do it in any place, this is just a setup.
   rewiremock.inScope( () => {
     rewiremock('something').with(something);
     rewiremock.enable();
+    // is 'something' mocked? Yes
     ....
     rewiremock.disable();
-    // is 'something' mocked? Yes
+    // is 'something' mocked? No
+    // is it still listed as mock? Yes
   }); 
-  // is 'something' mocked? No
+  // is 'something' mocked or listed? No
  ```
 
 # Around
@@ -288,6 +287,9 @@ Don't forget - you can write your own plugins.
  shouldMock: (mock, requestFilename, parentModule, entryPoint) => boolean
  }
  ```
+ 
+# Wanna read something about?
+ [Rewiremock - medium article](https://medium.com/@antonkorzunov/how-to-mock-dependency-in-a-node-js-and-why-2ad4386f6587)
  
 # Licence
  MIT
