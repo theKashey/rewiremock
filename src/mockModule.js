@@ -52,9 +52,11 @@ mockModule.resolve = (module) => {
 
 /**
  * Activates module isolation
+ * @param {Object} [options]
+ * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThought.
  */
-mockModule.isolation = () => {
-    mockScope.isolation = true;
+mockModule.isolation = (options = {}) => {
+    mockScope.isolation = { ...options };
 };
 
 /**

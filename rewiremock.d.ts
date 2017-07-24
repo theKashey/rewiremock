@@ -3,7 +3,8 @@ interface OverloadedModule {
     fileName: String,
     parent: Object,
     original: Object
-};
+}
+;
 
 interface ModuleMock {
     /**
@@ -74,8 +75,9 @@ interface rewiremock {
 
     /**
      * Activates module isolation
+     * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThought.
      */
-    isolation();
+    isolation(options?: Object);
 
     /**
      * Deactivates isolation

@@ -13,16 +13,25 @@ const patternMatch = fileName => pattern => {
 };
 
 const testPassby = (request, module) => {
-    const {parentModule, passBy} = getScope();
+    const {
+      parentModule,
+      passBy,
+      mockedModules,
+      isolation
+    } = getScope();
+
     // was called from test
     if (module === parentModule || module == module.parent) {
         return true;
     }
-    // if parent was in passlist - pass everythinh
+    // if parent is in the pass list - pass everything
     let fileName = Module._resolveFilename(request, module);
     let m = module;
     while (m) {
-        if (passBy.filter(patternMatch(fileName)).length) {
+        if (
+          (!isolation.noAutoPassBy && mockedModules[fileName]) ||  // parent was mocked
+          passBy.filter(patternMatch(fileName)).length             // parent is in pass list
+        ) {
             return true;
         }
         fileName = m.filename;
@@ -40,7 +49,8 @@ function mockLoader(request, parent, isMain) {
     const {
         parentModule,
 
-        mockedModules
+        mockedModules,
+        isolation
     } = getScope();
 
     const baseRequest = Module._resolveFilename(request, parent);
@@ -54,7 +64,7 @@ function mockLoader(request, parent, isMain) {
 
     if (mock) {
         if (shouldMock(mock, request, parent, parentModule)) {
-            // this file fill be not cached, but it`s opener - will. And we have to remeber it
+            // this file fill be not cached, but it`s opener - will. And we have to remember it
             mockedModules[parent.filename] = true;
             mock.usedAs = (mock.usedAs || []);
             mock.usedAs.push(baseRequest);
@@ -84,6 +94,17 @@ function mockLoader(request, parent, isMain) {
             }
 
             if (mock.allowCallThought) {
+                if(typeof(mock.original) === 'function') {
+                  if (
+                    typeof mock.value === 'object' &&
+                    Object.keys(mock.value).length === 0
+                  ) {
+                    return mockResult(request, mock.original);
+                  } else {
+                       throw new Error('rewiremock: trying to merge Functional base with CallThought mock at '
+                         + request + '. Use overrideBy instead.');
+                  }
+                }
                 return mockResult(request, {
                     ...mock.original,
                     ...mock.value,
@@ -96,9 +117,9 @@ function mockLoader(request, parent, isMain) {
         }
     }
 
-    if (getScope().isolation && !mockedModules[baseRequest]) {
+    if (isolation && !mockedModules[baseRequest]) {
         if (!testPassby(request, parent)) {
-            throw new Error('mockModule: ' + request + ' in not listed as passby modules');
+            throw new Error('rewiremock: isolation breach by [' + request + ']. Requested from ',parent.filename);
         }
     }
 
