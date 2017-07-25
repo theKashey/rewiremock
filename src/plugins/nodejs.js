@@ -6,7 +6,9 @@ const wipeCheck = (stubs, moduleName) => standardWipeCheck(stubs, moduleName);
 
 const plugin = createPlugin({
     fileNameTransformer,
-    wipeCheck
+    wipeCheck,
+
+    name: 'nodejs'
 });
 
 export default plugin;

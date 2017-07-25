@@ -40,6 +40,11 @@ interface ModuleMock {
     disable(): ModuleMock,
 
     /**
+     * mocks only first direct children.
+     */
+    directChildOnly(): ModuleMock;
+    atAnyPlace(): ModuleMock;
+    /**
      * Force mock to be used, or throw an error otherwise
      */
     toBeUsed(): ModuleMock,

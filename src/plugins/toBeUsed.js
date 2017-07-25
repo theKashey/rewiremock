@@ -14,7 +14,9 @@ const onDisable = ({mock}) => {
 
 const plugin = createPlugin({
     onDisable,
-    onEnable
+    onEnable,
+
+    name: 'toBeUsed'
 });
 
 export default plugin;

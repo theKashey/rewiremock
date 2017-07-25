@@ -22,6 +22,8 @@ export {
 
 export default createPlugin({
     fileNameTransformer,
-    wipeCheck
+    wipeCheck,
+
+    name: 'webpack-alias'
 });
 

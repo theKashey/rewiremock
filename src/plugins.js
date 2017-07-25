@@ -10,6 +10,7 @@ const plugins = () => {
         }
     };
     collect(getScope());
+    //console.log('with pug',result);
     return result;
 };
 
@@ -83,7 +84,9 @@ const removePlugin = (plugin) => {
     getScope().plugins = getScope().plugins.filter(plug => (plug !== plugin));
 };
 
-const _clearPlugins = () => (getScope().plugins = []);
+const _clearPlugins = () => {
+    getScope().plugins = []
+};
 
 export  {
     convertName,

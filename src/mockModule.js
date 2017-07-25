@@ -108,9 +108,16 @@ mockModule.disable = () => {
  */
 mockModule.inScope = (callback) => {
     const currentScope = mockScope;
+    let error;
     updateScope(currentScope);
-    callback();
+    try {
+      callback();
+    } catch(e) {
+        error = e;
+    }
+
     mockScope = currentScope;
+    if(error) throw error;
 };
 
 /**
@@ -124,14 +131,21 @@ mockModule.around = (loader, createCallback) => {
         const currentScope = mockScope;
         updateScope(currentScope);
 
+        const restore = () => {
+          mockModule.disable();
+          mockScope = currentScope;
+        };
+
         Promise.resolve(createCallback && createCallback(mockModule))
             .then(() => mockModule.enable())
             .then(() =>
                 Promise.resolve(loader()).then((mockedResult) => {
-                    mockModule.disable();
-                    mockScope = currentScope;
+                    restore();
                     resolve(mockedResult);
-                }, (err) => reject(err))
+                }, (err) => {
+                    restore();
+                    reject(err)
+                })
             );
     });
 };

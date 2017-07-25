@@ -77,6 +77,16 @@ class ModuleMock {
         return this;
     }
 
+    directChildOnly() {
+      this.mock.flag_directChildOnly = true;
+      return this;
+    }
+
+    atAnyPlace() {
+      this.mock.flag_directChildOnly = false;
+      return this;
+    }
+
     toBeUsed() {
         this.mock.flag_toBeUsed = true;
         return this;

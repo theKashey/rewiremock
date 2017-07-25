@@ -1,13 +1,15 @@
-import createPlugin, {PASS, NO} from './_common';
+import createPlugin, { PASS, NO } from './_common';
 
 const shouldMock = (mock, request, parent, topModule) => {
+  if(mock.flag_directChildOnly) {
     return parent.parent === topModule ? PASS : NO;
+  }
 };
 
 const plugin = createPlugin({
-    shouldMock,
+  shouldMock,
 
-    name: 'childOnly'
+  name: 'directChild'
 });
 
 export default plugin;

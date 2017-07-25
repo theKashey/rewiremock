@@ -7,7 +7,9 @@ const onMockCreate = (mock) => {
 
 const plugin = createPlugin({
     onMockCreate,
-    onDisable: onMockCreate
+    onDisable: onMockCreate,
+
+    name: 'disabledByDefault'
 });
 
 export default plugin;

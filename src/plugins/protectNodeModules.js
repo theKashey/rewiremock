@@ -7,7 +7,9 @@ const wipeCheck = (stubs, moduleName) => {
 };
 
 const plugin = createPlugin({
-    wipeCheck
+    wipeCheck,
+
+    name: 'protectNodeModules'
 });
 
 export default plugin;

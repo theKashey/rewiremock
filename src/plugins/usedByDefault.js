@@ -7,6 +7,8 @@ const onMockCreate = (mock) => {
 
 const plugin = createPlugin({
     onMockCreate,
+
+    name: 'usedByDefault'
 });
 
 export default plugin;

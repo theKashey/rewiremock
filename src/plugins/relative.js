@@ -21,7 +21,9 @@ const shouldMock = (mock, request, parent, topModule) => {
 const plugin = createPlugin({
     fileNameTransformer,
     wipeCheck,
-    shouldMock
+    shouldMock,
+
+    name: 'relative'
 });
 
 export default plugin;
