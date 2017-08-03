@@ -32,13 +32,15 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
  - rewiremock.inScope(callback) - place callback inside a sandbox.
  - rewiremock.around(loader, creator) - loads a module in an asynchronous sandbox.
  ## mocking API 
- - rewiremock(moduleName: string):rewiremock - set name of overloading module
-    - .with(stubs: function | Object) - overloads current module
-    - .withDefault(stub: function | Object) - overload `default` es6 export
-    - .by(otherModule: string) - overload everything by another module
-    - .callThought() - first load original module, and next extend it by provided stub.
+ - rewiremock(moduleName: string) - set name of overloading module
     - .enable/disable() - to enable or disable mock (enabled by default).
-    - .toBeUsed() - enables usage checking  
+    - .with(stubs: function | Object) - overloads module with a value
+    - .withDefault(stub: function | Object) - overload `default` es6 export
+    - .by(otherModule: string) - overload by another module
+    - .callThought() - first load original module, and next extend it by provided stub.    
+    - .toBeUsed() - enables usage checking.  
+    - .directChildOnly - will do mock only direct dependencies.
+    - .calledFromMock - will do mock only dependencies of mocked dependencies.
  ## isolation API
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - disables isolation
@@ -77,6 +79,11 @@ First - define your mocks. You can do it in any place, this is just a setup.
     .with({
         onlyOneMethod
     })
+    
+ // secure yourself and from 'unexpected' mocks
+ rewiremock('myDep')
+     .with(mockedDep) 
+     .calledFromMock()
 ```   
    
 # Running
