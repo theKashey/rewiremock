@@ -87,6 +87,16 @@ class ModuleMock {
       return this;
     }
 
+    calledFromMock() {
+      this.mock.flag_toBeCalledFromMock = true;
+      return this;
+    }
+
+    calledFromAnywhere() {
+      this.mock.flag_toBeCalledFromMock = false;
+      return this;
+    }
+
     toBeUsed() {
         this.mock.flag_toBeUsed = true;
         return this;

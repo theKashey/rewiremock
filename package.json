@@ -1,7 +1,7 @@
 {
   "name": "rewiremock",
-  "version": "1.3.6",
-  "description": "Easy and es6 compatible di/mocking tool.",
+  "version": "1.3.7",
+  "description": "Easy and es6 compatible dependency mocking tool.",
   "main": "lib/index.js",
   "module": "src/index.js",
   "types": "rewiremock.d.ts",

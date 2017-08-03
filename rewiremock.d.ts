@@ -44,6 +44,12 @@ interface ModuleMock {
      */
     directChildOnly(): ModuleMock;
     atAnyPlace(): ModuleMock;
+
+    /**
+     * mocks only if parent were mocked
+     */
+    calledFromMock(): ModuleMock;
+    calledFromAnywhere(): ModuleMock;
     /**
      * Force mock to be used, or throw an error otherwise
      */
