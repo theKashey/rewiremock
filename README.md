@@ -23,6 +23,8 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
 - be secure, and isolate target under test.
 - be fast, to be faster.
 
+I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
+
 # API
  see d.ts file, or JSDoc in javascript sources.
  
