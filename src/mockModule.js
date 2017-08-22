@@ -57,6 +57,7 @@ mockModule.resolve = (module) => {
  */
 mockModule.isolation = (options = {}) => {
     mockScope.isolation = { ...options };
+    return mockModule;
 };
 
 /**
@@ -64,6 +65,7 @@ mockModule.isolation = (options = {}) => {
  */
 mockModule.withoutIsolation = () => {
     mockScope.isolation = false;
+    return mockModule;
 };
 
 /**
@@ -72,6 +74,7 @@ mockModule.withoutIsolation = () => {
  */
 mockModule.passBy = (pattern) => {
     mockScope.passBy.push(pattern);
+    return mockModule;
 };
 
 mockModule.overrideEntryPoint = (parent) => {
@@ -89,6 +92,7 @@ mockModule.enable = () => {
     Module._load = executor;
     wipeCache();
     onEnable(getAllMocks());
+    return mockModule;
 };
 
 /**
@@ -100,6 +104,7 @@ mockModule.disable = () => {
     onDisable(getAllMocks());
     mockModule.withoutIsolation();
     mockModule.flush();
+    return mockModule;
 };
 
 /**
@@ -118,6 +123,7 @@ mockModule.inScope = (callback) => {
 
     mockScope = currentScope;
     if(error) throw error;
+    return mockModule;
 };
 
 /**
@@ -183,7 +189,10 @@ const removePlugin = (plugin) => {
     removePluginAPI(plugin);
 };
 
-mockModule.addPlugin = addPlugin;
+mockModule.addPlugin = (plugin) => {
+    addPlugin(plugin);
+    return mockModule;
+};
 
 export {
     mockModule,

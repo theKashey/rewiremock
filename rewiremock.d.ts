@@ -4,7 +4,6 @@ interface OverloadedModule {
     parent: Object,
     original: Object
 }
-;
 
 interface ModuleMock {
     /**
@@ -65,8 +64,8 @@ interface ModuleMock {
 interface rewiremock {
     (module: string): ModuleMock;
 
-    enable();
-    disable();
+    enable(): rewiremock;
+    disable(): rewiremock;
 
     /**
      * executes module in a sanbox
@@ -74,7 +73,7 @@ interface rewiremock {
      * @param {Function} [creator] - mock creator. You may add any mocks inside.
      */
     around<T>(loader: () => T, creator?: Function): Promise<T>;
-    inScope(callback);
+    inScope(callback): rewiremock;
 
     flush();
     clear();
@@ -88,20 +87,26 @@ interface rewiremock {
      * Activates module isolation
      * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThought.
      */
-    isolation(options?: Object);
+    isolation(options?: Object): rewiremock;
 
     /**
      * Deactivates isolation
      */
-    withoutIsolation();
+    withoutIsolation(): rewiremock;
 
     /**
      * Adding new isolationpassby record
      */
-    passBy(pattern: any);
+    passBy(pattern: any): rewiremock;
+
+
+    /**
+     * Adds a plugin
+     */
+    addPlugin(plugin: any): rewiremock;
 }
 
 declare module 'rewiremock' {
     var p: rewiremock;
-    export = p;
+    export default p;
 }

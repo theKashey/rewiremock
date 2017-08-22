@@ -23,6 +23,10 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
 - be secure, and isolate target under test.
 - be fast, to be faster.
 
+# Goal:
+- give ability to mock everything
+- give ability to do correctly.
+
 # API
  see d.ts file, or JSDoc in javascript sources.
  
