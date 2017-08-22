@@ -27,6 +27,8 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
 - give ability to mock everything
 - give ability to do correctly.
 
+I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
+
 # API
  see d.ts file, or JSDoc in javascript sources.
  
