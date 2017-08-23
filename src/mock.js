@@ -9,11 +9,11 @@ class ModuleMock {
 
     /**
      * Enabled call thought original module
-     * @name ModuleMock.callThought
+     * @name ModuleMock.callThrough
      * @return {ModuleMock}
      */
-    callThought() {
-        this.mock.allowCallThought = true;
+    callThrough() {
+        this.mock.allowCallThrough = true;
         return this;
     }
 

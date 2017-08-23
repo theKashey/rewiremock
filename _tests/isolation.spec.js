@@ -85,7 +85,7 @@ describe('isolation ', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
     rewiremock('./lib/c/bar')
-      .callThought();
+      .callThrough();
 
     rewiremock.enable();
     rewiremock.isolation();
@@ -101,7 +101,7 @@ describe('isolation ', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
     rewiremock('./lib/c/bar')
-      .callThought();
+      .callThrough();
 
     rewiremock.enable();
     rewiremock.isolation({

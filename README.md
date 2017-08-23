@@ -43,7 +43,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .with(stubs: function | Object) - overloads module with a value
     - .withDefault(stub: function | Object) - overload `default` es6 export
     - .by(otherModule: string) - overload by another module
-    - .callThought() - first load original module, and next extend it by provided stub.    
+    - .callThrough() - first load original module, and next extend it by provided stub.    
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
     - .calledFromMock - will do mock only dependencies of mocked dependencies.
@@ -81,7 +81,7 @@ First - define your mocks. You can do it in any place, this is just a setup.
  
  // replace only part of some library and keep the rest 
  rewiremock('someLibrary')
-    .callThought() 
+    .callThrough() 
     .with({
         onlyOneMethod
     })

@@ -59,10 +59,10 @@ describe('es6 modules ', () => {
         _clearPlugins();
     });
 
-    it('should fail with callThought: ', () => {
+    it('should fail with callThrough: ', () => {
         addPlugin(relativePlugin);
         rewiremock('./foo')
-            .callThought()
+            .callThrough()
             .with(()=>'aa');
 
         rewiremock('./bar')
@@ -84,10 +84,10 @@ describe('es6 modules ', () => {
         _clearPlugins();
     });
 
-    it('should fail with callThought: ', () => {
+    it('should fail with callThrough: ', () => {
         addPlugin(relativePlugin);
         rewiremock('./foo')
-            .callThought()
+            .callThrough()
             .withDefault(()=>'aa');
 
         rewiremock('./bar')

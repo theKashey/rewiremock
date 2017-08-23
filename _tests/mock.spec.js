@@ -134,7 +134,7 @@ describe('rewiremock ', () => {
           addPlugin(relativePlugin);
 
           rewiremock('./foo')
-            .callThought()
+            .callThrough()
             .by(({original}) => {
               return () => "~" + original() + '~'
             });
@@ -177,7 +177,7 @@ describe('rewiremock ', () => {
         .then(mocked => expect(mocked()).to.be.equal('>+!mock'));
     });
 
-    it('should mock all due to callthought mocked : ', () => {
+    it('should mock all due to callThrough mocked : ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {
           //addPlugin(nodePlugin);
@@ -185,7 +185,7 @@ describe('rewiremock ', () => {
             .with(() => 'mock')
             .calledFromMock();
           rewiremock('./bar')
-            .callThought();
+            .callThrough();
         })
         .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
     });

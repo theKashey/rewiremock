@@ -71,7 +71,7 @@ function mockLoader(request, parent, isMain) {
 
             mockedModules[baseRequest] = true;
 
-            if (mock.allowCallThought) {
+            if (mock.allowCallThrough) {
                 if (!mock.original) {
                     mock.original = originalLoader(request, parent, isMain);
                 }
@@ -93,7 +93,7 @@ function mockLoader(request, parent, isMain) {
                 return mockResult(request, mock.override);
             }
 
-            if (mock.allowCallThought) {
+            if (mock.allowCallThrough) {
                 if(typeof(mock.original) === 'function') {
                   if (
                     typeof mock.value === 'object' &&
@@ -101,7 +101,7 @@ function mockLoader(request, parent, isMain) {
                   ) {
                     return mockResult(request, mock.original);
                   } else {
-                       throw new Error('rewiremock: trying to merge Functional base with CallThought mock at '
+                       throw new Error('rewiremock: trying to merge Functional base with callThrough mock at '
                          + request + '. Use overrideBy instead.');
                   }
                 }

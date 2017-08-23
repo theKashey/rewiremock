@@ -9,7 +9,7 @@ interface ModuleMock {
     /**
      * Enabled call thought original module
      */
-    callThought(): ModuleMock,
+    callThrough(): ModuleMock,
 
     /**
      * Setting es6 bahavior for a module
@@ -85,7 +85,7 @@ interface rewiremock {
 
     /**
      * Activates module isolation
-     * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThought.
+     * @param {Boolean} [options.noAutoPassBy] auto-includes mocked modules passBy list.
      */
     isolation(options?: Object): rewiremock;
 
