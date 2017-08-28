@@ -1,9 +1,7 @@
-import Module from 'module';
+import Module, { originalLoader } from './module';
 import {shouldMock} from './plugins';
 import {getMock} from './mocks';
 import getScope from './globals';
-
-export const originalLoader = Module._load;
 
 const patternMatch = fileName => pattern => {
     if (typeof pattern == 'function') {

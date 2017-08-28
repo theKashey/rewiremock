@@ -1,11 +1,10 @@
 import path from 'path'
-import wipe from 'wipe-node-cache';
+import { wipe } from './wipeCache';
 import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 
 delete require.cache[path.join(path.dirname(require.resolve(__filename)), './mockModule.js')];
 import * as API from './mockModule';
-
 
 export const cleanup = () => {
     const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;

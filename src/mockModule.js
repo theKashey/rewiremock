@@ -1,8 +1,7 @@
-import Module from 'module';
+import Module from './module';
 import wipeCache from './wipeCache';
 import createScope from './scope';
 import {setScope} from './globals';
-import executor, {originalLoader} from './executor';
 import {
     convertName,
     onMockCreate,
@@ -89,7 +88,7 @@ mockModule.overrideEntryPoint = (parent) => {
  */
 mockModule.enable = () => {
     scope();
-    Module._load = executor;
+    Module.overloadRequire();
     wipeCache();
     onEnable(getAllMocks());
     return mockModule;
@@ -100,7 +99,7 @@ mockModule.enable = () => {
  */
 mockModule.disable = () => {
     scope();
-    Module._load = originalLoader;
+    Module.restoreRequire();
     onDisable(getAllMocks());
     mockModule.withoutIsolation();
     mockModule.flush();

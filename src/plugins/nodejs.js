@@ -1,4 +1,4 @@
-import Module from 'module';
+import Module from '../module';
 import createPlugin, {standardWipeCheck} from './_common';
 
 const fileNameTransformer = (fileName, module) => Module._resolveFilename(fileName, module);
