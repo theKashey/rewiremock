@@ -3,12 +3,16 @@ import {shouldMock} from './plugins';
 import {getMock} from './mocks';
 import getScope from './globals';
 
+const thisModule = module;
+
 const patternMatch = fileName => pattern => {
     if (typeof pattern == 'function') {
         return pattern(fileName)
     }
     return fileName.match(pattern);
 };
+
+export const requireModule = (name) => require(name);
 
 const testPassby = (request, module) => {
     const {
@@ -53,7 +57,7 @@ function mockLoader(request, parent, isMain) {
 
     const baseRequest = Module._resolveFilename(request, parent);
 
-    if (parent === parentModule) {
+    if (parent === parentModule || parent === thisModule) {
         delete Module._cache[baseRequest];
         mockedModules[baseRequest] = true;
     }

@@ -75,6 +75,13 @@ interface rewiremock {
     around<T>(loader: () => T, creator?: Function): Promise<T>;
     inScope(callback: Function): rewiremock;
 
+    /**
+     * Loads a file in a `proxyquire` way
+     * @param {String} fileName
+     * @param {Object} overrides, with key==filename, and value==data
+     */
+    proxy<T>(fileName: String, overrides?: Object): T;
+
     flush(): void;
     clear(): void;
     /**

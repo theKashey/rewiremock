@@ -106,6 +106,26 @@ mockModule.disable = () => {
     return mockModule;
 };
 
+
+/**
+ * Requires file with hooks
+ * @param {String} file
+ * @param {Object} overrides
+ */
+mockModule.proxy = (file, overrides = {}) => {
+    let result = 0;
+    mockModule.inScope( () => {
+      Object
+        .keys(overrides)
+        .forEach( key => mockModule(key).with(overrides[key]));
+
+      mockModule.enable();
+      result = Module.require(Module.relativeFileName(file, parentModule));
+      mockModule.disable();
+    });
+    return result;
+};
+
 /**
  * Creates temporary executing scope. All mocks and plugins you will add in callback will be removed at exit.
  * @param callback

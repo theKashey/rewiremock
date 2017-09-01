@@ -124,4 +124,15 @@ describe('scope ', () => {
                 expect(mockedBaz()).to.be.equal('foobarbaz');
             });
     });
+
+    it('scope load via proxy call: ', () => {
+        const unmockedBaz = require('./lib/a/test.js');
+        expect(unmockedBaz()).to.be.equal('foobarbaz');
+        const mockedBaz = rewiremock.proxy('./lib/a/test.js',{
+            './foo': () => 'aa',
+            '../b/baz':() => 'cc'
+        });
+
+        expect(mockedBaz()).to.be.equal('aabarcc');
+    });
 });
