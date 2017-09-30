@@ -1,4 +1,4 @@
-import Module from './module';
+import Module, {getModuleParent} from './module';
 import wipeCache from './wipeCache';
 import createScope from './scope';
 import {setScope} from './globals';
@@ -13,7 +13,7 @@ import {
 import {resetMock, getMock, getAllMocks} from './mocks';
 import ModuleMock from './mock';
 
-let parentModule = module.parent;
+let parentModule = getModuleParent(module);
 let mockScope = null;
 const scope = () => setScope(mockScope);
 const updateScope = (parentScope = null) => {
@@ -55,7 +55,7 @@ mockModule.resolve = (module) => {
  * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThrough.
  */
 mockModule.isolation = (options = {}) => {
-    mockScope.isolation = { ...options };
+    mockScope.isolation = Object.assign({}, options);
     return mockModule;
 };
 
@@ -77,7 +77,7 @@ mockModule.passBy = (pattern) => {
 };
 
 mockModule.overrideEntryPoint = (parent) => {
-    mockScope.parentModule = parentModule = parent || module.parent.parent;
+    mockScope.parentModule = parentModule = parent || getModuleParent(getModuleParent(module));
 };
 
 

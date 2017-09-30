@@ -8,7 +8,7 @@
   "scripts": {
     "test": "npm run test:pick -- '_tests/**/*spec.js'",
     "test:pick": "BABEL_ENV=test mocha --compilers js:babel-core/register",
-    "test:karma": "node ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
+    "test:karma": "node ./node_modules/karma/bin/karma start --browsers Chrome",
     "build": "babel src -d lib",
     "prepublish": "npm run build",
     "lint": "eslint src tests",
@@ -37,6 +37,7 @@
   "dependencies": {
     "lodash.some": "^4.6.0",
     "lodash.template": "^4.4.0",
+    "path-parse": "false1.0.5",
     "wipe-node-cache": "^1.0.2",
     "wipe-webpack-cache": "^1.0.0"
   },
@@ -52,13 +53,13 @@
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "eslint-plugin-mocha": "^4.9.0",
-    "mocha": "^3.0.2",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "^2.0.4",
+    "mocha": "^3.0.2",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-polyfill-object-assign": "0.0.2",
     "webpack": "^3.5.5",

@@ -1,13 +1,14 @@
 import createPlugin, {PASS, NO} from './_common';
+import {inParents} from '../module';
 
 const shouldMock = (mock, request, parent, topModule) => {
-    return parent.parent === topModule ? PASS : NO;
+  return inParents(parent, topModule) ? PASS : NO;
 };
 
 const plugin = createPlugin({
-    shouldMock,
+  shouldMock,
 
-    name: 'childOnly'
+  name: 'childOnly'
 });
 
 export default plugin;

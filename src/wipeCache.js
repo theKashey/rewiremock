@@ -1,10 +1,10 @@
-import wipeNode from 'wipe-node-cache';
-import wipeWebpack from 'wipe-webpack-cache';
 import {getAllMocks} from './mocks';
 import {shouldWipe} from './plugins'
 
 // which one?
-export const wipe = module.hot ? wipeWebpack : wipeNode;
+export const wipe =  module.hot
+    ? require('wipe-webpack-cache')
+    : require('wipe-node-cache');
 
 const primaryResolver = (stubs, moduleName) =>
   stubs[moduleName];

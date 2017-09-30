@@ -10,7 +10,6 @@ const plugins = () => {
         }
     };
     collect(getScope());
-    //console.log('with pug',result);
     return result;
 };
 

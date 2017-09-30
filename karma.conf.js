@@ -1,13 +1,12 @@
 var webpack = require("webpack");
+var mockPlugin = require("./webpack/plugin")
+
 module.exports = function(config) {
   config.set({
 
     files: [
-      // all files ending in "test"
-      //'./node_modules/phantomjs-polyfill/bind-polyfill.js',
       './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
       '_tests/karma.js'
-      // each file acts as entry point for the webpack configuration
     ],
 
     // frameworks to use
@@ -23,7 +22,8 @@ module.exports = function(config) {
       // webpack configuration
       plugins: [
         new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new mockPlugin()
       ]
     },
 
@@ -35,11 +35,11 @@ module.exports = function(config) {
     plugins: [
       require("karma-webpack"),
       require("karma-mocha"),
-      require("karma-phantomjs-launcher")
-      //require("karma-chrome-launcher")
+      require("karma-phantomjs-launcher"),
+      require("karma-chrome-launcher")
     ],
 
-    browsers: ['PhantomJS']
-    //browsers: ['Chrome']
+    //browsers: []
+    browsers: ['PhantomJS','Chrome']
   });
 };

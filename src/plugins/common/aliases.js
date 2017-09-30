@@ -1,5 +1,4 @@
 import {join, resolve, isAbsolute, dirname, basename, sep} from 'path';
-import fs from 'fs';
 import template from 'lodash.template';
 import some from 'lodash.some';
 
@@ -10,6 +9,7 @@ const DEFAULT_CONFIG_NAMES = ['webpack.config.js', 'webpack.config.babel.js'];
 
 function fileExists(path) {
     try {
+        const fs= require('fs');
         return !fs.accessSync(path, fs.F_OK);
     } catch (e) {
         return false;

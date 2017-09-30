@@ -10,12 +10,11 @@ const pass = () => PASS;
 
 
 const createPlugin = (plugin) => {
-    const result = {
+    const result = Object.assign({
         fileNameTransformer: onetoone,
         wipeCheck: pass,
         shouldMock: pass,
-        ...plugin
-    };
+    }, plugin);
     return result;
 }
 
