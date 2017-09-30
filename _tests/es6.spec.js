@@ -51,7 +51,6 @@ describe('es6 modules ', () => {
 
         rewiremock.enable();
 
-        console.log('prepare');
         const mockedBaz = require('./lib/es6/test').default;
         expect(mockedBaz()).to.be.equal('aabbcc');
         rewiremock.disable();

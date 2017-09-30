@@ -135,4 +135,55 @@ describe('scope ', () => {
 
         expect(mockedBaz()).to.be.equal('aabarcc');
     });
+
+  describe('proxy call', () => {
+
+    it('simple flow: ', () => {
+      const unmockedBaz = require('./lib/a/test.js');
+      expect(unmockedBaz()).to.be.equal('foobarbaz');
+      const mockedBaz = rewiremock.proxy('./lib/a/test.js', r => ({
+        './foo': () => 'aa',
+        '../b/baz': r.with(() => 'cc')
+      }));
+
+      expect(mockedBaz()).to.be.equal('aabarcc');
+    });
+
+    it('require call: ', () => {
+      const unmockedBaz = require('./lib/a/test.js');
+      expect(unmockedBaz()).to.be.equal('foobarbaz');
+      const mockedBaz = rewiremock.proxy(() => require('./lib/a/test.js'), {
+        './foo': () => 'aa',
+        '../b/baz': () => 'cc'
+      });
+
+      expect(mockedBaz()).to.be.equal('aabarcc');
+    });
+
+    it('import es5: ', () => {
+      const unmockedBaz = require('./lib/a/test.js');
+      expect(unmockedBaz()).to.be.equal('foobarbaz');
+      const mockedBazLoad = rewiremock.module( () => import('./lib/a/test.js'), r => ({
+        './foo': () => 'aa',
+        '../b/baz': r.with(() => 'cc')
+      }));
+
+      return mockedBazLoad.then(mockedBaz => {
+        expect(mockedBaz()).to.be.equal('aabarcc')
+      })
+    });
+
+    it('import es6: ', () => {
+      const unmockedBaz = require('./lib/a/test.js');
+      expect(unmockedBaz()).to.be.equal('foobarbaz');
+      const mockedBazLoad = rewiremock.module( () => import('./lib/a/test.es6.js'), r => ({
+        './foo': () => 'aa',
+        '../b/baz': r.with(() => 'cc')
+      }));
+
+      return mockedBazLoad.then(mockedBaz => {
+        expect(mockedBaz.default()).to.be.equal('aabarcc')
+      })
+    });
+  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "rewiremock",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Easy and es6 compatible dependency mocking tool.",
   "main": "lib/index.js",
   "module": "src/index.js",
@@ -14,6 +14,10 @@
     "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix"
   },
+  "files": [
+    "lib",
+    "webpack"
+  ],
   "keywords": [
     "es6",
     "require",

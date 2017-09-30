@@ -30,13 +30,14 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
 I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
 
 # API
- see d.ts file, or JSDoc in javascript sources.
  
  ## main API
  - rewiremock.enable() - wipes cache and enables interceptor.
  - rewiremock.disable() - wipes cache and disables interceptor.
  - rewiremock.inScope(callback) - place callback inside a sandbox.
  - rewiremock.around(loader, creator) - loads a module in an asynchronous sandbox.
+ - rewiremock.proxy(file, stubs) - _proxyquire_ like mocking api
+ - rewiremock.from(loader, stubs) - _proxyquire_ like mocking api
  ## mocking API 
  - rewiremock(moduleName: string) - set name of overloading module
     - .enable/disable() - to enable or disable mock (enabled by default).
@@ -52,11 +53,35 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  - rewiremock.withoutIsolation() - disables isolation
  - rewiremock.passBy(pattern or function) - enables some modules to pass thought isolation.
 
-# Not working?
- If something is not working - just check that you:
-  - added a plugin to transform names (nodejs, webpackAlias or relative)
-  - use .toBeUsed for each mocks
-And they actually were mocked. If not - rewiremock will throw an Error.
+# Which one?
+Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
+
+Which one to choose? Any! It just depends:
+  - If everything is simply - use __proxy__.
+  - If you need scope isolation - use __around__. inScope is just creating a scope and can be used in all cases.
+  - If you need full control - dont use proxy.
+  - As long all internal API will call __.enable/.disable__ - I would not recommend using them directly.  
+
+#Usage
+```js
+// proxy will load a file by it's own ( name resolution is a hard thing)
+const mock = rewiremock.proxy('somemodule', (r) => ({
+   'dep1': { name: 'override' },
+   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`  
+}));
+
+// you can require a file by yourself. ( yep, proxy is a god function)
+const mock = rewiremock.proxy(() => require('somemodule'), {
+   'dep1': { name: 'override' },
+   'dep2': { onlyDump: 'stubs' }  
+}));
+
+// or use es6 import (not for node.js mjs `real` es6 modules) 
+const mock = await rewiremock.module(() => import('somemodule'), {
+   'dep1': { name: 'override' },
+   'dep2': { onlyDump: 'stubs' }  
+}));
+```
 
 # Setup
 
@@ -113,7 +138,7 @@ First - define your mocks. You can do it in any place, this is just a setup.
  All unrelated to test dependencies will be kept. Node modules, react, common files - everything.
  
  As result - it will run faster.
- 
+  
 # inScope
  Sometimes you will have independent tests in a single file, and you might need separate mocks for each one.
  `inScope` execute callback inside sandbox, and all mocks or plugins or anything else you have added will not leaks away.
@@ -166,7 +191,24 @@ rewiremock.around(
 );
 
 ```
-Currently .inScope is the only API capable to handle es6 dynamic imports.
+Currently .inScope is the only API capable to handle es6(not node [m]js!) dynamic imports.
+
+# Proxy
+ Sometimes it is much easier to combine all the things together.
+```js
+// preferred way - crete stubs using a function, where R is mock creator
+rewiremock.proxy('somemodule', (r) => ({
+   'dep1': { name: 'override' },
+   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // same powerfull syntax
+}));
+
+// straight way - just provide stubs.
+rewiremock.proxy('somemodule', {
+   'dep1': { name: 'override' },
+   'dep2': { name: 'override' }
+ }));
+```
+
 
 # Plugins
  By default - rewiremock has limited features. You can extend its behavior via plugins.
@@ -300,6 +342,12 @@ Don't forget - you can write your own plugins.
  shouldMock: (mock, requestFilename, parentModule, entryPoint) => boolean
  }
  ```
+# Not working?
+ If something is not working - just check that you:
+  - added a plugin to transform names (nodejs, webpackAlias or relative)
+  - use .toBeUsed for each mocks
+And they actually were mocked. If not - rewiremock will throw an Error.
+ 
  
 # Wanna read something about?
  [Rewiremock - medium article](https://medium.com/@antonkorzunov/how-to-mock-dependency-in-a-node-js-and-why-2ad4386f6587)

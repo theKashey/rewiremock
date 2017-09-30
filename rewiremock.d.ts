@@ -56,6 +56,11 @@ interface ModuleMock {
 
     noToBeUsed(): ModuleMock
 }
+
+type ProxyFunction = (r: ModuleMock) => Object;
+type RequireFunction<T>= () => T;
+type ImportFunction<T> = () => Promise<T>;
+type AnyImportFunction<T> = RequireFunction<T> | ImportFunction<T>;
 /**
  * @name rewiremock
  * @class
@@ -72,15 +77,21 @@ interface rewiremock {
      * @param {Function} loader - loader of target module. You can use import or require. May return a Promise
      * @param {Function} [creator] - mock creator. You may add any mocks inside.
      */
-    around<T>(loader: () => T, creator?: Function): Promise<T>;
+    around<T>(loader: AnyImportFunction<T>, creator?: Function): Promise<T>;
     inScope(callback: Function): rewiremock;
 
     /**
      * Loads a file in a `proxyquire` way
-     * @param {String} fileName
+     * @param {String|Function} fileName
+     * @param {Object|Function} overrides, with key==filename, and value==data
+     */
+    proxy<T>(fileName: String | RequireFunction<T>, overrides?: Object | ProxyFunction): T;
+    /**
+     * Loads a file in a `proxyquire` way
+     * @param {Function} fileName
      * @param {Object} overrides, with key==filename, and value==data
      */
-    proxy<T>(fileName: String, overrides?: Object): T;
+    module<T>(fileName: ImportFunction<T>, overrides?: Object | ProxyFunction): T;
 
     flush(): void;
     clear(): void;

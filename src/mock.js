@@ -7,6 +7,16 @@ class ModuleMock {
         mock._parent = this;
     }
 
+    from(source){
+        if(source instanceof  ModuleMock){
+            const originalName = this.mock.name;
+            Object.assign(this.mock, source.mock);
+            this.mock.name= originalName;
+        } else {
+            return this.with(source);
+        }
+    }
+
     /**
      * Enabled call thought original module
      * @name ModuleMock.callThrough
@@ -107,5 +117,13 @@ class ModuleMock {
         return this;
     }
 }
+
+ModuleMock.inlineConstructor = {};
+Object.getOwnPropertyNames(ModuleMock.prototype).forEach( key => {
+  ModuleMock.inlineConstructor[key] = function(...args) {
+    const mock = new ModuleMock({value:{}});
+    return mock[key](...args);
+  }
+});
 
 export default ModuleMock;

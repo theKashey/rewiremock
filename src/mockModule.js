@@ -109,21 +109,48 @@ mockModule.disable = () => {
 
 /**
  * Requires file with hooks
- * @param {String} file
- * @param {Object} overrides
+ * @param {String|Function} file
+ * @param {Object|Function} overrides
  */
 mockModule.proxy = (file, overrides = {}) => {
     let result = 0;
+    const stubs =
+      typeof overrides === 'function'
+      ? overrides(ModuleMock.inlineConstructor)
+      : overrides;
+
     mockModule.inScope( () => {
       Object
-        .keys(overrides)
-        .forEach( key => mockModule(key).with(overrides[key]));
+        .keys(stubs)
+        .forEach( key => mockModule(key).from(stubs[key]));
 
       mockModule.enable();
-      result = Module.require(Module.relativeFileName(file, parentModule));
+      if(typeof file === 'string') {
+        result = Module.require(Module.relativeFileName(file, parentModule));
+      } else {
+        result = file();
+      }
       mockModule.disable();
     });
     return result;
+};
+
+/**
+ * Imports file with hooks
+ * @param {Function} importFunction (use import)
+ * @param {Object|Function} overrides
+ */
+mockModule.module = (importFunction, overrides = {}) => {
+  const stubs =
+    typeof overrides === 'function'
+      ? overrides(ModuleMock.inlineConstructor)
+      : overrides;
+
+  return mockModule.around(importFunction, () =>
+    Object
+      .keys(stubs)
+      .forEach( key => mockModule(key).from(stubs[key]))
+  );
 };
 
 /**
@@ -144,6 +171,7 @@ mockModule.inScope = (callback) => {
     if(error) throw error;
     return mockModule;
 };
+
 
 /**
  * executes module in sandbox
