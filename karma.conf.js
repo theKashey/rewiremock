@@ -1,7 +1,8 @@
 var webpack = require("webpack");
-var mockPlugin = require("./webpack/plugin")
+var mockPlugin = require("./webpack/plugin");
+var path = require('path');
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     files: [
@@ -40,6 +41,6 @@ module.exports = function(config) {
     ],
 
     //browsers: []
-    browsers: ['PhantomJS','Chrome']
+    browsers: ['PhantomJS', 'Chrome']
   });
 };
