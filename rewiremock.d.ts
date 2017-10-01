@@ -81,17 +81,17 @@ interface rewiremock {
     inScope(callback: Function): rewiremock;
 
     /**
-     * Loads a file in a `proxyquire` way
+     * Loads a file and hooks deps in a `proxyquire` way
      * @param {String|Function} fileName
      * @param {Object|Function} overrides, with key==filename, and value==data
      */
     proxy<T>(fileName: String | RequireFunction<T>, overrides?: Object | ProxyFunction): T;
     /**
-     * Loads a file in a `proxyquire` way
-     * @param {Function} fileName
+     * Loads a file and hooks deps in a `proxyquire` way
+     * @param {Function} fileLoader. Require or Import desired module
      * @param {Object} overrides, with key==filename, and value==data
      */
-    module<T>(fileName: ImportFunction<T>, overrides?: Object | ProxyFunction): T;
+    module<T>(fileLoader: ImportFunction<T>, overrides?: Object | ProxyFunction): T;
 
     flush(): void;
     clear(): void;

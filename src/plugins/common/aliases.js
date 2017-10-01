@@ -3,6 +3,7 @@ import template from 'lodash.template';
 import some from 'lodash.some';
 import {requireModule} from '../../executor';
 
+const FS_MODULE_NAME = 'fs';
 const DEFAULT_CONFIG_NAMES = ['webpack.config.js', 'webpack.config.babel.js'];
 
 // most of this file is a copypaste from https://github.com/trayio/babel-plugin-webpack-alias/blob/master/src/index.js
@@ -13,7 +14,7 @@ function fileExists(path) {
     return __webpack_modules__['.' + path] && '.' + path;
   }
   try {
-    const fs = require('fs');
+    const fs = require(FS_MODULE_NAME);
     return !fs.accessSync(path, fs.F_OK) && path;
   } catch (e) {
     return false;

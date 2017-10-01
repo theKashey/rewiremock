@@ -17,7 +17,8 @@
   },
   "files": [
     "lib",
-    "webpack"
+    "webpack",
+    "rewiremock.d.ts"
   ],
   "keywords": [
     "es6",
