@@ -1,10 +1,10 @@
-import {readAlises, processFile} from './common/aliases'
+import {readAliases, processFile} from './common/aliases'
 import createPlugin, {standardWipeCheck} from './_common';
 
 let settings = null;
 
 const configure = (fileName) => {
-    settings = readAlises(fileName);
+    settings = readAliases(fileName);
 };
 
 const fileNameTransformer = (fileName) => {

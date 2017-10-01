@@ -4,6 +4,10 @@
   "plugins": [
     "mocha"
   ],
+  "globals": {
+    "__webpack_modules__": true,
+    "__webpack_require__": false
+  },
   "env": {
     "browser": true,
     "node": true,

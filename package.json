@@ -8,7 +8,8 @@
   "scripts": {
     "test": "npm run test:pick -- '_tests/**/*spec.js'",
     "test:pick": "BABEL_ENV=test mocha --compilers js:babel-core/register",
-    "test:karma": "node ./node_modules/karma/bin/karma start --browsers Chrome",
+    "test:karma": "node ./node_modules/karma/bin/karma --single-run --browsers PhantomJS",
+    "test:browser": "node ./node_modules/karma/bin/karma start --browsers Chrome",
     "build": "babel src -d lib",
     "prepublish": "npm run build",
     "lint": "eslint src tests",

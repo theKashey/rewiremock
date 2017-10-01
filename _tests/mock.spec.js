@@ -124,7 +124,6 @@ describe('rewiremock ', () => {
         })
         .then(mocked => {
           expect(mocked()).to.be.equal('FOObarbaz');
-          expect(toched).to.be.equal('./foo');
         });
     });
 

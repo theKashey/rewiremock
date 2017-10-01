@@ -7,8 +7,6 @@ const Module = module.hot
 import executor, {requireModule} from './executor';
 
 export const originalLoader = Module._load;
-//__webpack_require__
-//__webpack_modules__
 
 const NodeModule = {
   overloadRequire() {
@@ -30,7 +28,7 @@ const NodeModule = {
 
   relativeFileName (name, parent) {
     if (name[0] == '.') {
-      return dirname(getModuleName(parent)) + '/' + name;
+      return this._resolveFilename(name, parent);
     }
     return name;
   },
@@ -51,7 +49,7 @@ export const pickModuleName = (fileName, parent) => {
   } else {
     return fileName;
   }
-}
+};
 
 export const moduleCompare = (a, b) => a === b || getModuleName(a) === getModuleName(b);
 

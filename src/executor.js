@@ -14,7 +14,13 @@ const patternMatch = fileName => pattern => {
   return fileName.match(pattern);
 };
 
-export const requireModule = (name) => require(name);
+export const requireModule = (name) => {
+  if (typeof __webpack_require__ !== 'undefined') {
+    return __webpack_require__(name);
+  } else {
+    return require(name);
+  }
+};
 
 const testPassby = (request, module) => {
   const {
@@ -32,21 +38,27 @@ const testPassby = (request, module) => {
   // if parent is in the pass list - pass everything
   let fileName = Module._resolveFilename(request, module);
   let m = module;
+
+  const test = (fileName) =>  (
+    (!isolation.noAutoPassBy && mockedModules[fileName]) ||  // parent was mocked
+    passBy.filter(patternMatch(fileName)).length             // parent is in pass list
+  );
+
   while (m) {
-    if (
-      (!isolation.noAutoPassBy && mockedModules[fileName]) ||  // parent was mocked
-      passBy.filter(patternMatch(fileName)).length             // parent is in pass list
-    ) {
+    if (test(fileName)) {
       return true;
     }
     fileName = getModuleName(m);
     m = getModuleParent(m);
   }
-  return false;
+  return test(fileName);
 };
 
 
 function mockResult(name, data) {
+  if(!data.default){
+    data.default=data;
+  }
   return data;
 }
 

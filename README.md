@@ -85,6 +85,32 @@ const mock = await rewiremock.module(() => import('somemodule'), {
 
 # Setup
 
+## To run with node.js
+  Just use it. You can also activate nodejs, which will double check all modules names on a real FS, but..
+  everything might work out of the box.
+  > PS: Just use usedByDefault to ensure module names are resolved correctly.
+
+## To run inside webpack enviroment.
+  Rewiremock can `emulate` few webpack features(like aliases) in node.js environment, but it also can be run inside webpack.
+  > Actually rewiremock is the first client side mocking library
+  
+  But not so fast, hanny. First you have to have 3(!) Plugins enabled.
+  1. webpack.NamedModulesPlugin(). To enlight the real names of modules. Not "numbers".
+  2. webpack.HotModuleReplacementPlugin(). To provide some information about connections between modules.
+  3. rewiremock.webpackPlugin. To add some magic and make gears rolling.
+  
+```js
+plugins: [
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new (require("rewiremock/webpack/plugin"))()
+      ]
+```
+  That's all. Now all magic will happens at client side.
+  > It is better to use .proxy/module command with direct require/import and leave all names conversion to webpack.
+   
+## To actually... mock   
+
 First - define your mocks. You can do it in any place, this is just a setup.
 ```javascript
  import rewiremock from 'rewiremock';
