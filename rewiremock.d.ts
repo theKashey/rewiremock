@@ -2,7 +2,8 @@ interface OverloadedModule {
     name: String,
     fileName: String,
     parent: Object,
-    original: Object
+    original: Object,
+    requireActual: Function
 }
 
 interface ModuleMock {
@@ -91,7 +92,7 @@ interface rewiremock {
      * @param {Function} fileLoader. Require or Import desired module
      * @param {Object} overrides, with key==filename, and value==data
      */
-    module<T>(fileLoader: ImportFunction<T>, overrides?: Object | ProxyFunction): T;
+    module<T>(fileLoader: ImportFunction<T>, overrides?: Object | ProxyFunction): Promise<T>;
 
     flush(): void;
     clear(): void;

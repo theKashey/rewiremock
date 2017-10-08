@@ -113,7 +113,8 @@ function mockLoader(request, parent, isMain) {
               name: request,
               fullName: baseRequest,
               parent: parent,
-              original: mock.original
+              original: mock.original,
+              requireActual: (name) => originalLoader(pickModuleName(name, parent), parent, isMain)
             });
           }
         }

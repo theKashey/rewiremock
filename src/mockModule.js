@@ -139,6 +139,7 @@ mockModule.proxy = (file, overrides = {}) => {
  * Imports file with hooks
  * @param {Function} importFunction (use import)
  * @param {Object|Function} overrides
+ * @return {Promise}
  */
 mockModule.module = (importFunction, overrides = {}) => {
   const stubs =

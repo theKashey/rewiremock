@@ -36,14 +36,14 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  - rewiremock.disable() - wipes cache and disables interceptor.
  - rewiremock.inScope(callback) - place callback inside a sandbox.
  - rewiremock.around(loader, creator) - loads a module in an asynchronous sandbox.
- - rewiremock.proxy(file, stubs) - _proxyquire_ like mocking api
- - rewiremock.from(loader, stubs) - _proxyquire_ like mocking api
+ - rewiremock.proxy(file, stubs) - _proxyquire_ like mocking api, where file is file name, and stubs are an object or a function.
+ - rewiremock.module(loader, stubs) - async version of proxy, where loader is a function.
  ## mocking API 
  - rewiremock(moduleName: string) - set name of overloading module
     - .enable/disable() - to enable or disable mock (enabled by default).
     - .with(stubs: function | Object) - overloads module with a value
     - .withDefault(stub: function | Object) - overload `default` es6 export
-    - .by(otherModule: string) - overload by another module
+    - .by(otherModule: string| function) - overload by another module(if string provider) or by result of a function call. 
     - .callThrough() - first load original module, and next extend it by provided stub.    
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
@@ -58,29 +58,41 @@ Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or j
 
 Which one to choose? Any! It just depends:
   - If everything is simply - use __proxy__.
+  - If you have issues with name resolve - use __module__ and resolve names by yourself.
   - If you need scope isolation - use __around__. inScope is just creating a scope and can be used in all cases.
-  - If you need full control - dont use proxy.
+  - If you need full control - you will always have it.
   - As long all internal API will call __.enable/.disable__ - I would not recommend using them directly.  
 
 #Usage
 ```js
-// proxy will load a file by it's own ( name resolution is a hard thing)
+// 1. proxy will load a file by it's own ( name resolution is a hard thing)
 const mock = rewiremock.proxy('somemodule', (r) => ({
    'dep1': { name: 'override' },
    'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`  
 }));
 
-// you can require a file by yourself. ( yep, proxy is a god function)
+// 2. you can require a file by yourself. ( yep, proxy is a god function)
 const mock = rewiremock.proxy(() => require('somemodule'), {
    'dep1': { name: 'override' },
    'dep2': { onlyDump: 'stubs' }  
 }));
 
-// or use es6 import (not for node.js mjs `real` es6 modules) 
+// 3. or use es6 import (not for node.js mjs `real` es6 modules) 
 const mock = await rewiremock.module(() => import('somemodule'), {
    'dep1': { name: 'override' },
    'dep2': { onlyDump: 'stubs' }  
 }));
+
+// 3. another version of .module, where you can do just ~anything~.
+const mock = await rewiremock.around(() => import('somemodule'), () => {
+   rewiremock('dep1').with('something');  
+   callMom();
+}));
+
+// 4. Low level API
+  rewiremock('someThing').with('someThingElse')
+  rewiremock.enable();
+  rewiremock.disable();
 ```
 
 # Setup
@@ -125,11 +137,24 @@ First - define your mocks. You can do it in any place, this is just a setup.
  // replace path, by other module 
  rewiremock('path')
     .by('path-mock');
+ 
+ // replace enzyme by preconfigured one  (from https://medium.com/airbnb-engineering/unlocking-test-performance-migrating-from-mocha-to-jest-2796c508ec50)
+  rewiremock('enzyme')
+     .by(({requireActual}) => {
+    // see rest of possible params in d.ts file
+         const enzyme = requireActual('enzyme');         
+         if (!mockSetup) {
+           const chai = requireActual('chai');
+           const chaiEnzyme = requireActual('chai-enzyme');
+           chai.use(chaiEnzyme());           
+         }
+         return enzyme;
+     });
   
  // replace default export of ES6 module 
  rewiremock('reactComponent')
     .withDefault(MockedComponent)
- 
+     
  // replace only part of some library and keep the rest 
  rewiremock('someLibrary')
     .callThrough() 
