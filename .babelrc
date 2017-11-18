@@ -1,7 +1,38 @@
 {
- "presets": ["latest"],
- "plugins": [
-  ["transform-object-rest-spread", { "useBuiltIns": true }],
-  "dynamic-import-node"
- ]
+  "presets": [],
+  "env": {
+    "cjs": {
+      "presets": [
+        "env"
+      ],
+      "plugins": [
+        [
+          "transform-object-rest-spread",
+          {
+            "useBuiltIns": true
+          }
+        ],
+        "dynamic-import-node"
+      ]
+    },
+    "ejs": {
+      "presets": [
+        [
+          "env",
+          {
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": [
+        [
+          "transform-object-rest-spread",
+          {
+            "useBuiltIns": true
+          }
+        ],
+        "dynamic-import-node"
+      ]
+    }
+  }
 }

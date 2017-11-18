@@ -10,7 +10,7 @@ import {
     addPlugin as addPluginAPI,
     removePlugin as removePluginAPI
 } from './plugins';
-import {resetMock, getMock, getAllMocks} from './mocks';
+import {resetMock, getMock, getAsyncMock, getAllMocks} from './mocks';
 import ModuleMock from './mock';
 
 let parentModule = getModuleParent(module);
@@ -27,14 +27,18 @@ updateScope();
 
 /**
  * @name rewiremock
- * @param {String} module name
+ * @param {String|Function} module name
  * @return {ModuleMock}
  */
 function mockModule(moduleName) {
     scope();
-    const name = convertName(moduleName, parentModule);
-    resetMock(name);
-    return onMockCreate(new ModuleMock(getMock(name)));
+    if(typeof moduleName === 'function'){
+      return onMockCreate(new ModuleMock(getAsyncMock(moduleName)));
+    } else {
+      const name = convertName(moduleName, parentModule);
+      resetMock(name);
+      return onMockCreate(new ModuleMock(getMock(name)));
+    }
 }
 
 /**
@@ -192,8 +196,10 @@ mockModule.around = (loader, createCallback) => {
 
         Promise.resolve(createCallback && createCallback(mockModule))
             .then(() => mockModule.enable())
+            .then(() => Module.probeAsyncModules())
             .then(() =>
-                Promise.resolve(loader()).then((mockedResult) => {
+                Promise.resolve(loader())
+                  .then((mockedResult) => {
                     restore();
                     resolve(mockedResult);
                 }, (err) => {

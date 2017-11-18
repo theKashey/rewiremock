@@ -7,6 +7,10 @@ class ModuleMock {
         mock._parent = this;
     }
 
+    nonStrict() {
+        return this;
+    }
+
     from(source){
         if(source instanceof  ModuleMock){
             const originalName = this.mock.name;

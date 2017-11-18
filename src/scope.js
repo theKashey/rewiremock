@@ -4,6 +4,7 @@ const createScope = (parentScope, parentModule) => ({
 
     mockedModules: {},
     mocks: {},
+    asyncMocks: [],
 
     passBy: [],
     isolation: false,

@@ -1,10 +1,11 @@
-import {dirname, resolve} from 'path';
+import { dirname, resolve } from 'path';
 
 const Module = module.hot
   ? require('../webpack/module')
   : require('module');
 
-import executor, {requireModule} from './executor';
+import executor, { requireModule } from './executor';
+import probeAsyncModules from './asyncModules';
 
 export const originalLoader = Module._load;
 
@@ -14,11 +15,21 @@ const NodeModule = {
     // overload modules by internally
   },
 
-  restoreRequire(){
+  restoreRequire() {
     Module._load = originalLoader;
   },
 
-  _resolveFilename(fileName, module){
+  probeAsyncModules() {
+    const load = Module._load;
+    Module._load = probeAsyncModules.load(this);
+    return probeAsyncModules
+      .execute()
+      .then(() => {
+        Module._load = load;
+      })
+  },
+
+  _resolveFilename(fileName, module) {
     return Module._resolveFilename(fileName, module);
   },
 
@@ -26,7 +37,7 @@ const NodeModule = {
     return Module._cache;
   },
 
-  relativeFileName (name, parent) {
+  relativeFileName(name, parent) {
     if (name[0] == '.') {
       return this._resolveFilename(name, parent);
     }

@@ -24,8 +24,8 @@ and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-
 - be fast, to be faster.
 
 # Goal:
-- give ability to mock everything
-- give ability to do correctly.
+- give ability to mock everything - CommonJS, ES6, Webpack, anything.
+- give ability to do correctly - isolation, typechecks, powerfull API
 
 I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
 
@@ -33,13 +33,13 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  
  ## main API
  - rewiremock.enable() - wipes cache and enables interceptor.
- - rewiremock.disable() - wipes cache and disables interceptor.
- - rewiremock.inScope(callback) - place callback inside a sandbox.
- - rewiremock.around(loader, creator) - loads a module in an asynchronous sandbox.
- - rewiremock.proxy(file, stubs) - _proxyquire_ like mocking api, where file is file name, and stubs are an object or a function.
- - rewiremock.module(loader, stubs) - async version of proxy, where loader is a function.
+ - rewiremock.disable() - wipes cache and disables interceptor.    
+ - rewiremock.around(loader, creator):Promise< T > - loads a module in an **asynchronous** sandbox.
+ - rewiremock.proxy(file, stubs):T - _proxyquire_ like mocking api, where file is file name, and stubs are an object or a function.
+ - rewiremock.module(loader, stubs):Promise< T > - async version of proxy, where loader is a function.
  ## mocking API 
- - rewiremock(moduleName: string) - set name of overloading module
+ - rewiremock(moduleName: string) - fabric for a moduleNames's mock
+ - rewiremock(moduleImport: loader) - async fabric for a module import function.
     - .enable/disable() - to enable or disable mock (enabled by default).
     - .with(stubs: function | Object) - overloads module with a value
     - .withDefault(stub: function | Object) - overload `default` es6 export
@@ -52,20 +52,23 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - disables isolation
  - rewiremock.passBy(pattern or function) - enables some modules to pass thought isolation.
+ ## sandboxing
+ - rewiremock.inScope(callback) - place synchronous callback inside a sandbox.
 
 # Which one?
 Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
 
 Which one to choose? Any! It just depends:
-  - If everything is simply - use __proxy__.
-  - If you have issues with name resolve - use __module__ and resolve names by yourself.
-  - If you need scope isolation - use __around__. inScope is just creating a scope and can be used in all cases.
+  - If everything is simply - use __rewiremock.proxy__.
+  - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
+  - If you need scope isolation - use __rewiremock.around__, or inScope.
+  - If you advanced syntax and type checking - use __rewiremock.around__.
   - If you need full control - you will always have it.
-  - As long all internal API will call __.enable/.disable__ - I would not recommend using them directly.  
+  - You always can just use __.enable/.disable__.  
 
 #Usage
 ```js
-// 1. proxy will load a file by it's own ( name resolution is a hard thing)
+// 1. proxy will load a file by it's own ( keep in mind - name resolution is a complex thing)
 const mock = rewiremock.proxy('somemodule', (r) => ({
    'dep1': { name: 'override' },
    'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`  
@@ -78,6 +81,7 @@ const mock = rewiremock.proxy(() => require('somemodule'), {
 }));
 
 // 3. or use es6 import (not for node.js mjs `real` es6 modules) 
+// PS: module is an async version of proxy, so you can use imports
 const mock = await rewiremock.module(() => import('somemodule'), {
    'dep1': { name: 'override' },
    'dep2': { onlyDump: 'stubs' }  
@@ -94,6 +98,49 @@ const mock = await rewiremock.around(() => import('somemodule'), () => {
   rewiremock.enable();
   rewiremock.disable();
 ```
+
+# Type safety
+Rewiremock is able to provide a type-safe mocks. To enable type-safety follow these steps:
+1. Use TypeScript or Flow.
+2. Use dynamic import syntax.
+3. Use rewiremock.around or rewiremock.module to perform a mock.
+4. Use async form of rewiremock mock declaration.  
+
+```js
+// @flow
+
+import rewiremock  from 'rewiremock';
+
+rewiremock.around(
+  () => import('./a.js'), 
+  mock => {
+  mock(() => import('./b.js'))
+    .withDefault(() => "4")
+    .with({testB: () => 10})
+    .nonStrict() // turn off type system
+    .with({ absolutely: "anything" })
+  }
+);
+```
+If default export is not exists on module 'b', or there is no named export testB, or types do not match - type system will throw.
+
+If you will declare an async mock, you it will not be resolved by the time of execution - Rewiremock will throw on Error.
+
+If you have async imports inside mocked file, follow this syntax
+```js
+rewiremock.around(
+  () => import('./a.js'), 
+  mock => {
+  // just before loader function rewiremock enabled itself
+  mock(() => import('./b.js').then(mock=>mock)) // mocks `live` one `tick` more
+  // just after loader function resolved rewiremock disables itself
+    mock => {
+    ....
+    }
+  }
+);
+```
+ 
 
 # Setup
 
