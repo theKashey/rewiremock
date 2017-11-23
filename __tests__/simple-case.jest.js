@@ -43,6 +43,12 @@ describe('pass', () => {
     expect(mocked.test2(3)).toBe(9);
   });
 
+  it('use es6', () => {
+    require("babel-register");
+    var mocked = rewiremock.requireActual('./stub/c');
+    expect(mocked.default(2)).toBe(8);
+  });
+
   it('execute async', (done) => {
     rewiremock.around(() => require('./stub/a.js'), () => {
       rewiremock(() => require('./stub/b'))
