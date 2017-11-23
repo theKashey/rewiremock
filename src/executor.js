@@ -79,10 +79,12 @@ function monkeyPatchPath(addr) {
 function asyncTest() {
   const asyncModulesLeft = asyncModules.hasAsyncModules();
   if (asyncModulesLeft) {
+    /* eslint-disable no-console */
     console.error(
       'Rewiremock: listed async modules should finish loading first. Use async API of rewiremock.',
       asyncModulesLeft.map(module => module.creator.toString())
     );
+    /* eslint-enable */
     throw new Error('Rewiremock: listed async modules should finish loading first. Use async API of rewiremock.')
   }
 }
