@@ -1,3 +1,5 @@
+var _this = this;
+
 import Module, { getModuleParent } from './module';
 import wipeCache from './wipeCache';
 import createScope from './scope';
@@ -126,7 +128,7 @@ mockModule.proxy = function (file) {
 
         mockModule.enable();
         if (typeof file === 'string') {
-            result = Module.require(Module.relativeFileName(file, parentModule));
+            result = mockModule.requireActual(file);
         } else {
             result = file();
         }
@@ -210,6 +212,22 @@ mockModule.around = function (loader, createCallback) {
 mockModule.flush = function () {
     wipeCache(mockScope.mockedModules);
     mockScope.mockedModules = {};
+};
+
+/**
+ * Low-level require
+ * @param {String} fileName
+ */
+mockModule.requireActual = function (fileName) {
+    return Module.require(Module.relativeFileName(fileName, parentModule), parentModule);
+};
+
+/**
+ * Low-level import
+ * @param {String} fileName
+ */
+mockModule.importActual = function (fileName) {
+    return Promise.resolve(_this.requireActual(fileName));
 };
 
 /**

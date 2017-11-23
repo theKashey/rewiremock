@@ -4,8 +4,13 @@ import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 import {getModuleName, getModuleParent} from './module';
 
+const moduleName = getModuleName(module);
+if(!moduleName) {
+    throw new Error('Rewiremock: while you using Jest - disable automocking')
+}
+
 delete require.cache[path.join(path.dirname(__filename), './mockModule.js')];
-delete require.cache[getModuleName(module).replace('index.js', 'mockModule.js')];
+delete require.cache[moduleName.replace('index.js', 'mockModule.js')];
 
 import * as API from './mockModule';
 

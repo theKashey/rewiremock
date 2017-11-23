@@ -170,6 +170,16 @@ declare module 'rewiremock' {
          * Adds a plugin
          */
         addPlugin(plugin: any): rewiremock;
+
+        /**
+         * low-level require
+         */
+        requireActual(fileName: string): any;
+
+        /**
+         * low-level import
+         */
+        importActual(fileName: string): any
     }
 
 

@@ -130,7 +130,7 @@ mockModule.proxy = (file, overrides = {}) => {
 
       mockModule.enable();
       if(typeof file === 'string') {
-        result = Module.require(Module.relativeFileName(file, parentModule));
+        result = mockModule.requireActual(file);
       } else {
         result = file();
       }
@@ -217,6 +217,19 @@ mockModule.flush = () => {
     wipeCache(mockScope.mockedModules);
     mockScope.mockedModules = {};
 };
+
+/**
+ * Low-level require
+ * @param {String} fileName
+ */
+mockModule.requireActual = (fileName) => Module.require(Module.relativeFileName(fileName, parentModule), parentModule);
+
+/**
+ * Low-level import
+ * @param {String} fileName
+ */
+mockModule.importActual = (fileName) => Promise.resolve(this.requireActual(fileName));
+
 
 /**
  * flushes anything

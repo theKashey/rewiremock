@@ -1,10 +1,11 @@
-import { relative } from 'path'
-import Module, { originalLoader } from './module';
-import { shouldMock } from './plugins';
-import { getMock } from './mocks';
+import {relative} from 'path'
+import Module, {originalLoader} from './module';
+import {shouldMock} from './plugins';
+import {getMock} from './mocks';
 import getScope from './globals';
-import { moduleCompare, pickModuleName, getModuleName, getModuleParent } from './module';
+import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './module';
 import asyncModules from './asyncModules';
+import ModuleLoader from './getModule';
 
 const thisModule = module;
 
@@ -15,11 +16,14 @@ const patternMatch = fileName => pattern => {
   return fileName.match(pattern);
 };
 
-export const requireModule = (name) => {
+export const requireModule = (name, parentModule) => {
   if (typeof __webpack_require__ !== 'undefined') {
     return __webpack_require__(name);
   } else {
-    return require(name);
+    //return Module._load(name);
+    return parentModule
+      ? ModuleLoader._load(name, parentModule)
+      : require(name);
   }
 };
 
@@ -57,7 +61,7 @@ const testPassby = (request, module) => {
 
 
 function mockResult(name, data) {
-  if (!data.default) {
+  if (data && !data.default) {
     data.default = data;
   }
   return data;
@@ -150,7 +154,7 @@ function mockLoader(request, parent, isMain) {
         return mockResult(request, Object.assign({},
           mock.original,
           mock.value,
-          { __esModule: mock.original.__esModule }
+          {__esModule: mock.original.__esModule}
         ));
       }
       return mockResult(request, mock.value);

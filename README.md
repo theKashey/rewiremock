@@ -357,6 +357,28 @@ rewiremock.proxy('somemodule', {
   Sometimes you have to be sure, that you mock is actually was called.
   Isolation will protect you then you add new dependencies, `.toBeUsed` protect you from removal.
  
+ # Jest
+ Jest is a very popular testing framework, but it has one issue - is already contain mocking support.
+ 
+ ## Jest will not allow ANY other mocking library to coexists with Jest
+ To use rewiremock with Jest add to the beginning of your file
+ ```js
+ // better to disable automock
+ jest.disableAutomock();
+
+ // Jest breaks the rules, and you have to restore nesting of a modules.
+ rewiremock.overrideEntryPoint(module);
+ 
+ // There is no way to use overload by Jest require or requireActual.
+ // use the version provided by rewiremock. 
+ require = rewiremock.requireActual;
+ ```
+ 
+ !!! the last line here may disable Jest sandboxing. !!!
+ It is better just to use `rewiremock.requireActual`, without overriding global require.
+  
+ 
+ 
  # Your own setup.
   In most cases you have to:
    - add plugin

@@ -7,6 +7,7 @@ import { getMock } from './mocks';
 import getScope from './globals';
 import { moduleCompare, pickModuleName, getModuleName, getModuleParent } from './module';
 import asyncModules from './asyncModules';
+import ModuleLoader from './getModule';
 
 var thisModule = module;
 
@@ -19,11 +20,12 @@ var patternMatch = function patternMatch(fileName) {
   };
 };
 
-export var requireModule = function requireModule(name) {
+export var requireModule = function requireModule(name, parentModule) {
   if (typeof __webpack_require__ !== 'undefined') {
     return __webpack_require__(name);
   } else {
-    return require(name);
+    //return Module._load(name);
+    return parentModule ? ModuleLoader._load(name, parentModule) : require(name);
   }
 };
 
@@ -62,7 +64,7 @@ var testPassby = function testPassby(request, module) {
 };
 
 function mockResult(name, data) {
-  if (!data.default) {
+  if (data && !data.default) {
     data.default = data;
   }
   return data;

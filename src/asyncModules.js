@@ -1,4 +1,4 @@
-import { getAllAsyncMocks, insertMock } from "./mocks";
+import {getAllAsyncMocks, insertMock} from "./mocks";
 
 let currentModule;
 

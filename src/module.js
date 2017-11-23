@@ -1,8 +1,5 @@
 import { dirname, resolve } from 'path';
-
-const Module = module.hot
-  ? require('../webpack/module')
-  : require('module');
+import Module from './getModule';
 
 import executor, { requireModule } from './executor';
 import probeAsyncModules from './asyncModules';
@@ -44,8 +41,8 @@ const NodeModule = {
     return name;
   },
 
-  require(name) {
-    return requireModule(name);
+  require(name, parentModule) {
+    return requireModule(name, parentModule);
   }
 };
 

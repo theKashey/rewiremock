@@ -1,6 +1,5 @@
 import { dirname, resolve } from 'path';
-
-var Module = module.hot ? require('../webpack/module') : require('module');
+import Module from './getModule';
 
 import executor, { requireModule } from './executor';
 import _probeAsyncModules from './asyncModules';
@@ -37,8 +36,8 @@ var NodeModule = {
     }
     return name;
   },
-  require: function require(name) {
-    return requireModule(name);
+  require: function require(name, parentModule) {
+    return requireModule(name, parentModule);
   }
 };
 
