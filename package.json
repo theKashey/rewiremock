@@ -12,9 +12,9 @@
     "test:karma": "node ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "test:browser": "node ./node_modules/karma/bin/karma start --browsers Chrome",
     "test:jest": "NODE_ENV=cjs jest",
-    "build": "npm run build5 && npm run build6",
-    "build5": "BABEL_ENV=cjs babel src -d lib & cp src/index.js.flow lib/index.js.flow",
-    "build6": "BABEL_ENV=ejs babel src -d es & cp src/index.js.flow es/index.js.flow",
+    "build": "npm run build5 & npm run build6",
+    "build5": "BABEL_ENV=cjs babel src -d lib && cp src/index.js.flow lib/index.js.flow",
+    "build6": "BABEL_ENV=ejs babel src -d es && cp src/index.js.flow es/index.js.flow",
     "prepublish": "npm run build",
     "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix"
