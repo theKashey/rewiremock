@@ -6,6 +6,8 @@ rewiremock.overrideEntryPoint(module);
 require = rewiremock.requireActual;
 
 describe('pass', () => {
+  require("babel-register");
+
   it('execute a', () => {
     rewiremock.inScope(() => {
       rewiremock('path')
@@ -44,7 +46,6 @@ describe('pass', () => {
   });
 
   it('use es6', () => {
-    require("babel-register");
     var mocked = rewiremock.requireActual('./stub/c');
     expect(mocked.default(2)).toBe(8);
   });

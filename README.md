@@ -374,7 +374,21 @@ rewiremock.proxy('somemodule', {
  require = rewiremock.requireActual;
  ```
  
- !!! the last line here may disable Jest sandboxing. !!!
+ !!! the last line here may disable Jest sandboxing. !!! 
+ 
+ Also it will disable Jest transformation.
+ 
+ To be able continue use ES6/imports - you have to enforce Babel to be applied in the `common` way.
+ ```js
+ describe('block of tests', () => {
+   // require babel-register in describe or it block.
+   // NOT! On top level. Jest sandboxing and isolation are still in action,
+   // and will reset all settings to default
+   require("babel-register");
+ })
+```
+ PS: Jest will set BABEL_ENV to `test`.
+ 
  It is better just to use `rewiremock.requireActual`, without overriding global require.
   
  
