@@ -6,7 +6,9 @@ import getScope from './globals';
 import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './module';
 import asyncModules from './asyncModules';
 import ModuleLoader from './getModule';
+import matchOriginFabric from 'compare-module-exports';
 
+const matchOrigin = matchOriginFabric('rewiremock');
 const thisModule = module;
 
 const patternMatch = fileName => pattern => {
@@ -60,7 +62,10 @@ const testPassby = (request, module) => {
 };
 
 
-function mockResult(name, data) {
+function mockResult(name, mock, data) {
+  if (mock.matchOrigin){
+    matchOrigin(mock.original, data, name, '%mock%', { noFunctionCompare: true })
+  }
   if (data && !data.default) {
     data.default = data;
   }
@@ -118,7 +123,7 @@ function mockLoader(request, parent, isMain) {
 
       mockedModules[baseRequest] = true;
 
-      if (mock.allowCallThrough) {
+      if (mock.allowCallThrough || mock.matchOrigin) {
         if (!mock.original) {
           mock.original = originalLoader(request, parent, isMain);
         }
@@ -138,7 +143,7 @@ function mockLoader(request, parent, isMain) {
             });
           }
         }
-        return mockResult(request, mock.override);
+        return mockResult(request, mock, mock.override);
       }
 
       if (mock.allowCallThrough) {
@@ -147,19 +152,19 @@ function mockLoader(request, parent, isMain) {
             typeof mock.value === 'object' &&
             Object.keys(mock.value).length === 0
           ) {
-            return mockResult(request, mock.original);
+            return mockResult(request, mock, mock.original);
           } else {
             throw new Error('rewiremock: trying to merge Functional base with callThrough mock at '
               + request + '. Use overrideBy instead.');
           }
         }
-        return mockResult(request, Object.assign({},
+        return mockResult(request, mock, Object.assign({},
           mock.original,
           mock.value,
           {__esModule: mock.original.__esModule}
         ));
       }
-      return mockResult(request, mock.value);
+      return mockResult(request, mock, mock.value);
     } else {
       // why you shouldn't?
     }

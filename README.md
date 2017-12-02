@@ -48,6 +48,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
     - .calledFromMock - will do mock only dependencies of mocked dependencies.
+ - rewiremock(moduleName: string|loader) - returns existing mock   
  ## isolation API
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - disables isolation
@@ -104,7 +105,7 @@ Rewiremock is able to provide a type-safe mocks. To enable type-safety follow th
 1. Use TypeScript or Flow.
 2. Use dynamic import syntax.
 3. Use rewiremock.around or rewiremock.module to perform a mock.
-4. Use async form of rewiremock mock declaration.  
+4. Use async form of rewiremock mock declaration.
 
 ```js
 // @flow
@@ -140,8 +141,26 @@ rewiremock.around(
   }
 );
 ```
- 
 
+# Type safety for JavaScript
+Rewiremock can check mock against the real implementation. This does not perform `type checking`, but
+could check exported names and exported types (function vs number, for example).
+
+Rewiremock expects that mock will be __less or equal__ than original file.
+```text
+rewiremock: mocked export "somethingMissing" does not exists in ./b.js
+rewiremock: exported type mismatch: ./b.js:default. Expected function, got number
+```
+To activate exports comparison
+```js
+ rewiremock('somemoduname')
+   .toMatchOrigin(); // to activate
+   
+// or
+import rewiremock, { addPlugin, removePlugin, plugins } from 'rewiremock';
+addPlugin(plugins.alwaysMatchOrigin);   
+```
+ 
 # Setup
 
 ## To run with node.js
@@ -353,7 +372,8 @@ rewiremock.proxy('somemodule', {
  rewiremock.passBy((name) => name.indexOf('.node')>=0 )
  ```
  
- # Reverse isolation.
+ 
+ # Reverse isolation
   Sometimes you have to be sure, that you mock is actually was called.
   Isolation will protect you then you add new dependencies, `.toBeUsed` protect you from removal.
  

@@ -10,6 +10,7 @@ declare type Plugins = {
   toBeUsed: Plugin,
   disabledByDefault: Plugin,
   usedByDefault: Plugin,
+  alwaysMatchOrigin: Plugin,
   directChild: Plugin,
 };
 
@@ -65,7 +66,13 @@ declare interface BaseMock {
    */
   toBeUsed(): *,
 
-  noToBeUsed(): *
+  noToBeUsed(): *,
+
+  /**
+   * checks mocks agains implementation
+   * @return {this}
+   */
+  toMatchOrigin(): *
 }
 
 declare interface MagicObjectWithRandomMethod {
@@ -117,6 +124,12 @@ declare interface rewiremock {
   (module: string): ModuleMock;
 
   <T>(module: ImportFunction<T>): TypedModuleMock<T>;
+
+  /**
+   * returns existing mock
+   */
+  getMock(module: string): ModuleMock;
+  getMock<T>(module: ImportFunction<T>): TypedModuleMock<T>;
 
   enable(): rewiremock;
 

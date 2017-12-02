@@ -2,6 +2,7 @@ import {join} from 'path';
 import parse from 'path-parse';
 import getScope from './globals';
 import {extensions} from './_common';
+import {getModuleName} from "./module";
 
 const genMock = (name) => {
   return {
@@ -34,8 +35,12 @@ const getMock = (name, scope = getScope()) => {
   return mock;
 };
 
-const getAsyncMock = (creator, scope = getScope()) => {
-  const signature = creator.toString();
+export const getAsyncModuleName = (creator, parent) => {
+  return creator.toString()+':'+getModuleName(parent);
+};
+
+const getAsyncMock = (creator, parent, scope = getScope()) => {
+  const signature = getAsyncModuleName(creator, parent);
   const mock = resetMock(signature);
   scope.asyncMocks.push({
     mock,

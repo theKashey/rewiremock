@@ -1,7 +1,7 @@
 declare module 'rewiremock' {
 
     type Plugin = any;
-    type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'usedByDefault' | 'directChild';
+    type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
     type Plugins = {
         [Key in PluginNames]: any
         };
@@ -58,7 +58,13 @@ declare module 'rewiremock' {
          */
         toBeUsed(): this,
 
-        noToBeUsed(): this
+        noToBeUsed(): this,
+
+        /**
+         * checks mocks agains implementation
+         * @return {this}
+         */
+        toMatchOrigin(): this
     }
 
     interface NamedModuleMock<T> extends BaseMock {
@@ -112,6 +118,14 @@ declare module 'rewiremock' {
 
         <T extends HasDefault>(module: ImportFunction<T>): DefaultModuleMock<T>
         <T>(module: ImportFunction<T>): NamedModuleMock<T>
+
+        /**
+         * returns existing mock
+         * @return {"rewiremock".ModuleMock}
+         */
+        getMock(module: string): ModuleMock;
+        getMock<T extends HasDefault>(module: ImportFunction<T>): DefaultModuleMock<T>
+        getMock<T>(module: ImportFunction<T>): NamedModuleMock<T>
 
         enable(): rewiremock;
 

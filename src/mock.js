@@ -92,27 +92,32 @@ class ModuleMock {
     }
 
     directChildOnly() {
-      this.mock.flag_directChildOnly = true;
-      return this;
+        this.mock.flag_directChildOnly = true;
+        return this;
     }
 
     atAnyPlace() {
-      this.mock.flag_directChildOnly = false;
-      return this;
+        this.mock.flag_directChildOnly = false;
+        return this;
     }
 
     calledFromMock() {
-      this.mock.flag_toBeCalledFromMock = true;
-      return this;
+        this.mock.flag_toBeCalledFromMock = true;
+        return this;
     }
 
     calledFromAnywhere() {
-      this.mock.flag_toBeCalledFromMock = false;
-      return this;
+        this.mock.flag_toBeCalledFromMock = false;
+        return this;
     }
 
     toBeUsed() {
         this.mock.flag_toBeUsed = true;
+        return this;
+    }
+
+    toMatchOrigin(){
+        this.mock.matchOrigin = true;
         return this;
     }
 

@@ -10,7 +10,7 @@ import {
     addPlugin as addPluginAPI,
     removePlugin as removePluginAPI
 } from './plugins';
-import {resetMock, getMock, getAsyncMock, getAllMocks} from './mocks';
+import {resetMock, getMock, getAsyncMock, getAsyncModuleName, getAllMocks} from './mocks';
 import ModuleMock from './mock';
 
 let parentModule = getModuleParent(module);
@@ -33,12 +33,26 @@ updateScope();
 function mockModule(moduleName) {
     scope();
     if(typeof moduleName === 'function'){
-      return onMockCreate(new ModuleMock(getAsyncMock(moduleName)));
+      return onMockCreate(new ModuleMock(getAsyncMock(moduleName, parentModule)));
     } else {
       const name = convertName(moduleName, parentModule);
       resetMock(name);
       return onMockCreate(new ModuleMock(getMock(name)));
     }
+}
+
+mockModule.getMock = (module) => {
+  let moduleName = module;
+  if(typeof moduleName === 'function'){
+    moduleName = getAsyncModuleName(moduleName, parentModule);
+  } else {
+    moduleName = convertName(moduleName, parentModule);
+  }
+  const mock = getMock(moduleName);
+  if(mock) {
+    return new ModuleMock(mock)
+  }
+  return null;
 }
 
 /**

@@ -8,6 +8,7 @@ import directChild from './directChild';
 
 import disabledByDefault from './disabledByDefault';
 import usedByDefault from './usedByDefault';
+import alwaysMatchOrigin from './toMatchOrigin';
 
 const exports = {
     childOnly,
@@ -18,6 +19,7 @@ const exports = {
     toBeUsed,
 
     disabledByDefault,
+    alwaysMatchOrigin,
     usedByDefault,
     directChild
 };
