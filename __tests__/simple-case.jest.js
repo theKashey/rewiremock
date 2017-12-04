@@ -3,7 +3,8 @@ var rewiremock = require('../lib/index').default;
 //!!!!!!!!!!!!!!!!!!
 jest.disableAutomock();
 rewiremock.overrideEntryPoint(module);
-//require = rewiremock.requireActual;
+// global override
+require = rewiremock.requireActual;
 
 describe('pass', () => {
   require("babel-register");
