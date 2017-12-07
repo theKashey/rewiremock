@@ -11,7 +11,7 @@ const genMock = (name) => {
   };
 };
 
-const insertMock = (name,mock) => getScope().mocks[name] = mock;
+const insertMock = (name, mock) => getScope().mocks[name] = mock;
 const resetMock = (name) => insertMock(name, genMock(name));
 
 const pickFrom = (mocks, name) => {
@@ -26,8 +26,12 @@ const getMock = (name, scope = getScope()) => {
   const fn = parse(name);
   const shortName = join(fn.dir, fn.name);
   const wshortName = fn.dir + '/' + fn.name;
+  const indexName = fn.name === 'index' ? fn.dir : null;
 
-  const mock = pickFrom(mocks, name) || pickFrom(mocks, shortName) || pickFrom(mocks, wshortName);
+  const mock =
+    pickFrom(mocks, name) || (indexName && pickFrom(mocks, indexName)) ||
+    pickFrom(mocks, shortName) || pickFrom(mocks, wshortName);
+
 
   if (!mock && scope.parentScope) {
     return getMock(name, scope.parentScope);
@@ -36,7 +40,7 @@ const getMock = (name, scope = getScope()) => {
 };
 
 export const getAsyncModuleName = (creator, parent) => {
-  return creator.toString()+':'+getModuleName(parent);
+  return creator.toString() + ':' + getModuleName(parent);
 };
 
 const getAsyncMock = (creator, parent, scope = getScope()) => {
@@ -51,15 +55,15 @@ const getAsyncMock = (creator, parent, scope = getScope()) => {
 };
 
 const collectMocks = (result, selector) => {
-    const collect = (scope) => {
-      if (scope.parentScope) {
-        collect(scope.parentScope);
-      }
-      const mocks = selector(scope);
-      Object.keys(mocks).forEach(key => result[key] = mocks[key]);
-    };
-    collect(getScope());
-    return result;
+  const collect = (scope) => {
+    if (scope.parentScope) {
+      collect(scope.parentScope);
+    }
+    const mocks = selector(scope);
+    Object.keys(mocks).forEach(key => result[key] = mocks[key]);
+  };
+  collect(getScope());
+  return result;
 };
 
 const getAllMocks = () => {
