@@ -198,11 +198,17 @@ declare interface rewiremock {
   /**
    * low-level import
    */
-  importActual(fileName: string): any
+  importActual(fileName: string): any;
+
+  /**
+   * low-level API override
+   */
+  overrideEntryPoint(module:any): void;
 }
 
 
 declare export function addPlugin(plugin: Plugin): void;
 declare export function removePlugins(plugin: Plugin): void;
+declare export function overrideEntryPoint(module:any):void;
 declare export var plugins: Plugins;
 declare export default rewiremock;

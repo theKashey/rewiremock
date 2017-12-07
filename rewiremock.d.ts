@@ -193,7 +193,12 @@ declare module 'rewiremock' {
         /**
          * low-level import
          */
-        importActual(fileName: string): any
+        importActual(fileName: string): any;
+
+        /**
+         * low-level API override
+         */
+        overrideEntryPoint(module:any): void;
     }
 
 
@@ -201,5 +206,6 @@ declare module 'rewiremock' {
     export default rewiremockdefault;
     export function addPlugin(plugin:Plugin):void;
     export function removePlugins(plugin:Plugin):void;
+    export function overrideEntryPoint(module:any):void;
     export var plugins: Plugins;
 }
