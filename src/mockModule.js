@@ -1,7 +1,7 @@
 import Module, {getModuleParent} from './module';
 import wipeCache from './wipeCache';
 import createScope from './scope';
-import {setScope} from './globals';
+import {getScopeVariable, setScope} from './globals';
 import {
     convertName,
     onMockCreate,
@@ -85,6 +85,10 @@ mockModule.withoutIsolation = () => {
     return mockModule;
 };
 
+mockModule.forceCacheClear = (mode) => {
+    mockScope.forceCacheClear = mode ? mode : true;
+};
+
 /**
  * Adding new passby record
  * @param {String|RegEx|Function} pattern
@@ -107,6 +111,7 @@ mockModule.overrideEntryPoint = (parent) => {
 mockModule.enable = () => {
     scope();
     Module.overloadRequire();
+    storeCache();
     wipeCache();
     onEnable(getAllMocks());
     return mockModule;
@@ -224,12 +229,56 @@ mockModule.around = (loader, createCallback) => {
     });
 };
 
+const storeCache = () => {
+  mockScope.requireCache = mockScope.requireCache || {...require.cache};
+};
+
+const restoreCache = () => {
+  const oldCache = mockScope.requireCache;
+  const newCache = require.cache;
+  if(oldCache) {
+    Object
+      .keys(oldCache)
+      .filter(key => !newCache[key])
+      .forEach(key => (newCache[key] = oldCache[key]));
+
+    mockScope.requireCache = null;
+  }
+};
+
+const swapCache = () => {
+  const oldCache = mockScope.requireCache;
+  const newCache = require.cache;
+  if(oldCache) {
+    Object
+      .keys(newCache)
+      .filter(key => !oldCache[key])
+      .forEach(key => delete newCache[key]);
+
+    Object
+      .keys(oldCache)
+      .forEach(key => (newCache[key] = oldCache[key]));
+
+    mockScope.requireCache = null;
+  }
+};
 /**
  * flushes all active overrides
  */
 mockModule.flush = () => {
+    const forceCacheClear = getScopeVariable('forceCacheClear');
+    // flush away soiled modules
     wipeCache(mockScope.mockedModules);
     mockScope.mockedModules = {};
+    if(forceCacheClear) {
+      if (forceCacheClear !== 'nocache') {
+        // restore cache completely
+        swapCache();
+      }
+    } else {
+        // merge caches
+        restoreCache();
+    }
 };
 
 /**

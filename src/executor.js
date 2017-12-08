@@ -2,7 +2,7 @@ import {relative} from 'path'
 import Module, {originalLoader} from './module';
 import {shouldMock} from './plugins';
 import {getMock} from './mocks';
-import getScope from './globals';
+import getScope, {collectScopeVariable, getScopeVariable} from './globals';
 import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './module';
 import asyncModules from './asyncModules';
 import ModuleLoader from './getModule';
@@ -32,10 +32,11 @@ export const requireModule = (name, parentModule) => {
 const testPassby = (request, module) => {
   const {
     parentModule,
-    passBy,
     mockedModules,
-    isolation
   } = getScope();
+
+  const passBy = collectScopeVariable('passBy');
+  const isolation = getScopeVariable('isolation');
 
   // was called from test
   if (moduleCompare(module, parentModule)) {
@@ -97,7 +98,6 @@ function asyncTest() {
 function mockLoader(request, parent, isMain) {
   const {
     parentModule,
-
     mockedModules,
     isolation
   } = getScope();
