@@ -1,12 +1,15 @@
 import createPlugin, {YES, PASS, NO} from './_common';
 import {inParents} from '../module';
+import { extensions } from "../_common";
 
 const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;
 
-const relativeWipeCheck = (stubs, moduleName) => {
+export const relativeWipeCheck = (stubs, moduleName) => {
   if (Object
       .keys(stubs)
-      .find(key => moduleName.indexOf(trimKey(key)) >= 0)
+      .find(key =>
+        extensions.find( ext => moduleName.endsWith(trimKey(key+ext)))
+      )
   ) {
     return YES;
   }
@@ -21,7 +24,7 @@ const shouldMock = (mock, request, parent, topModule) => {
 
 const plugin = createPlugin({
   fileNameTransformer,
-  wipeCheck,
+  //wipeCheck,
   shouldMock,
 
   name: 'relative'

@@ -214,8 +214,8 @@ mockModule.around = (loader, createCallback) => {
         };
 
         Promise.resolve(createCallback && createCallback(mockModule))
-            .then(() => mockModule.enable())
             .then(() => Module.probeAsyncModules())
+            .then(() => mockModule.enable())
             .then(() =>
                 Promise.resolve(loader())
                   .then((mockedResult) => {

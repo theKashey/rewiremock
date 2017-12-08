@@ -1,5 +1,6 @@
 import {getAllMocks} from './mocks';
 import {shouldWipe} from './plugins'
+import {relativeWipeCheck} from "./plugins/relative";
 
 // which one?
 export const wipe =  module.hot
@@ -14,7 +15,7 @@ const resolver = (stubs, moduleName) => {
   if (moduleName.indexOf('\.node') > -1) {
     return false;
   }
-  return shouldWipe(stubs, moduleName);
+  return shouldWipe(stubs, moduleName) || primaryResolver(stubs, moduleName) || relativeWipeCheck(stubs, moduleName);
 };
 
 const wipeCache = (primaryCache = {}) => {

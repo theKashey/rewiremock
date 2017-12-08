@@ -189,7 +189,20 @@ describe('rewiremock ', () => {
         .then(mocked => expect(mocked()).to.be.equal('>+!mock'));
     });
 
-    it('should mock all due to callThrough mocked : ', () => {
+    it('should mock all due to callThrough mocked / async : ', () => {
+      return rewiremock.around(() => require('./lib/c/barbaz.js'),
+        () => {
+          //addPlugin(nodePlugin);
+          rewiremock(() => import('./lib/c/baz'))
+            .with(() => 'mock')
+            .calledFromMock();
+          rewiremock(() => import('./lib/c/bar'))
+            .callThrough();
+        })
+        .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
+    });
+
+    it('should mock all due to callThrough mocked / sync: ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {
           //addPlugin(nodePlugin);
