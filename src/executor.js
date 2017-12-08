@@ -67,6 +67,7 @@ function mockResult(name, mock, data) {
   if (mock.matchOrigin) {
     const matchResult = matchOrigin(mock.original, data, name, '%mock%', {noFunctionCompare: true})
     if (matchResult) {
+      // eslint-disable-next-line no-console
       matchResult.forEach(line => console.error(line));
       throw new Error('Rewiremock: provided mocks does not match ' + name);
     }
