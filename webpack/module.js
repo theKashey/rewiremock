@@ -5,9 +5,17 @@ const Module = {
   _load: interceptor.load,
   _resolveFilename(fileName, parent){
     const targetFile = resolve(dirname(parent.i), fileName);
-    return Object
+    const keys = Object
       .keys(__webpack_modules__)
-      .find(name => name.indexOf(targetFile) > 0) || fileName;
+      .sort((a,b) => a.length - b.length);
+    const targetFileIndex = targetFile + '/index';
+
+    const asFile = keys.find(name => name.indexOf(targetFile) > 0);
+    const asIndex = keys.find(name => name.indexOf(targetFileIndex) > 0);
+    if (asFile && asIndex && asFile.substr(targetFile.length+1).indexOf('/') >= 0) {
+        return asIndex;
+    }
+    return asFile || fileName;
   },
   get _cache() {
     return require.cache;

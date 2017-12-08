@@ -452,29 +452,27 @@ rewiremock.proxy('somemodule', {
  You extract some common code into helper. And things become a lot easier.
    
  # Caching
- 
-Other libraries will always do strange things with cache:
 
-- just wipe everything. Absolutely. 
-As a result tests will run slow, or not run at all. 
-Normally you should not wipe native(.node) modules, and external(node_modules) modules.
- For example you should not wipe React - _new_ version of React will be incompatible with old one.
-- wipe only listed modules. Exactly.
- Also not a good idea, as sometimes you can found some sort of middleware between first and mocked module.
- Syntax sugar, third party library, helper, and so on.
+Default cache policy follow these steps:
 
-Rewiremock is using a bit different, smarter way:
+1. Preparation:
 
 - all files required from original test, while interceptor is active, will bypass cache.
- (proxyquire can't do it, as it works at a lower API level).
-- all files you indicate as mocks will be removed from cache. Unfortunately all, in any case.
-- all files which rely on mocks - will also  be removed from cache.
-- repeat.
-  
-As a result - it will not wipe things it should not wipe.
+- all files you indicate as mocks will be removed from the cache.
+- all "soiled" files which rely on mocks - will also  be removed from the cache.
+- repeat .
 
-As a result - you can mock any file at any level. Sometimes it is useful.
-  
+2. Finalization
+- repeat all mocks, and possible "soiled" by mocks files.
+- copy over the old cache.
+- or restore the old cache complitely if `forceCacheClear` mode is set.
+
+The last variant is default for proxyquire and mockery, also it is more `sequre` from different side effects.
+Regardless, default is the first variant - as a way faster, and secure enough. 
+
+As result of this mocking strategy you can mock any file at any level, while keeping another files cached.
+
+#### Hint  
 If you __don't want__  this - just add `relative` plugin. It will allow mocking only for modules
 
 >  _required from __module__ with __parent__ equals __entryPoint__._

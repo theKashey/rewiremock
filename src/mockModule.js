@@ -230,7 +230,7 @@ mockModule.around = (loader, createCallback) => {
 };
 
 const storeCache = () => {
-  mockScope.requireCache = mockScope.requireCache || {...require.cache};
+  mockScope.requireCache = mockScope.requireCache || Object.assign({},require.cache);
 };
 
 const restoreCache = () => {
@@ -253,6 +253,7 @@ const swapCache = () => {
     Object
       .keys(newCache)
       .filter(key => !oldCache[key])
+      .filter(key => key.indexOf('\.node') < 0)
       .forEach(key => delete newCache[key]);
 
     Object

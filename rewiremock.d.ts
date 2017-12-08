@@ -176,6 +176,11 @@ declare module 'rewiremock' {
         withoutIsolation(): rewiremock;
 
         /**
+         * set aggressive politics to cache operation, restoring to the the previous values on end.
+         */
+        forceCacheClear(): rewiremock;
+
+        /**
          * Adding new isolationpassby record
          */
         passBy(pattern: any): rewiremock;
