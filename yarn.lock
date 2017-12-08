@@ -1273,9 +1273,9 @@ commander@^2.11.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
 
-compare-module-exports@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/compare-module-exports/-/compare-module-exports-1.1.0.tgz#4da8728fcc49e6ab5a079e7648d52d7092ac62ca"
+compare-module-exports@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/compare-module-exports/-/compare-module-exports-2.0.0.tgz#781880b594ffab28d07ff7b164e42a06884cf25e"
 
 component-bind@1.0.0:
   version "1.0.0"
