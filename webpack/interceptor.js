@@ -18,7 +18,11 @@ function interceptor(superRequire, parentModule) {
   }
 
   Object.getOwnPropertyNames(superRequire).forEach(key => {
-    RQ[key] = superRequire[key]
+    try {
+      RQ[key] = superRequire[key]
+    } catch (e) {
+      // could not set length, for example
+    }
   });
   return RQ;
 }

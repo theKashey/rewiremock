@@ -3,7 +3,7 @@ import {shouldWipe} from './plugins'
 import {relativeWipeCheck} from "./plugins/relative";
 
 // which one?
-export const wipe =  module.hot
+export const wipe = typeof __webpack_require__ === 'function'
     ? require('wipe-webpack-cache')
     : require('wipe-node-cache');
 

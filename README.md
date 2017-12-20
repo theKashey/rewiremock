@@ -186,6 +186,18 @@ plugins: [
 ```
   That's all. Now all magic will happens at client side.
   > It is better to use .proxy/module command with direct require/import and leave all names conversion to webpack.
+
+### webpack troubleshooting
+Currently there are 2 known problems, both for mocha+webpack, ie using nodejs to run webpack bundle:
+- TypeError: Cannot read property 'webpackHotUpdate' of undefined
+
+  Caused by babel. Just dont use babel then running webpack bundles. Use babel them creating bundled.
+- TypeError: Cannot read property 'call' of undefined 
+
+  Caused by webpack. Sometimes is does not include some important files.
+  To solve this problem just `import('rewiremock/webpack/interceptor')` in scaffolding.
+  The problem is simply - this file does not exists in the bundle.  
+
    
 ## To actually... mock   
 

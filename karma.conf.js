@@ -1,6 +1,4 @@
-var webpack = require("webpack");
-var mockPlugin = require("./webpack/plugin");
-var path = require('path');
+var webpack = require("./webpack.config");
 
 module.exports = function (config) {
   config.set({
@@ -19,14 +17,7 @@ module.exports = function (config) {
       '_tests/karma.js': ['webpack']
     },
 
-    webpack: {
-      // webpack configuration
-      plugins: [
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new mockPlugin()
-      ]
-    },
+    webpack,
 
     webpackMiddleware: {
       // webpack-dev-middleware configuration

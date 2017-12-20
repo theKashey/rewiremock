@@ -11,6 +11,7 @@
     "test:pick": "BABEL_ENV=cjs mocha --compilers js:babel-core/register",
     "test:karma": "node ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "test:browser": "node ./node_modules/karma/bin/karma start --browsers Chrome",
+    "test:webpack": "webpack ./_tests/karma.js ./_tests/bundle.js && mocha --compilers js:babel-core/register ./_tests/bundle.js",
     "test:jest": "NODE_ENV=cjs jest",
     "build": "npm run build5 && npm run build6",
     "build5": "BABEL_ENV=cjs babel src -d lib && cp src/index.js.flow lib/index.js.flow",

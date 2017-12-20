@@ -1,7 +1,7 @@
-import { dirname, resolve } from 'path';
+import {dirname, resolve} from 'path';
 import Module from './getModule';
 
-import executor, { requireModule } from './executor';
+import executor, {requireModule} from './executor';
 import probeAsyncModules from './asyncModules';
 
 export const originalLoader = Module._load;
@@ -46,7 +46,7 @@ const NodeModule = {
   }
 };
 
-const toModule = (name) => require.cache[name];
+const toModule = (name) => name && require.cache[name];
 
 export const pickModuleName = (fileName, parent) => {
   if (typeof __webpack_modules__ !== 'undefined') {
@@ -62,8 +62,8 @@ export const pickModuleName = (fileName, parent) => {
 export const moduleCompare = (a, b) => a === b || getModuleName(a) === getModuleName(b);
 
 export const getModuleName = (module) => module.filename || module.i;
-export const getModuleParent = (module) => module.parent || toModule(module.parents[0]);
-export const getModuleParents = (module) => module.parent ? [getModuleName(module.parent)] : module.parents;
+export const getModuleParent = (module) => module && (module.parent || toModule(module.parents && module.parents[0]));
+export const getModuleParents = (module) => module && (module.parent ? [getModuleName(module.parent)] : module.parents);
 
 export const inParents = (a, b) => {
   const B = getModuleName(b)
