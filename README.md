@@ -3,12 +3,12 @@
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
 
 Simple es6-friendly mocking library inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - the library I like the most.
-- [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever.
-- [proxyquire](https://github.com/theKashey/proxyquire) - the one I know better than others.
+- [mockery](https://github.com/mfncooper/mockery) - the library I like the most. Rewiremock is a better mockery.
+- [proxyquire](https://github.com/theKashey/proxyquire) - the one with quite handy API. Rewiremock do it better.
+- [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever. Things must not be complex.
 
 By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
-It covers _any_ cases. It is the right way to mock your dependencies or perform dependency injection.
+It covers _any_ case. It is the right way to mock your dependencies or perform dependency injection.
  
 
 Rewiremock is an evolution of lessons I learned from: 
@@ -67,7 +67,7 @@ Which one to choose? Any! It just depends:
   - If you need full control - you will always have it.
   - You always can just use __.enable/.disable__.  
 
-#Usage
+# Usage
 ```js
 // 1. proxy will load a file by it's own ( keep in mind - name resolution is a complex thing)
 const mock = rewiremock.proxy('somemodule', (r) => ({
