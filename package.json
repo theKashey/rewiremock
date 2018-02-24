@@ -1,10 +1,7 @@
 {
   "name": "rewiremock",
   "version": "3.4.2",
-  "description": "Easy and es6 compatible dependency mocking tool.",
-  "repository": { 
-    "url": "theKashey/rewiremock"
-  },
+  "description": "Advanced dependency mocking device.",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "module": "es/index.js",
@@ -23,6 +20,14 @@
     "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theKashey/rewiremock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theKashey/rewiremock/issues"
+  },
+  "homepage": "https://github.com/theKashey/rewiremock#readme",
   "files": [
     "lib",
     "es",
@@ -41,7 +46,8 @@
     "swap",
     "test",
     "mock",
-    "stub"
+    "mockery",
+    "proxyquire"
   ],
   "jest": {
     "testMatch": [
