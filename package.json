@@ -2,6 +2,9 @@
   "name": "rewiremock",
   "version": "3.4.2",
   "description": "Easy and es6 compatible dependency mocking tool.",
+  "repository": { 
+    "url": "theKashey/rewiremock"
+  },
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "module": "es/index.js",
