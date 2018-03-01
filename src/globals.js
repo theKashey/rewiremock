@@ -10,7 +10,17 @@ export const getScopeVariable = (name, scope = currentScope) => {
     return getScopeVariable(name, scope.parentScope);
   }
   return undefined;
-}
+};
+
+export const getScopeOption = (name, scope = currentScope) => {
+  if(name in scope.options){
+    return scope.options[name];
+  }
+  if(scope.parentScope){
+    return getScopeOption(name, scope.parentScope);
+  }
+  return undefined;
+};
 
 export const collectScopeVariable = (name, scope = currentScope, collect = []) => {
   if(name in scope){
@@ -24,6 +34,6 @@ export const collectScopeVariable = (name, scope = currentScope, collect = []) =
     collectScopeVariable(name, scope.parentScope, collect);
   }
   return collect;
-}
+};
 
 export default () => currentScope;

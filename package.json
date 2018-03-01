@@ -95,6 +95,7 @@
     "mocha": "^3.0.2",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-polyfill-object-assign": "0.0.2",
+    "sinon": "^4.4.2",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   }

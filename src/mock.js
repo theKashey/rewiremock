@@ -32,6 +32,17 @@ class ModuleMock {
     }
 
     /**
+     * Enable automatic dependency mocking
+     * @name ModuleMock.mockThrough
+     * @param {Function} [mockFactory=() => emptyFunction] - mock constructor
+     * @return {ModuleMock}
+     */
+    mockThrough(mockFactory = true) {
+        this.mock.mockThrough = mockFactory;
+        return this;
+    }
+
+    /**
      * Setting es6 behavior for a current module
      * @return {ModuleMock}
      */

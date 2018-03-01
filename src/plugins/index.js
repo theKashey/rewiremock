@@ -7,6 +7,7 @@ import toBeUsed from './toBeUsed';
 import directChild from './directChild';
 
 import disabledByDefault from './disabledByDefault';
+import mockThoughByDefault from './mockThoughByDefault';
 import usedByDefault from './usedByDefault';
 import alwaysMatchOrigin from './toMatchOrigin';
 
@@ -19,6 +20,7 @@ const exports = {
     toBeUsed,
 
     disabledByDefault,
+    mockThoughByDefault,
     alwaysMatchOrigin,
     usedByDefault,
     directChild

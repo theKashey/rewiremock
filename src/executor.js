@@ -2,7 +2,7 @@ import {relative} from 'path'
 import Module, {originalLoader} from './module';
 import {shouldMock} from './plugins';
 import {getMock} from './mocks';
-import getScope, {collectScopeVariable, getScopeVariable} from './globals';
+import getScope, {collectScopeVariable, getScopeOption, getScopeVariable} from './globals';
 import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './module';
 import asyncModules from './asyncModules';
 import ModuleLoader from './getModule';
@@ -78,9 +78,37 @@ function mockResult(name, mock, data) {
   return data;
 }
 
+function standardStubFactory(name, object, deeperMock) {
+  if (typeof object === 'function') {
+    return () => {
+    }
+  }
+  if (typeof object === 'object') {
+    return deeperMock(deeperMock);
+  }
+  return object;
+}
+
+function mockThought(stubFactory, mockOriginal, name = '') {
+  if (typeof mockOriginal === 'function') {
+    return stubFactory(name || 'default', mockOriginal)
+  }
+  if (typeof mockOriginal === 'object') {
+    const deeperMock = (key, value) => mockThought(stubFactory, value, name ? `${name}.${key}` : key);
+    if (Array.isArray(mockOriginal)) {
+      return mockOriginal.map((x, i) => deeperMock(i, x))
+    } else {
+      return Object.keys(mockOriginal)
+        .map(key => ({key, value: deeperMock(key, mockOriginal[key])}))
+        .reduce((acc, x) => (Object.assign(acc, {[x.key]: x.value})), {})
+    }
+  }
+  return mockOriginal;
+}
+
 function monkeyPatchPath(addr) {
   const path = addr.split('/');
-  if (path[0] == '..') {
+  if (path[0] === '..') {
     path[0] = '.';
     return path.join('/');
   }
@@ -128,10 +156,16 @@ function mockLoader(request, parent, isMain) {
 
       mockedModules[baseRequest] = true;
 
-      if (mock.allowCallThrough || mock.matchOrigin) {
+      if (mock.allowCallThrough || mock.matchOrigin || mock.mockThrough) {
         if (!mock.original) {
           mock.original = originalLoader(request, parent, isMain);
         }
+      }
+
+      if (mock.mockThrough) {
+        const factory = mock.mockThrough === true ? getScopeOption('stubFactory') : mock.mockThrough;
+        mock.override = mockThought(factory || standardStubFactory, mock.original);
+        return mockResult(request, mock, mock.override);
       }
 
       if (mock.overrideBy) {

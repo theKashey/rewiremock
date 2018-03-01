@@ -9,6 +9,7 @@ declare type Plugins = {
   webpackAlias: Plugin,
   toBeUsed: Plugin,
   disabledByDefault: Plugin,
+  mockThoughByDefault: Plugin,
   usedByDefault: Plugin,
   alwaysMatchOrigin: Plugin,
   directChild: Plugin,
@@ -22,11 +23,23 @@ declare interface OverloadedModule {
   requireActual: () => any
 }
 
+declare type IStubFactory = (name: string, value: any) => any;
+
 declare interface BaseMock {
   /**
    * Enabled call thought original module
    */
   callThrough(): *,
+
+  /**
+   * Mimic the original file, replacing all the original methods by mocks.
+   * @param {IStubFactory} [stubFactory] - stub factory function
+   * @example
+   * mock.mockThrough();
+   * mock.mockThrough( () => sinon.stub() );
+   * mock.mockThrough( (name, value) => typeof value === 'function' ? sinon.stub() : value );
+   */
+  mockThrough(stubFactory?: IStubFactory): this,
 
   /**
    * Setting es6 bahavior for a module
@@ -66,7 +79,7 @@ declare interface BaseMock {
    */
   toBeUsed(): *,
 
-  noToBeUsed(): *,
+  notToBeUsed(): *,
 
   /**
    * checks mocks agains implementation
@@ -161,6 +174,12 @@ declare interface rewiremock {
   flush(): void;
 
   clear(): void;
+
+  /**
+   * Define stub factory for mockThrought command
+   * @param {IStubFactory} stubFactory
+   */
+  stubFactory(stubFactory: IStubFactory): void;
 
   /**
    * converts module name

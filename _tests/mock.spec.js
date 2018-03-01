@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 
 import rewiremock, {addPlugin} from '../src/index';
+import sinon from 'sinon';
 
 import nodePlugin from '../src/plugins/nodejs';
 import relativePlugin from '../src/plugins/relative';
@@ -177,7 +178,7 @@ describe('rewiremock ', () => {
     });
   });
 
-  describe('called from a mock ', () => {
+  describe('called from a mock', () => {
     it('should mock top level entity only due to mocked parent: ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {
@@ -214,6 +215,81 @@ describe('rewiremock ', () => {
         })
         .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
     });
+  });
+
+  describe('mock thought', () => {
+    it('should mock through - default', () => {
+      return rewiremock.around(() => require('./lib/requireThought'),
+        () => {
+          rewiremock('./thought')
+            .mockThrough();
+        })
+        .then(mocked => {
+          expect(mocked.fun1()).to.be.equal();
+          expect(mocked.fun2()).to.be.equal();
+          expect(mocked.value1).to.be.equal(41);
+          expect(mocked.object.value2).to.be.equal(42);
+          expect(mocked.object.fun3()).to.be.equal();
+        });
+    });
+
+    it('should mock through - inline', () => {
+      return rewiremock.around(() => require('./lib/requireThought'),
+        () => {
+          rewiremock('./thought')
+            .mockThrough(() => () => 'mocked');
+        })
+        .then(mocked => {
+          expect(mocked.fun1()).to.be.equal('mocked');
+          expect(mocked.fun2()).to.be.equal('mocked');
+          expect(mocked.value1).to.be.equal(41);
+          expect(mocked.object.fun3()).to.be.equal('mocked');
+        });
+    });
+
+    it('should mock through - global', () => {
+      return rewiremock.around(() => require('./lib/requireThought'),
+        () => {
+          rewiremock.stubFactory((name) => () => name);
+          rewiremock('./thought').mockThrough();
+        })
+        .then(mocked => {
+          expect(mocked.fun1()).to.be.equal('fun1');
+          expect(mocked.fun2()).to.be.equal('fun2');
+          expect(mocked.value1).to.be.equal(41);
+          expect(mocked.object.fun3()).to.be.equal('object.fun3');
+        });
+    });
+
+    it('should mock through - instant rewire', () => {
+      rewiremock('./lib/thought').mockThrough();
+      rewiremock.inScope( () => {
+        rewiremock.enable();
+        rewiremock.stubFactory((name) => () => name);
+        const mocked = require('./lib/thought');
+        rewiremock.disable();
+        expect(mocked.fun1()).to.be.equal('fun1');
+      });
+    });
+
+    it('should mock through - sinon', () => {
+      const stub = sinon.stub();
+      return rewiremock.around(() => require('./lib/requireThought'),
+        () => {
+          rewiremock.stubFactory((name) => name === 'fun1' ? stub : sinon.stub());
+          rewiremock('./thought').mockThrough();
+        })
+        .then(mocked => {
+          expect(stub.called).to.be.false;
+          mocked.fun1();
+          expect(stub.called).to.be.true;
+          expect(mocked.fun1.called).to.be.true;
+
+          expect(mocked.fun2.called).to.be.false;
+          mocked.fun2();
+          expect(mocked.fun2.called).to.be.true;
+        });
+    })
   });
 
 });

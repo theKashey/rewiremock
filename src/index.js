@@ -45,4 +45,5 @@ export {
     removePlugin,
     plugins
 };
+
 export default API.mockModule;

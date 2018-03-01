@@ -44,10 +44,11 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .with(stubs: function | Object) - overloads module with a value
     - .withDefault(stub: function | Object) - overload `default` es6 export
     - .by(otherModule: string| function) - overload by another module(if string provider) or by result of a function call. 
-    - .callThrough() - first load original module, and next extend it by provided stub.    
+    - .callThrough() - first load the original module, and next extend it by provided stub.
+    - .mockThrough() - first load the original module, and then replaces all exports by stubs.    
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
-    - .calledFromMock - will do mock only dependencies of mocked dependencies.
+    - .calledFromMock - will do mock only dependencies of mocked dependencies.    
  - rewiremock(moduleName: string|loader) - returns existing mock   
  ## isolation API
  - rewiremock.isolation() - enables isolation
@@ -55,6 +56,8 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  - rewiremock.passBy(pattern or function) - enables some modules to pass thought isolation.
  ## sandboxing
  - rewiremock.inScope(callback) - place synchronous callback inside a sandbox.
+ ## helper functions
+ - rewuremock.stubFactory(factory) - define a stub factory for mockThrough command.
 
 # Which one?
 Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
@@ -68,37 +71,51 @@ Which one to choose? Any! It just depends:
   - You always can just use __.enable/.disable__.  
 
 # Usage
+
+- `proxy` will load a file by it's own ( keep in mind - name resolution is a complex thing)
+
 ```js
-// 1. proxy will load a file by it's own ( keep in mind - name resolution is a complex thing)
 const mock = rewiremock.proxy('somemodule', (r) => ({
    'dep1': { name: 'override' },
    'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`  
 }));
-
-// 2. you can require a file by yourself. ( yep, proxy is a god function)
+```
+- you can require a file by yourself. ( yep, proxy is a "god" function)
+```js
 const mock = rewiremock.proxy(() => require('somemodule'), {
    'dep1': { name: 'override' },
    'dep2': { onlyDump: 'stubs' }  
 }));
-
-// 3. or use es6 import (not for node.js mjs `real` es6 modules) 
-// PS: module is an async version of proxy, so you can use imports
+```
+- or use es6 `import` (not for node.js mjs `real` es6 modules) 
+`module` is an async version of proxy, so you can use imports
+```js
 const mock = await rewiremock.module(() => import('somemodule'), {
    'dep1': { name: 'override' },
    'dep2': { onlyDump: 'stubs' }  
 }));
-
-// 3. another version of .module, where you can do just ~anything~.
+```
+- `around` - another version of .module, where you can do just ~anything~.
+```js
 const mock = await rewiremock.around(() => import('somemodule'), () => {
    rewiremock('dep1').with('something');  
    callMom();
+   // prepare mocking behavior
 }));
-
-// 4. Low level API
+```
+- `enable`/`disable` - Low level API
+```js  
   rewiremock('someThing').with('someThingElse')
   rewiremock.enable();
+  // require something
   rewiremock.disable();
 ```
+
+In all the cases you can specify what exactly you want to mock, or just mock anything 
+```js
+   addPlugin(plugins.mockThoughByDefault);  
+```
+
 
 # Type safety
 Rewiremock is able to provide a type-safe mocks. To enable type-safety follow these steps:
@@ -348,6 +365,7 @@ rewiremock.proxy('somemodule', {
  - protectNodeModules. Ensures that any module from node_modules will not be wiped from a cache.
  - toBeUsed. Adds feature. The only plugin enabled by default.
  - disabledByDefault. All mocks will be disabled on create and at the end of each cycle.
+ - mockThoughByDefault. All mocks mocked though.
  - usedByDefault. All mocks to be used by fact (reverse isolation)  
  ```javascript
  import rewiremock, { addPlugin, removePlugin, plugins } from 'rewiremock';     

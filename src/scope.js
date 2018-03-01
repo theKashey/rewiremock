@@ -7,9 +7,10 @@ const createScope = (parentScope, parentModule) => ({
     asyncMocks: [],
 
     passBy: [],
-    isolation: false,
+    //isolation: false,
 
-    plugins: []
+    plugins: [],
+    options: {}
 });
 
 export default createScope;

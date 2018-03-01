@@ -229,6 +229,11 @@ mockModule.around = (loader, createCallback) => {
     });
 };
 
+mockModule.stubFactory = factory => {
+  const currentScope = mockScope;
+  currentScope.options.stubFactory = factory;
+};
+
 const storeCache = () => {
   mockScope.requireCache = mockScope.requireCache || Object.assign({},require.cache);
 };
