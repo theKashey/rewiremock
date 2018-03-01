@@ -247,6 +247,19 @@ describe('rewiremock ', () => {
         });
     });
 
+    it('should mock through - inline and merge', () => {
+      return rewiremock.around(() => require('./lib/requireThought'),
+        () => {
+          rewiremock('./thought')
+            .mockThrough(() => () => 'mocked')
+            .with({fun2: 42})
+        })
+        .then(mocked => {
+          expect(mocked.fun1()).to.be.equal('mocked');
+          expect(mocked.fun2).to.be.equal(42);
+        });
+    });
+
     it('should mock through - global', () => {
       return rewiremock.around(() => require('./lib/requireThought'),
         () => {
@@ -263,7 +276,7 @@ describe('rewiremock ', () => {
 
     it('should mock through - instant rewire', () => {
       rewiremock('./lib/thought').mockThrough();
-      rewiremock.inScope( () => {
+      rewiremock.inScope(() => {
         rewiremock.enable();
         rewiremock.stubFactory((name) => () => name);
         const mocked = require('./lib/thought');
