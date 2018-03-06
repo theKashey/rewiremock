@@ -2,10 +2,22 @@
 
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
 
-Simple es6-friendly mocking library inspired by the best libraries:
+The most powerful mocking library, inspired by the best libraries:
 - [mockery](https://github.com/mfncooper/mockery) - the library I like the most. Rewiremock is a better mockery.
-- [proxyquire](https://github.com/theKashey/proxyquire) - the one with quite handy API. Rewiremock do it better.
+- [proxyquire](https://github.com/theKashey/proxyquire) - the one with quite handy API. Rewiremock is it a better proxyquire.
 - [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever. Things must not be complex.
+- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - may be the right way to mock. Rewiremock can do the same.
+
+```text
+                     /$$      /$$ /$$                     /$$      /$$                     /$$      
+                    | $$  /$ | $$|__/                    | $$$    /$$$                    | $$      
+  /$$$$$$   /$$$$$$ | $$ /$$$| $$ /$$  /$$$$$$   /$$$$$$ | $$$$  /$$$$  /$$$$$$   /$$$$$$$| $$   /$$
+ /$$__  $$ /$$__  $$| $$/$$ $$ $$| $$ /$$__  $$ /$$__  $$| $$ $$/$$ $$ /$$__  $$ /$$_____/| $$  /$$/
+| $$  \__/| $$$$$$$$| $$$$_  $$$$| $$| $$  \__/| $$$$$$$$| $$  $$$| $$| $$  \ $$| $$      | $$$$$$/ 
+| $$      | $$_____/| $$$/ \  $$$| $$| $$      | $$_____/| $$\  $ | $$| $$  | $$| $$      | $$_  $$ 
+| $$      |  $$$$$$$| $$/   \  $$| $$| $$      |  $$$$$$$| $$ \/  | $$|  $$$$$$/|  $$$$$$$| $$ \  $$
+|__/       \_______/|__/     \__/|__/|__/       \_______/|__/     |__/ \______/  \_______/|__/  \__/
+```
 
 By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
 It covers _any_ case. It is the right way to mock your dependencies or perform dependency injection.
