@@ -196,6 +196,14 @@ addPlugin(plugins.alwaysMatchOrigin);
   Just use it. You can also activate nodejs, which will double check all modules names on a real FS, but..
   everything might work out of the box.
   > PS: Just use usedByDefault to ensure module names are resolved correctly.
+  
+  There is also a special entry point for node.js, with nodejs plugin activated, and rewiremock as es5 export
+   ```js
+   const rewiremock = require('rewiremock/node');
+   
+   // meanwhile
+   const rewiremock = require('rewiremock').default;
+   ```
 
 ## To run inside webpack enviroment.
   Rewiremock can `emulate` few webpack features(like aliases) in node.js environment, but it also can be run inside webpack.

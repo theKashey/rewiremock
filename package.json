@@ -32,7 +32,9 @@
     "lib",
     "es",
     "webpack",
-    "rewiremock.d.ts"
+    "rewiremock.d.ts",
+    "node.js",
+    "internal.js"
   ],
   "keywords": [
     "es6",
@@ -48,7 +50,7 @@
     "mock",
     "mockery",
     "proxyquire"
-  ],
+  ],view-source:https://upload.wikimedia.org/wikipedia/commons/0/05/Sierpinski_triangle_evolution.svgview-source:https://upload.wikimedia.org/wikipedia/commons/0/05/Sierpinski_triangle_evolution.svgff
   "jest": {
     "testMatch": [
       "**/?(*.)(jest).js?(x)"

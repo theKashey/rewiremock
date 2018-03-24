@@ -25,7 +25,6 @@ export const overrideEntryPoint = (module) => {
     //API.cleanup();
 };
 
-
 overrideEntryPoint(module);
 
 // instance must be clean
