@@ -17,7 +17,7 @@
     "build5": "BABEL_ENV=cjs babel src -d lib && cp src/index.js.flow lib/index.js.flow",
     "build6": "BABEL_ENV=ejs babel src -d es && cp src/index.js.flow es/index.js.flow",
     "prepublish": "npm run build",
-    "lint": "eslint src tests",
+    "lint": "eslint src",
     "lint:fix": "eslint src tests --fix"
   },
   "repository": {
@@ -50,7 +50,7 @@
     "mock",
     "mockery",
     "proxyquire"
-  ],view-source:https://upload.wikimedia.org/wikipedia/commons/0/05/Sierpinski_triangle_evolution.svgview-source:https://upload.wikimedia.org/wikipedia/commons/0/05/Sierpinski_triangle_evolution.svgff
+  ],
   "jest": {
     "testMatch": [
       "**/?(*.)(jest).js?(x)"
@@ -69,9 +69,10 @@
     "compare-module-exports": "^2.0.0",
     "lodash.some": "^4.6.0",
     "lodash.template": "^4.4.0",
+    "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",
     "wipe-node-cache": "^1.1.0",
-    "wipe-webpack-cache": "^1.0.0"
+    "wipe-webpack-cache": "^1.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -84,7 +85,7 @@
     "babel-preset-env": "1.6.1",
     "babel-register": "6.18.0",
     "chai": "^3.5.0",
-    "eslint": "^3.19.0",
+    "eslint": "^4.19.1",
     "eslint-plugin-mocha": "^4.9.0",
     "flow-bin": "^0.59.0",
     "jest-cli": "^21.2.1",
@@ -98,7 +99,8 @@
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-polyfill-object-assign": "0.0.2",
     "sinon": "^4.4.2",
-    "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1"
   }
 }

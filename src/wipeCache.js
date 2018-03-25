@@ -12,7 +12,7 @@ const primaryResolver = (stubs, moduleName) =>
 
 const resolver = (stubs, moduleName) => {
   // never wipe .node(native) module
-  if (moduleName.indexOf('\.node') > -1) {
+  if (moduleName.indexOf('.node') > -1) {
     return false;
   }
   return shouldWipe(stubs, moduleName) || primaryResolver(stubs, moduleName) || relativeWipeCheck(stubs, moduleName);

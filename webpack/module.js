@@ -12,6 +12,7 @@ const Module = {
 
     const asFile = keys.find(name => name.indexOf(targetFile) > 0);
     const asIndex = keys.find(name => name.indexOf(targetFileIndex) > 0);
+
     if (asFile && asIndex && asFile.substr(targetFile.length+1).indexOf('/') >= 0) {
         return asIndex;
     }

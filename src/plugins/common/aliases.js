@@ -139,12 +139,14 @@ function processFile(filePath, {aliasConf, extensionsConf}) {
     if (aliasConf.hasOwnProperty(aliasFrom)) {
 
       let aliasTo = aliasConf[aliasFrom];
-      const regex = new RegExp(`^${aliasFrom}(\/|$)`);
+      const regex = new RegExp(`^${aliasFrom}(/|$)`);
 
       // If the regex matches, replace by the right config
       if (regex.test(filePath)) {
 
         // notModuleRegExp from https://github.com/webpack/enhanced-resolve/blob/master/lib/Resolver.js
+
+        /* eslint-disable no-useless-escape */
         const notModuleRegExp = /^\.$|^\.[\\\/]|^\.\.$|^\.\.[\/\\]|^\/|^[A-Z]:[\\\/]/i;
         const isModule = !notModuleRegExp.test(aliasTo);
 

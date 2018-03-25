@@ -1,6 +1,7 @@
 node_modules/
 /lib/
 /es/
+/dist/
 .DS_Store
 .idea
 npm-debug.log

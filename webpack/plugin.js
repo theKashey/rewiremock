@@ -11,7 +11,9 @@ class RewiremockPlugin {
 
       compilation.moduleTemplate.plugin('render', function (moduleSource) {
         const source = new ConcatSource();
-        source.add(injectString);
+        if (moduleSource.source().indexOf('require') > 0) {
+          source.add(injectString);
+        }
         source.add(moduleSource);
         return source;
       });

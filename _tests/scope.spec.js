@@ -6,6 +6,11 @@ import {_clearPlugins} from '../src/plugins';
 import nodePlugin from '../src/plugins/nodejs';
 
 describe('scope ', () => {
+
+    const webpackDefault = exports => {
+      return typeof __webpack_require__ !== 'undefined' ? exports.default: exports;
+    };
+
     it('scope test: ', () => {
         addPlugin(nodePlugin);
         const unmockedBaz = require('./lib/a/test.js');
@@ -57,7 +62,7 @@ describe('scope ', () => {
                 mock('./lib/a/../b/baz').with(() => 'cc');
             })
             .then((mockedBaz) => {
-                expect(mockedBaz()).to.be.equal('aabbcc');
+                expect(webpackDefault(mockedBaz)()).to.be.equal('aabbcc');
             });
     });
 
@@ -75,7 +80,7 @@ describe('scope ', () => {
                     mock('./lib/a/../b/baz').with(() => 'cc');
                 }))
             .then((mockedBaz) => {
-                expect(mockedBaz()).to.be.equal('aabbcc');
+                expect(webpackDefault(mockedBaz)()).to.be.equal('aabbcc');
             });
     });
 
@@ -87,7 +92,7 @@ describe('scope ', () => {
             () =>
                 import('./lib/a/test.js')
                     .then((mockedBaz) => {
-                        expect(mockedBaz()).to.be.equal('aabbcc');
+                        expect(webpackDefault(mockedBaz)()).to.be.equal('aabbcc');
                     }),
             (mock) => {
                 addPlugin(nodePlugin);
@@ -111,7 +116,7 @@ describe('scope ', () => {
                 mock('./lib/a/../b/baz').with(() => 'cc');
             })
             .then((mockedBaz) => {
-                expect(mockedBaz()).to.be.equal('aabarcc');
+                expect(webpackDefault(mockedBaz)()).to.be.equal('aabarcc');
             });
     });
 
@@ -121,7 +126,7 @@ describe('scope ', () => {
 
         return rewiremock.around(() => import('./lib/a/test.js'))
             .then((mockedBaz) => {
-                expect(mockedBaz()).to.be.equal('foobarbaz');
+                expect(webpackDefault(mockedBaz)()).to.be.equal('foobarbaz');
             });
     });
 
@@ -169,7 +174,7 @@ describe('scope ', () => {
       }));
 
       return mockedBazLoad.then(mockedBaz => {
-        expect(mockedBaz()).to.be.equal('aabarcc')
+        expect(webpackDefault(mockedBaz)()).to.be.equal('aabarcc')
       })
     });
 

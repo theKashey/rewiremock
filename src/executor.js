@@ -145,6 +145,8 @@ function mockLoader(request, parent, isMain) {
     mockedModules[baseRequest] = true;
   }
 
+  //autoMock(baseRequest);
+
   const mock = getMock(baseRequest) || getMock(request) || getMock(shortRequest);
 
   if (mock) {

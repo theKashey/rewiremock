@@ -11,6 +11,7 @@ describe('simples case ', () => {
 
     rewiremock.enable();
     const mocked = require('./lib/use-node_module.js');
+
     expect(mocked.test()).to.be.equal('mocked');
     rewiremock.disable();
   });

@@ -258,7 +258,7 @@ const swapCache = () => {
     Object
       .keys(newCache)
       .filter(key => !oldCache[key])
-      .filter(key => key.indexOf('\.node') < 0)
+      .filter(key => key.indexOf('.node') < 0)
       .forEach(key => delete newCache[key]);
 
     Object
