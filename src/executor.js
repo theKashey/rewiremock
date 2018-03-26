@@ -1,6 +1,6 @@
 import {relative} from 'path'
 import Module, {originalLoader} from './module';
-import {shouldMock} from './plugins';
+import {autoMock, shouldMock} from './plugins';
 import {getMock} from './mocks';
 import getScope, {collectScopeVariable, getScopeOption, getScopeVariable} from './globals';
 import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './module';
@@ -145,9 +145,7 @@ function mockLoader(request, parent, isMain) {
     mockedModules[baseRequest] = true;
   }
 
-  //autoMock(baseRequest);
-
-  const mock = getMock(baseRequest) || getMock(request) || getMock(shortRequest);
+  const mock = getMock(baseRequest) || getMock(request) || getMock(shortRequest) || autoMock(baseRequest);
 
   if (mock) {
     if (shouldMock(mock, request, parent, parentModule)) {
@@ -177,7 +175,7 @@ function mockLoader(request, parent, isMain) {
       if (mock.overrideBy) {
         if (!mock.override) {
           if (typeof mock.overrideBy === 'string') {
-            mock.override = originalLoader(pickModuleName(mock.overrideBy, parent), parent, isMain)
+             mock.override = originalLoader(pickModuleName(mock.overrideBy, parent), parent, isMain)
           } else {
             mock.override = mock.overrideBy({
               name: request,

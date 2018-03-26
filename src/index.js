@@ -39,6 +39,8 @@ const removePlugin = API.removePlugin;
 addPlugin(plugins.toBeUsed);
 addPlugin(plugins.directChild);
 
+addPlugin(plugins.__mock__);
+
 if(typeof __webpack_require__ !== "undefined"){
   addPlugin(plugins.nodeLibBrowser);
 }

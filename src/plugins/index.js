@@ -12,6 +12,7 @@ import usedByDefault from './usedByDefault';
 import alwaysMatchOrigin from './toMatchOrigin';
 
 import nodeLibBrowser from './node-lib-browser';
+import __mock__ from './__mock__';
 
 const exports = {
     childOnly,
@@ -26,6 +27,8 @@ const exports = {
     alwaysMatchOrigin,
     usedByDefault,
     directChild,
+
+    __mock__,
 
     nodeLibBrowser
 };

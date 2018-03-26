@@ -56,6 +56,12 @@ const shouldWipe = (stubs, moduleName) => (
   ), false)
 );
 
+const autoMock = (moduleName) => (
+  plugins().reduce(
+    (result, plugin) => result || plugin.autoMock && plugin.autoMock(moduleName)
+    ,false)
+);
+
 const onMockCreate = (mock) => (
   plugins().reduce(
     (mock, plugin) => {
@@ -98,6 +104,8 @@ export  {
   convertName,
   shouldWipe,
   shouldMock,
+
+  autoMock,
   onMockCreate,
 
   onDisable,

@@ -49,7 +49,7 @@ const NodeModule = {
 const toModule = (name) => name && require.cache[name];
 
 export const pickModuleName = (fileName, parent) => {
-  if (typeof __webpack_modules__ !== 'undefined') {
+  if (typeof __webpack_modules__ !== 'undefined' && !__webpack_modules__[fileName]) {
     const targetFile = resolve(dirname(getModuleName(parent)), fileName);
     return Object
       .keys(__webpack_modules__)

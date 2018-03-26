@@ -2,24 +2,12 @@ import {join, resolve, isAbsolute, dirname, basename, sep} from 'path';
 import template from 'lodash.template';
 import some from 'lodash.some';
 import {requireModule} from '../../executor';
+import {fileExists} from "./utils";
 
-const FS_MODULE_NAME = 'fs';
 const DEFAULT_CONFIG_NAMES = ['webpack.config.js', 'webpack.config.babel.js'];
 
 // most of this file is a copypaste from https://github.com/trayio/babel-plugin-webpack-alias/blob/master/src/index.js
 // just cos we emulate its behavior
-
-function fileExists(path) {
-  if (typeof __webpack_modules__ !== 'undefined') {
-    return __webpack_modules__['.' + path] && '.' + path;
-  }
-  try {
-    const fs = require(FS_MODULE_NAME);
-    return !fs.accessSync(path, fs.F_OK) && path;
-  } catch (e) {
-    return false;
-  }
-}
 
 function getConfigPath(configPaths) {
   let conf = null;
