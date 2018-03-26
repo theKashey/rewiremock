@@ -71,6 +71,15 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  ## helper functions
  - rewuremock.stubFactory(factory) - define a stub factory for mockThrough command.
 
+ ### Automocking
+ Rewiremock supports (inspired by [Jest](https://facebook.github.io/jest/docs/en/manual-mocks.html)) auto `__mocks__`ing.
+ Just create `__mocks__/fileName.js`, and `fileName.js` will be replaced by mock. Please refer to Jest documentation for use cases.
+ 
+ If you dont want some file to be replaced by mock - add it, and then - disable
+```js
+ rewiremock('fileName.js').disable();
+```
+
 # Which one?
 Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
 
