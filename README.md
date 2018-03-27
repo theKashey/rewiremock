@@ -69,7 +69,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  ## sandboxing
  - rewiremock.inScope(callback) - place synchronous callback inside a sandbox.
  ## helper functions
- - rewuremock.stubFactory(factory) - define a stub factory for mockThrough command.
+ - rewiremock.stubFactory(factory) - define a stub factory for mockThrough command.
 
  ### Automocking
  Rewiremock supports (inspired by [Jest](https://facebook.github.io/jest/docs/en/manual-mocks.html)) auto `__mocks__`ing.
