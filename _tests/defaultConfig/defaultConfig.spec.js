@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import path from 'path';
 import rewiremock from '../../src/index';
 import defaultConfig from '../../src/plugins/defaultConfig';
 
@@ -12,10 +13,11 @@ describe('defaultConfig', () => {
   });
 
   it('mocked test', () => {
-    defaultConfig(rewiremock, __dirname);
+    defaultConfig(rewiremock, path.dirname(module.i || __filename));
     rewiremock.enable();
     const mocked = require('./foo');
-    expect(mocked).to.be.equal('mocked');
     rewiremock.disable();
+    expect(mocked).to.be.equal('mocked');
+
   });
 });

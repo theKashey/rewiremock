@@ -20,3 +20,5 @@ export function fileExists(path) {
     return false;
   }
 }
+
+export const ensureRequire = typeof __webpack_require__ !== 'undefined' ? __webpack_require__ : eval('require');
