@@ -39,7 +39,13 @@ declare interface BaseMock {
    * mock.mockThrough( () => sinon.stub() );
    * mock.mockThrough( (name, value) => typeof value === 'function' ? sinon.stub() : value );
    */
-  mockThrough(stubFactory?: IStubFactory): this,
+  mockThrough(stubFactory?: IStubFactory): *,
+
+  /**
+   * enables hot mock updates
+   * @return {this}
+   */
+  dynamic(): *,
 
   /**
    * Setting es6 bahavior for a module
@@ -99,6 +105,11 @@ declare interface TypedModuleMock<T> extends BaseMock {
   with(key: $Shape<$Diff<T, MagicObjectWithRandomMethod>>): TypedModuleMock<T>;
 
   /**
+   * Append overrides
+   */
+  append(key: $Shape<$Diff<T, MagicObjectWithRandomMethod>>): TypedModuleMock<T>;
+
+  /**
    * Washes away the types
    */
   nonStrict(): AnyModuleMock;
@@ -119,6 +130,11 @@ declare interface AnyModuleMock extends BaseMock {
    * Overriding export of a module
    */
   with(stubs: any): AnyModuleMock;
+
+  /**
+   * Append overrides
+   */
+  append(stubs: any): AnyModuleMock;
 }
 
 declare type Function = () => any;

@@ -35,6 +35,12 @@ declare module 'rewiremock' {
         mockThrough(stubFactory?: IStubFactory): this,
 
         /**
+         * enables hot mock updates
+         * @return {this}
+         */
+        dynamic(): this,
+
+        /**
          * Setting es6 behaviour for a module
          */
         es6(): this,
@@ -95,6 +101,11 @@ declare module 'rewiremock' {
         with(keys: {[P in keyof T]?: T[P]}): this;
 
         /**
+         * Append overrides
+         */
+        append(keys: {[P in keyof T]?: T[P]}): this;
+
+        /**
          * Washes away the types
          */
         nonStrict(): AnyModuleMock;
@@ -121,6 +132,11 @@ declare module 'rewiremock' {
          * Overriding export of a module
          */
         with(stubs: any): this;
+
+        /**
+         * Append overrides
+         */
+        append(stubs: any): this;
     }
 
     type ModuleMock = AnyModuleMock;

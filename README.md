@@ -57,7 +57,8 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .withDefault(stub: function | Object) - overload `default` es6 export
     - .by(otherModule: string| function) - overload by another module(if string provider) or by result of a function call. 
     - .callThrough() - first load the original module, and next extend it by provided stub.
-    - .mockThrough() - first load the original module, and then replaces all exports by stubs.    
+    - .mockThrough([stubFactory]) - first load the original module, and then replaces all exports by stubs.
+    - .dynamic - enables hot mock updates.     
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
     - .calledFromMock - will do mock only dependencies of mocked dependencies.    
@@ -84,6 +85,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
 Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
 
 Which one to choose? Any! It just depends:
+  - You want just to ensure you have called endpoints? – mockThrough.
   - If everything is simply - use __rewiremock.proxy__.
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
@@ -98,7 +100,8 @@ Which one to choose? Any! It just depends:
 ```js
 const mock = rewiremock.proxy('somemodule', (r) => ({
    'dep1': { name: 'override' },
-   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`  
+   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`
+   'dep3': r.mockThrough() // automatically create a test double  
 }));
 ```
 - you can require a file by yourself. ( yep, proxy is a "god" function)
@@ -137,6 +140,71 @@ In all the cases you can specify what exactly you want to mock, or just mock any
    addPlugin(plugins.mockThoughByDefault);  
 ```
 
+# Hoisted mocking 
+You can also use a top level mocking, the same as Jest could only provide
+```js
+import sinon from 'sinon';
+import rewiremock from 'rewiremock';
+import Component1 from 'common/Component1';
+import selectors from 'common/selectors';
+
+rewiremock('common/Component1').by('common/Component2');
+rewiremock('common/Component2/action').with({ action: () => {} });
+rewiremock('common/selectors').mockThrough(() => sinon.stub());
+
+selectors.findUser.returns("cat"); // this is sinon stub.
+``` 
+As result Component1 will be replaced by Component2, action with empty function and 
+all selectors by sinon stubs, with one configured.
+
+This is only possible via babel plugin, and without it this code will be executed without any sence, as long mocking
+will be configured after the files required.
+
+1. Add `rewiremock/babel' into plugin section in `.babelrc`
+2. This example will be transpiled into
+```jsjs
+import sinon from 'sinon';
+import rewiremock from 'rewiremock';
+
+rewiremock('common/Component1').by('common/Component2');
+rewiremock('common/Component2/action').with({ action: () => {} });
+rewiremock('common/selectors').mockThrough(() => sinon.stub());
+
+rewiremock.enabled();
+
+import Component1 from 'common/Component1';
+import selectors from 'common/selectors';
+
+rewiremock.disable();
+
+selectors.findUser.returns("cat"); // this is sinon stub.
+``` 
+
+Keep in mind - rewiremock will hoist mock definition next to rewiremock import.
+ - You can use anything above rewiremock import
+ - You can mock anything below rewiremock import
+ 
+### Changing the mocks after the mocking
+It is possible to partially change mocking already being applied.
+```js
+ rewiremock('./foo')
+  .callThrough()
+  .with({ action1: action1Stub1 })
+  .dynamic();
+
+ const foo = require('./foo');
+ foo.action == action1Stub1;
+ 
+ rewiremock('./foo')
+   .with({ action1: action1Stub2 });
+ 
+ foo.action == action1Stub2;
+ 
+ rewiremock('./foo')
+    .with({ });
+ 
+ foo.action == theRealFoo;
+```   
 
 # Type safety
 Rewiremock is able to provide a type-safe mocks. To enable type-safety follow these steps:
@@ -225,10 +293,10 @@ addPlugin(plugins.alwaysMatchOrigin);
   
 ```js
 plugins: [
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new (require("rewiremock/webpack/plugin"))()
-      ]
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new (require("rewiremock/webpack/plugin"))()
+]
 ```
   That's all. Now all magic will happens at client side.
   > It is better to use .proxy/module command with direct require/import and leave all names conversion to webpack.
@@ -509,6 +577,20 @@ rewiremock.proxy('somemodule', {
 ``` 
  * Part 3 - enjoy.
  You extract some common code into helper. And things become a lot easier.
+ 
+ # Default configuration
+ Absolutely the same - preconfiguring rewiremock one can achive via default configuration.
+ 
+ Just put __rewiremock.config.js__ in the root dir, next to project.json, and export a configuration function
+```js
+// rewiremock.config.js
+import wrongrewiremock, {plugins} from 'rewiremock';
+
+export default rewiremock => {
+  // do everything with "right" rewiremock
+  rewiremock.addPlugin(plugins.nodejs)
+}
+```
    
  # Caching
 

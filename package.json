@@ -34,7 +34,8 @@
     "webpack",
     "rewiremock.d.ts",
     "node.js",
-    "internal.js"
+    "internal.js",
+    "babel.js"
   ],
   "keywords": [
     "es6",

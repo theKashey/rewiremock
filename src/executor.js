@@ -73,7 +73,9 @@ function mockResult(name, mock, data) {
     }
   }
   if (data && !data.default) {
-    data.default = data;
+    if(['object','function'].indexOf(typeof data)>=0) {
+      data.default = data;
+    }
   }
   return data;
 }
@@ -207,6 +209,7 @@ function mockLoader(request, parent, isMain) {
           {__esModule: mock.original.__esModule}
         ));
       }
+
       return mockResult(request, mock, mock.value);
     } else {
       // why you shouldn't?
