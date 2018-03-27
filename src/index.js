@@ -13,6 +13,7 @@ delete require.cache[path.join(path.dirname(__filename), './mockModule.js')];
 delete require.cache[moduleName.replace('index.js', 'mockModule.js')];
 
 import * as API from './mockModule';
+import applyDefaultConfig from "./plugins/defaultConfig";
 
 export const cleanup = () => {
     const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;
@@ -44,6 +45,8 @@ addPlugin(plugins.__mock__);
 if(typeof __webpack_require__ !== "undefined"){
   addPlugin(plugins.nodeLibBrowser);
 }
+
+applyDefaultConfig(API.mockModule);
 
 export {
     addPlugin,
