@@ -1,12 +1,12 @@
 import path from 'path'
-import { wipe } from './wipeCache';
+import {wipe} from './wipeCache';
 import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 import {getModuleName, getModuleParent} from './module';
 
 const moduleName = getModuleName(module);
-if(!moduleName) {
-    throw new Error('Rewiremock: while you using Jest - disable automocking')
+if (!moduleName) {
+  throw new Error('Rewiremock: while you using Jest - disable automocking')
 }
 
 delete require.cache[path.join(path.dirname(__filename), './mockModule.js')];
@@ -16,14 +16,14 @@ import * as API from './mockModule';
 import applyDefaultConfig from "./plugins/defaultConfig";
 
 export const cleanup = () => {
-    const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;
-    wipe(path.dirname(__filename), wipeAll);
+  const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;
+  wipe(path.dirname(__filename), wipeAll);
 };
 
 export const overrideEntryPoint = (module) => {
-    delete require.cache[getModuleName(module)];
-    API.mockModule.overrideEntryPoint(getModuleParent(module));
-    //API.cleanup();
+  delete require.cache[getModuleName(module)];
+  API.mockModule.overrideEntryPoint(getModuleParent(module));
+  //API.cleanup();
 };
 
 overrideEntryPoint(module);
@@ -42,16 +42,23 @@ addPlugin(plugins.directChild);
 
 addPlugin(plugins.__mock__);
 
-if(typeof __webpack_require__ !== "undefined"){
+if (typeof __webpack_require__ !== "undefined") {
   addPlugin(plugins.nodeLibBrowser);
 }
 
 applyDefaultConfig(API.mockModule);
 
+if (global['REWIREMOCK_HOISTED']) {
+  global['REWIREMOCK_HOISTED'].forEach(cb => {
+    cb(API.mockModule)
+  });
+  global['REWIREMOCK_HOISTED'] = [];
+}
+
 export {
-    addPlugin,
-    removePlugin,
-    plugins
+  addPlugin,
+  removePlugin,
+  plugins
 };
 
 export default API.mockModule;

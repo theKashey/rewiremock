@@ -63,21 +63,36 @@ const testPassby = (request, module) => {
 };
 
 
-function mockResult(name, mock, data) {
-  if (mock.matchOrigin) {
-    const matchResult = matchOrigin(mock.original, data, name, '%mock%', {noFunctionCompare: true})
-    if (matchResult) {
-      // eslint-disable-next-line no-console
-      matchResult.forEach(line => console.error(line));
-      throw new Error('Rewiremock: provided mocks does not match ' + name);
+function mockResult(name, mock, dataFactory) {
+  const factory = () => {
+    const data = dataFactory();
+    if (mock.matchOrigin) {
+      const matchResult = matchOrigin(mock.original, data, name, '%mock%', {noFunctionCompare: true})
+      if (matchResult) {
+        // eslint-disable-next-line no-console
+        matchResult.forEach(line => console.error(line));
+        throw new Error('Rewiremock: provided mocks does not match ' + name);
+      }
+    }
+    if (data && !data.default) {
+      if (['object', 'function'].indexOf(typeof data) >= 0) {
+        data.default = data;
+      }
+    }
+    return data;
+  };
+
+  if (mock.flag_dynamic) {
+    const origin = factory();
+    if (['object', 'function'].indexOf(typeof origin) >= 0) {
+      return new Proxy(origin, {
+        get(target, prop) {
+          return factory()[prop]
+        }
+      })
     }
   }
-  if (data && !data.default) {
-    if(['object','function'].indexOf(typeof data)>=0) {
-      data.default = data;
-    }
-  }
-  return data;
+  return factory();
 }
 
 function standardStubFactory(name, object, deeperMock) {
@@ -167,7 +182,7 @@ function mockLoader(request, parent, isMain) {
       if (mock.mockThrough) {
         const factory = mock.mockThrough === true ? getScopeOption('stubFactory') : mock.mockThrough;
         mock.override = mockThought(factory || standardStubFactory, mock.original);
-        return mockResult(request, mock, Object.assign({},
+        return mockResult(request, mock, () => Object.assign({},
           mock.override,
           mock.value,
           {__esModule: mock.original.__esModule}
@@ -177,7 +192,7 @@ function mockLoader(request, parent, isMain) {
       if (mock.overrideBy) {
         if (!mock.override) {
           if (typeof mock.overrideBy === 'string') {
-             mock.override = originalLoader(pickModuleName(mock.overrideBy, parent), parent, isMain)
+            mock.override = originalLoader(pickModuleName(mock.overrideBy, parent), parent, isMain)
           } else {
             mock.override = mock.overrideBy({
               name: request,
@@ -188,7 +203,7 @@ function mockLoader(request, parent, isMain) {
             });
           }
         }
-        return mockResult(request, mock, mock.override);
+        return mockResult(request, mock, () => mock.override);
       }
 
       if (mock.allowCallThrough) {
@@ -197,20 +212,20 @@ function mockLoader(request, parent, isMain) {
             typeof mock.value === 'object' &&
             Object.keys(mock.value).length === 0
           ) {
-            return mockResult(request, mock, mock.original);
+            return mockResult(request, mock, () => mock.original);
           } else {
             throw new Error('rewiremock: trying to merge Functional base with callThrough mock at '
               + request + '. Use overrideBy instead.');
           }
         }
-        return mockResult(request, mock, Object.assign({},
+        return mockResult(request, mock, () => Object.assign({},
           mock.original,
           mock.value,
           {__esModule: mock.original.__esModule}
         ));
       }
 
-      return mockResult(request, mock, mock.value);
+      return mockResult(request, mock, () => mock.value);
     } else {
       // why you shouldn't?
     }

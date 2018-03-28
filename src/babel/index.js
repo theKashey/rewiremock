@@ -1,34 +1,90 @@
-module.exports = () => {
-  const isRewiremock = callee =>
-    callee.get('object').isIdentifier(REWIREMOCK_GLOBAL) ||
-    (callee.isMemberExpression() && isRewiremock(callee.get('object')));
+const templateOptions = {
+  placeholderPattern: /^([A-Z0-9]+)([A-Z0-9_]+)$/,
+};
 
-  const shouldHoistExpression = expr => {
+const REWIREMOCK_GLOBAL = {name: 'rewiremock'};
+
+const isRewiremock = expr => {
+  const callee = expr.get('callee');
+  if (!callee.node) {
+    return false;
+  }
+  const object = callee.get('object');
+  return (
+    (callee.isIdentifier(REWIREMOCK_GLOBAL) || (callee.isMemberExpression() && isRewiremock(object)))
+  );
+}
 
 
-    return (
-      property.isIdentifier() &&
-      FUNCTIONS[property.node.name] &&
-      (object.isIdentifier(REWIREMOCK_GLOBAL) ||
-        (callee.isMemberExpression() && shouldHoistExpression(object))) &&
-      FUNCTIONS[property.node.name](expr.get('arguments'))
-    );
-  };
+module.exports = (args) => {
+
+  const {template} = args
+
+  const enable = template('rewiremock.enable();\n', templateOptions);
+  const disable = template('rewiremock.disable();\n', templateOptions);
+
+  const registrations = template(
+`(function(){
+  global["REWIREMOCK_HOISTED"] = global["REWIREMOCK_HOISTED"] || [];
+  global["REWIREMOCK_HOISTED"].push(function(rewiremock){     
+    MOCKS 
+   });
+})();`
+    , templateOptions);
+
+  const REGISTRATIONS = Symbol('registrations')
 
   return {
     visitor: {
-      Import(path){
-        console.log(path);
+      Program: {
+        enter({node}) {
+          node[REGISTRATIONS] = {
+            imports: [],
+            mocks: []
+          }
+        },
+        exit({node}) {
+          const {imports, mocks} = node[REGISTRATIONS];
+          if (mocks.length) {
+
+            const rewiremock = imports.find(({node}) => node.source.value.indexOf('rewiremock') >= 0);
+            if (!rewiremock) {
+              /* eslint-disable no-console */
+              console.warn('rewiremock not found in imports');
+            }
+
+            const mocker = registrations({
+              MOCKS: [enable(), ...mocks]
+            });
+
+            node.body.push(mocker);
+
+            mocker._blockHoist = Infinity
+
+            imports[imports.length - 1].insertAfter(disable());
+          }
+        }
       },
-      ExpressionStatement(path: any) {
+
+      ImportDeclaration(path) {
+        path.parent[REGISTRATIONS].imports.push(path);
+      },
+      ExpressionStatement(path) {
+        if (!path.parent[REGISTRATIONS]) {
+          return false;
+        }
+
         const expr = path.get('expression');
+
         if (!expr.isCallExpression()) {
           return false;
         }
 
-        const callee = expr.get('callee');
-        const object = callee.get('object');
-        const property = callee.get('property');
+        if (isRewiremock(expr)) {
+          path.parent[REGISTRATIONS].mocks.push(path.node);
+          path.remove();
+        }
+
       },
     },
   };

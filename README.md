@@ -195,8 +195,12 @@ It is possible to partially change mocking already being applied.
  const foo = require('./foo');
  foo.action == action1Stub1;
  
- rewiremock('./foo')
+ rewiremock.getMock('./foo')
    .with({ action1: action1Stub2 });
+ 
+ //while will RESET the mock, and could not change existing ones.
+ rewiremock('./foo')
+    .with({ action1: action1Stub2 });
  
  foo.action == action1Stub2;
  
@@ -205,6 +209,27 @@ It is possible to partially change mocking already being applied.
  
  foo.action == theRealFoo;
 ```   
+
+#### Changing the hoisted mocks
+```js
+ import rewiremock from 'rewiremock';
+ import foo from './foo';
+ 
+ rewiremock('./foo') 
+   .with({ action1: action1Stub1 })
+   .dynamic();
+
+ const fooMock = rewiremock.getMock('./foo');
+ 
+ describe(..., () => {
+   it('...', () => {
+     fooMock.with({ });
+     
+     // while may NOT found the mock
+     rewiremock.getMock('./foo').with({ });
+   });
+ })
+```
 
 # Type safety
 Rewiremock is able to provide a type-safe mocks. To enable type-safety follow these steps:

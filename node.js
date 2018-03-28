@@ -1,4 +1,4 @@
-const mock = require("lib/index");
+const mock = require("./lib/index.js");
 
 mock.overrideEntryPoint(module);
 
