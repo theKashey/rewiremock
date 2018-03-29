@@ -8,7 +8,7 @@ The most powerful mocking library, inspired by the best libraries:
 - [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
 - [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
 
-Rewiremock __is__ your favorite library. The better version of it.
+Rewiremock __is a your favorite library__. The better version of it. For mocha, ava, karma, and anything not-jest.
 
 ```text
                      /$$      /$$ /$$                     /$$      /$$                     /$$      
@@ -25,7 +25,7 @@ By its nature rewiremock has same behavior as Mockery. But it can behave like ot
 It covers _any_ case. It is the right way to mock your dependencies or perform dependency injection.
  
 # Goal:
-- give ability to mock everything - CommonJS, ES6, Webpack, anything.
+- give ability to mock everything - CommonJS, ES6, inside nodejs or webpack.
 - give ability to do correctly - isolation, typechecking, powerfull API
 - give ability to do it easy - simple API to cover all the cases.
 
