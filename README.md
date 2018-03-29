@@ -3,10 +3,12 @@
 [![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
 
 The most powerful mocking library, inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - the library I like the most. Rewiremock is a better mockery.
-- [proxyquire](https://github.com/theKashey/proxyquire) - the one with quite handy API. Rewiremock is it a better proxyquire.
-- [mock-require](https://github.com/boblauer/mock-require) - the simplest thing ever. Things must not be complex.
-- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - may be the right way to mock. Rewiremock can do the same.
+- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery.
+- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ it a better proxyquire.
+- [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
+- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
+
+Rewiremock __is__ your favorite library. The better version of it.
 
 ```text
                      /$$      /$$ /$$                     /$$      /$$                     /$$      
@@ -22,22 +24,10 @@ The most powerful mocking library, inspired by the best libraries:
 By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
 It covers _any_ case. It is the right way to mock your dependencies or perform dependency injection.
  
-
-Rewiremock is an evolution of lessons I learned from: 
-the better [proxyquire](https://github.com/theKashey/proxyquire), 
-the way of [resolveQuire](https://github.com/theKashey/resolveQuire),
-and magic of [proxyquire-webpack-alias](https://github.com/theKashey/proxyquire-webpack-alias).
-
-# Ideology
-- be right, and enable `true` testing experience.
-- be simple, and ease to use.
-- be modular, to cover all cases.
-- be secure, and isolate target under test.
-- be fast, to be faster.
-
 # Goal:
 - give ability to mock everything - CommonJS, ES6, Webpack, anything.
-- give ability to do correctly - isolation, typechecks, powerfull API
+- give ability to do correctly - isolation, typechecking, powerfull API
+- give ability to do it easy - simple API to cover all the cases.
 
 I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
 
@@ -62,7 +52,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .toBeUsed() - enables usage checking.  
     - .directChildOnly - will do mock only direct dependencies.
     - .calledFromMock - will do mock only dependencies of mocked dependencies.    
- - rewiremock(moduleName: string|loader) - returns existing mock   
+ - rewiremock.getMock(moduleName: string|loader) - returns existing mock (_rewiremock(moduleName)_ will _override_)   
  ## isolation API
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - disables isolation
@@ -74,6 +64,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
 
  ### Automocking
  Rewiremock supports (inspired by [Jest](https://facebook.github.io/jest/docs/en/manual-mocks.html)) auto `__mocks__`ing.
+ 
  Just create `__mocks__/fileName.js`, and `fileName.js` will be replaced by mock. Please refer to Jest documentation for use cases.
  
  If you dont want some file to be replaced by mock - add it, and then - disable
@@ -81,17 +72,23 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  rewiremock('fileName.js').disable();
 ```
 
-# Which one?
+# Which API to use?
 Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
 
-Which one to choose? Any! It just depends:
-  - You want just to ensure you have called endpoints? – mockThrough.
-  - If everything is simply - use __rewiremock.proxy__.
+### 2 different APIs
+ - (jest) one could mock everything, but requires babel plugin. And there is one way to use it. Refer to Hoisted mocking.
+ - (common) second will _require_ a file, overriding depenedies. And there are many ways to use it. 
+
+### A common way to mock.
+Rewiremock provides lots of APIs to help you setup mock, and get the mocked module.  
+  - If everything is simply - use __rewiremock.proxy__. (~proxyquire)
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
   - If you advanced syntax and type checking - use __rewiremock.around__.
-  - If you need full control - you will always have it.
-  - You always can just use __.enable/.disable__.  
+  - You always can just use __.enable/.disable__ (~ mockery).
+  
+> All the mocks await you to provide "stubs" to override the real implimentation.
+> If you want just to ensure you have called endpoints – use rewiremock('someFile').mockThrough.    
 
 # Usage
 
@@ -100,7 +97,7 @@ Which one to choose? Any! It just depends:
 ```js
 const mock = rewiremock.proxy('somemodule', (r) => ({
    'dep1': { name: 'override' },
-   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly() // use all `mocking API`
+   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly(), // use all `mocking API`
    'dep3': r.mockThrough() // automatically create a test double  
 }));
 ```
@@ -532,6 +529,8 @@ rewiremock.proxy('somemodule', {
  # Jest
  Jest is a very popular testing framework, but it has one issue - is already contain mocking support.
  
+ > Do not use rewiremock and jest. Even if it is possible.
+ 
  ## Jest will not allow ANY other mocking library to coexists with Jest
  To use rewiremock with Jest add to the beginning of your file
  ```js
@@ -548,7 +547,7 @@ rewiremock.proxy('somemodule', {
  
  !!! the last line here may disable Jest sandboxing. !!! 
  
- Also it will disable Jest transformation.
+ Also it will disable Jest transformation, killing all the jest magics.
  
  To be able continue use ES6/imports - you have to enforce Babel to be applied in the `common` way.
  ```js
@@ -665,8 +664,8 @@ Don't forget - you can write your own plugins.
   - added a plugin to transform names (nodejs, webpackAlias or relative)
   - use .toBeUsed for each mocks
 And they actually were mocked. If not - rewiremock will throw an Error.
- 
- 
+  
+
 # Wanna read something about?
  [Rewiremock - medium article](https://medium.com/@antonkorzunov/how-to-mock-dependency-in-a-node-js-and-why-2ad4386f6587)
  
