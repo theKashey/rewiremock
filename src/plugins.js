@@ -30,7 +30,11 @@ const convertName = (fileName, parentModule) => {
   return resultName;
 };
 
-const triResult = (values, defaultValue) => {
+const triResult = (values, defaultValue, storeResult) => {
+  if(storeResult){
+    storeResult.values = values;
+    storeResult.plugins = plugins();
+  }
   if (values.indexOf(NO) >= 0) {
     return false;
   }
@@ -40,13 +44,13 @@ const triResult = (values, defaultValue) => {
   return defaultValue;
 };
 
-const shouldMock = (mock, request, parent, topModule) => (
+const shouldMock = (mock, request, parent, topModule, result) => (
   mock.disabled
     ? false
     : triResult(plugins().map(
     plugin =>
       plugin.shouldMock ? plugin.shouldMock(mock, request, parent, topModule) : PASS
-  ), true)
+  ), true, result)
 );
 
 const shouldWipe = (stubs, moduleName) => (

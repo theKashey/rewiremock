@@ -67,7 +67,8 @@ export const getModuleParents = (module) => module && (module.parent ? [getModul
 
 export const inParents = (a, b) => {
   const B = getModuleName(b)
-  return !!getModuleParents(a).find(x => x === B);
+  const parents = getModuleParents(a);
+  return !!parents.find(x => x === B);
 }
 
 export default NodeModule;

@@ -45,6 +45,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
     - .enable/disable() - to enable or disable mock (enabled by default).
     - .with(stubs: function | Object) - overloads module with a value
     - .withDefault(stub: function | Object) - overload `default` es6 export
+    - .es6() - marks module as ES6( __esModule )
     - .by(otherModule: string| function) - overload by another module(if string provider) or by result of a function call. 
     - .callThrough() - first load the original module, and next extend it by provided stub.
     - .mockThrough([stubFactory]) - first load the original module, and then replaces all exports by stubs.

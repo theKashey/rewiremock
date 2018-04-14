@@ -17,7 +17,14 @@
     },
     "cjs": {
       "presets": [
-        "env"
+        [
+          "env",
+          {
+            "targets": {
+              "node": "7.0"
+            }
+          }
+        ]
       ],
       "plugins": [
         [

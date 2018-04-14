@@ -7,6 +7,7 @@ import {moduleCompare, pickModuleName, getModuleName, getModuleParent} from './m
 import asyncModules from './asyncModules';
 import ModuleLoader from './getModule';
 import matchOriginFabric from 'compare-module-exports';
+import {NO} from "./plugins/_common";
 
 const matchOrigin = matchOriginFabric('rewiremock');
 const thisModule = module;
@@ -165,7 +166,9 @@ function mockLoader(request, parent, isMain) {
   const mock = getMock(baseRequest) || getMock(request) || getMock(shortRequest) || autoMock(baseRequest);
 
   if (mock) {
-    if (shouldMock(mock, request, parent, parentModule)) {
+    mock.wasRequired = true;
+    const shouldResult = {};
+    if (shouldMock(mock, request, parent, parentModule, shouldResult)) {
       // this file fill be not cached, but it`s opener - will. And we have to remember it
       mockedModules[getModuleName(parent)] = true;
       mock.usedAs = (mock.usedAs || []);
@@ -227,6 +230,17 @@ function mockLoader(request, parent, isMain) {
 
       return mockResult(request, mock, () => mock.value);
     } else {
+      mock.rejected = mock.rejected || [];
+      if(shouldResult.plugins) {
+        mock.rejected.push({
+          parent,
+          plugins:
+            shouldResult
+              .plugins
+              .filter((p, index) => shouldResult.values[index] === NO)
+              .map(p => p.name)
+        });
+      }
       // why you shouldn't?
     }
   }

@@ -30,7 +30,7 @@ describe('tristate test ', () => {
         })
     });
 
-    it('a1 case - mock all: ', () => {
+    it('a1 case - mock all (this test also checks deep wipe): ', () => {
         return rewiremock.around(() => import('./lib/tristate/a1.js'),
             () => {
                 rewiremock.addPlugin(plugins.nodejs);
