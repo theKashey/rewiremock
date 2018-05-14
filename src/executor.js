@@ -77,7 +77,10 @@ function mockResult(name, mock, dataFactory) {
     }
     if (data && !data.default) {
       if (['object', 'function'].indexOf(typeof data) >= 0) {
-        data.default = data;
+        Object.defineProperty(data, 'default', {
+          enumerable: false,
+          value: data
+        })
       }
     }
     return data;
@@ -231,7 +234,7 @@ function mockLoader(request, parent, isMain) {
       return mockResult(request, mock, () => mock.value);
     } else {
       mock.rejected = mock.rejected || [];
-      if(shouldResult.plugins) {
+      if (shouldResult.plugins) {
         mock.rejected.push({
           parent,
           plugins:
