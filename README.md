@@ -78,11 +78,11 @@ Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or j
 
 ### 2 different APIs
  - (jest) one could mock everything, but requires babel plugin. And there is one way to use it. Refer to Hoisted mocking.
- - (common) second will _require_ a file, overriding depenedies. And there are many ways to use it. 
+ - (common) second will _require_ a file, overriding dependencies. And there are many ways to use it. 
 
 ### A common way to mock.
 Rewiremock provides lots of APIs to help you setup mock, and get the mocked module.  
-  - If everything is simply - use __rewiremock.proxy__. (~proxyquire)
+  - If everything is simple - use __rewiremock.proxy__. (~proxyquire)
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
   - If you advanced syntax and type checking - use __rewiremock.around__.
@@ -501,7 +501,7 @@ rewiremock.proxy('somemodule', {
  PS: note, rewiremock did have nested API, but it were removed.
   
 # Isolation
- Unit testing requires all decencies to be mocked. All!
+ Unit testing requires all dependencies to be mocked. All!
  To enable it, run
  ```javascript
   rewiremock.isolation();
