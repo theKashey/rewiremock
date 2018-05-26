@@ -5,3 +5,7 @@ node_modules/
 .DS_Store
 .idea
 npm-debug.log
+.nyc_output
+coverage
+coverage.lcov
+yarn-error.log

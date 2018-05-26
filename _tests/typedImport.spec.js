@@ -38,10 +38,12 @@ describe('typed import ', () => {
     const unmockedBaz = require('./lib/typed/a.js');
     expect(unmockedBaz.default()).to.be.equal(10);
 
+    /* istanbul ignore next */
     const mockedBazLoad = rewiremock.around(
       () => import('./lib/typed/a.js'),
       mock => {
         mock(() => import('./lib/typed/b.js')).with(() => 42);
+
         mock.getMock(() => import('./lib/typed/b.js')).disable();
       });
 
