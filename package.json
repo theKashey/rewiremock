@@ -10,7 +10,7 @@
     "test": "npm run test:pick -- '_tests/**/*spec.js'",
     "test:report": "nyc report --reporter=text-lcov > coverage.lcov",
     "test:cov": "BABEL_ENV=cjs nyc mocha --compilers js:babel-core/register --report lcovonly -- '_tests/**/*spec.js'",
-    "test:ci":"npm run test:cov && npm run test:report",
+    "test:ci":"npm run test:cov && npm run test:report && codecov",
     "test:pick": "BABEL_ENV=cjs mocha --compilers js:babel-core/register",
     "test:karma": "node ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "test:browser": "node ./node_modules/karma/bin/karma start --browsers Chrome",
