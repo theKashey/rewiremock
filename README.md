@@ -4,7 +4,7 @@
 [![version-badge](https://img.shields.io/npm/v/rewiremock.svg?style=flat-square)](https://www.npmjs.com/package/rewiremock)
 
 
-[![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/)
+[![NPM](https://nodei.co/npm/rewiremock.png?downloads=true&stars=true)](https://nodei.co/npm/rewiremock/) [![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
 
 The most powerful mocking library, inspired by the best libraries:
 - [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery.
