@@ -14,6 +14,8 @@ import alwaysMatchOrigin from './toMatchOrigin';
 import nodeLibBrowser from './node-lib-browser';
 import __mock__ from './__mock__';
 
+const mockThroughByDefault = mockThoughByDefault;
+
 const exports = {
     childOnly,
     nodejs,
@@ -23,7 +25,10 @@ const exports = {
     toBeUsed,
 
     disabledByDefault,
+
     mockThoughByDefault,
+    mockThroughByDefault,
+
     alwaysMatchOrigin,
     usedByDefault,
     directChild,

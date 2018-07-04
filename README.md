@@ -61,7 +61,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
  ## isolation API
  - rewiremock.isolation() - enables isolation
  - rewiremock.withoutIsolation() - disables isolation
- - rewiremock.passBy(pattern or function) - enables some modules to pass thought isolation.
+ - rewiremock.passBy(pattern or function) - enables some modules to pass throught isolation.
  ## sandboxing
  - rewiremock.inScope(callback) - place synchronous callback inside a sandbox.
  ## helper functions
@@ -139,7 +139,7 @@ const mock = await rewiremock.around(() => import('somemodule'), () => {
 
 In all the cases you can specify what exactly you want to mock, or just mock anything 
 ```js
-   addPlugin(plugins.mockThoughByDefault);  
+   addPlugin(plugins.mockThroughByDefault);  
 ```
 
 # Hoisted mocking 
@@ -489,7 +489,7 @@ rewiremock.proxy('somemodule', {
  - protectNodeModules. Ensures that any module from node_modules will not be wiped from a cache.
  - toBeUsed. Adds feature. The only plugin enabled by default.
  - disabledByDefault. All mocks will be disabled on create and at the end of each cycle.
- - mockThoughByDefault. All mocks mocked though.
+ - mockThroughByDefault. All mocks mocked through.
  - usedByDefault. All mocks to be used by fact (reverse isolation)  
  ```javascript
  import rewiremock, { addPlugin, removePlugin, plugins } from 'rewiremock';     
