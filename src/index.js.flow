@@ -9,7 +9,7 @@ declare type Plugins = {
   webpackAlias: Plugin,
   toBeUsed: Plugin,
   disabledByDefault: Plugin,
-  mockThoughByDefault: Plugin,
+  mockThroughByDefault: Plugin,
   usedByDefault: Plugin,
   alwaysMatchOrigin: Plugin,
   directChild: Plugin,

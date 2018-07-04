@@ -1,7 +1,7 @@
 declare module 'rewiremock' {
 
     type Plugin = any;
-    type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'mockThoughByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
+    type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'mockThroughByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
     type Plugins = {
         [Key in PluginNames]: any
         };
