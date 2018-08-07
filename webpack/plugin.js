@@ -5,7 +5,13 @@ const normalizePath = a => a[0] === '.' ? a : './' + a;
 
 const file = normalizePath(relative(process.cwd(), __dirname + '/interceptor.js').replace(/\\/g, '/'));
 
-const injectString = "/***/if(typeof __webpack_require__!=='undefined'){__webpack_require__ = __webpack_require__('" + file + "')(__webpack_require__, module);}\n";
+const injectString = `/***/if(typeof __webpack_require__!=='undefined') {
+   var rewiremockInterceptor = __webpack_require__('${file}');
+   if (rewiremockInterceptor) { 
+     __webpack_require__ = rewiremockInterceptor(__webpack_require__, module);
+   }
+}
+`;
 
 class RewiremockPlugin {
   apply(compiler) {
@@ -14,7 +20,7 @@ class RewiremockPlugin {
       compilation.moduleTemplate.plugin('render', function (moduleSource) {
         const source = new ConcatSource();
         if (moduleSource.source().indexOf('require') > 0) {
-          source.add(injectString);
+            source.add(injectString);
         }
         source.add(moduleSource);
         return source;

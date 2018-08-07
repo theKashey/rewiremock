@@ -76,7 +76,7 @@
     "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",
     "wipe-node-cache": "^1.1.0",
-    "wipe-webpack-cache": "^1.0.2"
+    "wipe-webpack-cache": "^1.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
