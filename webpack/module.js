@@ -1,5 +1,5 @@
 const {dirname, resolve} = require('path');
-const interceptor = require('./interceptor');
+const interceptor = require('./interceptor').default;
 
 const Module = {
   _load: interceptor.load,

@@ -7,8 +7,8 @@ const file = normalizePath(relative(process.cwd(), __dirname + '/interceptor.js'
 
 const injectString = `/***/if(typeof __webpack_require__!=='undefined') {
    var rewiremockInterceptor = __webpack_require__('${file}');
-   if (rewiremockInterceptor) { 
-     __webpack_require__ = rewiremockInterceptor(__webpack_require__, module);
+   if (rewiremockInterceptor && rewiremockInterceptor.default) { 
+     __webpack_require__ = rewiremockInterceptor.default(__webpack_require__, module);
    }
 }
 `;

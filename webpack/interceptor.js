@@ -37,9 +37,8 @@ interceptor.popLoader = (loader) => {
 
 interceptor.provideModule = (_Module) => {
   Module = _Module;
-}
+};
 
 interceptor.load = loader;
 
-
-module.exports = interceptor;
+exports.default = interceptor;
