@@ -119,7 +119,7 @@ declare module 'rewiremock' {
         /**
          * Setting es6 behavior for a current module and overriding default export
          */
-        withDefault<Ts extends {[K in keyof Ts]: Ts[K]} & T>(fn: Ts['default']): this;
+        withDefault(fn: T['default']): this;
     }
 
     interface AnyModuleMock {
