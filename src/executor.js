@@ -149,6 +149,15 @@ function asyncTest() {
   }
 }
 
+function tryOr(fn, failBack) {
+  try {
+    return fn();
+  } catch (e) {
+    // probably file not found
+  }
+  return failBack;
+}
+
 function mockLoader(request, parent, isMain) {
   const {
     parentModule,
@@ -158,7 +167,7 @@ function mockLoader(request, parent, isMain) {
 
   asyncTest();
 
-  const baseRequest = Module._resolveFilename(request, parent);
+  const baseRequest = tryOr(() => Module._resolveFilename(request, parent), request);
   const shortRequest = monkeyPatchPath(relative(getModuleName(parent), request));
 
   if (moduleCompare(parent, parentModule) || moduleCompare(parent, thisModule)) {

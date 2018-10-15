@@ -111,8 +111,19 @@ describe('rewiremock ', () => {
         .then(mocked => expect(mocked()).to.be.equal('FOObarbaz'));
     });
 
+    it('should replace unexisting file: ', () => {
+      rewiremock.inScope(() => {
+        rewiremock('./random-file.js').with(42);
+        rewiremock.enable();
+        expect(require('./random-file')).to.be.equal(42);
+        expect(() => require('./another-random-file')).to.throw();
+        rewiremock.disable();
+        expect(() => require('./random-file')).to.throw();
+      });
+    });
+
     it('should handle default: ', () => {
-      rewiremock.inScope( () => {
+      rewiremock.inScope(() => {
         //addPlugin(relativePlugin);
 
         const withoutDefault = rewiremock.proxy('./lib/a/getTest.js', {
