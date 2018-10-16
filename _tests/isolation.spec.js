@@ -96,8 +96,7 @@ describe('isolation ', () => {
   it('should nest mocked module with options: ', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
-    rewiremock('./lib/c/bar')
-      .callThrough();
+    rewiremock('./lib/c/bar').callThrough();
 
     rewiremock.enable();
     rewiremock.isolation({
@@ -114,7 +113,7 @@ describe('isolation ', () => {
   it('auto passby ', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
-    rewiremock.passBy('./lib/c/bar');
+    rewiremock('./lib/c/bar').callThrough();
 
     rewiremock.enable();
     rewiremock.isolation();
@@ -129,7 +128,7 @@ describe('isolation ', () => {
   it('auto passby noParent', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
-    rewiremock.passBy('./lib/c/bar');
+    rewiremock('./lib/c/bar').callThrough();
 
     rewiremock.enable();
     rewiremock.isolation({

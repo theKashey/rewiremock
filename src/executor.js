@@ -52,15 +52,17 @@ const testPassby = (request, module) => {
     // parent was mocked
     (!isolation.noAutoPassBy && mockedModules[fileName]) ||
     // parent is in pass list
-    (!isolation.noParentPassBy && passBy.filter(patternMatch(fileName)).length )
+    passBy.filter(patternMatch(fileName)).length
   );
 
-  while (m && !moduleCompare(m, parentModule)) {
-    if (test(fileName)) {
-      return true;
+  if (!isolation.noParentPassBy) {
+    while (m && !moduleCompare(m, parentModule)) {
+      if (test(fileName)) {
+        return true;
+      }
+      fileName = getModuleName(m);
+      m = getModuleParent(m);
     }
-    fileName = getModuleName(m);
-    m = getModuleParent(m);
   }
   return test(fileName);
 };
