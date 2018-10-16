@@ -49,11 +49,13 @@ const testPassby = (request, module) => {
   let m = module;
 
   const test = (fileName) => (
-    (!isolation.noAutoPassBy && mockedModules[fileName]) ||  // parent was mocked
-    passBy.filter(patternMatch(fileName)).length             // parent is in pass list
+    // parent was mocked
+    (!isolation.noAutoPassBy && mockedModules[fileName]) ||
+    // parent is in pass list
+    (!isolation.noParentPassBy && passBy.filter(patternMatch(fileName)).length )
   );
 
-  while (m) {
+  while (m && !moduleCompare(m, parentModule)) {
     if (test(fileName)) {
       return true;
     }

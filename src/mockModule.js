@@ -70,7 +70,8 @@ mockModule.resolve = (module) => {
 /**
  * Activates module isolation
  * @param {Object} [options]
- * @param {Boolean} [options.noAutoPassBy] includes mocked modules to a isolation scope. Usage with mock.callThrough.
+ * @param {Boolean} [options.noAutoPassBy] excludes mocked modules to a isolation scope. Use it with mock.callThrough.
+ * @param {Boolean} [options.noParentPassBy] disable allowing any module, with allowed parent
  */
 mockModule.isolation = (options = {}) => {
     mockScope.isolation = Object.assign({}, options);

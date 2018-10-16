@@ -209,9 +209,10 @@ declare module 'rewiremock' {
 
         /**
          * Activates module isolation
-         * @param {Boolean} [options.noAutoPassBy] auto-includes mocked modules passBy list.
+         * @param {Boolean} [options.noAutoPassBy] excludes mocked modules to a isolation scope. Use it with mock.callThrough.
+         * @param {Boolean} [options.noParentPassBy] disable allowing any module, with allowed parent
          */
-        isolation(options?: Object): rewiremock;
+        isolation(options?: { noAutoPassBy?: boolean, noParentPassBy?: boolean}): rewiremock;
 
         /**
          * Deactivates isolation
