@@ -11,12 +11,8 @@ describe('isolation ', () => {
     rewiremock.enable();
     rewiremock.isolation();
 
-    try {
-      require('./lib/a/test.js');
-      expect("should not be called").to.be.equal(false);
-    } catch (e) {
+    expect(() => require('./lib/a/test.js')).to.throw();
 
-    }
     rewiremock.disable();
     rewiremock.clear();
     _clearPlugins();
@@ -100,40 +96,48 @@ describe('isolation ', () => {
   it('should nest mocked module with options: ', () => {
     addPlugin(nodePlugin);
     rewiremock.passBy(/node_modules/);
-    rewiremock('./lib/c/bar')
-      .callThrough();
+    rewiremock('./lib/c/bar').callThrough();
 
     rewiremock.enable();
     rewiremock.isolation({
       noAutoPassBy: true
     });
 
-    try {
-      require('./lib/c/foo.js');
-      expect('should not be called').to.equal.false();
-    } catch(e) {
+    expect(() => require('./lib/c/foo.js')).to.throw();
 
-    }
     rewiremock.disable();
     rewiremock.clear();
     _clearPlugins();
   });
 
-  it('should inverse isolation by toBeUsed: ', () => {
-    rewiremock('./lib/a/foo')
-      .with(() => 'aa')
-      .toBeUsed();
+  it('auto passby ', () => {
+    addPlugin(nodePlugin);
+    rewiremock.passBy(/node_modules/);
+    rewiremock('./lib/c/bar').callThrough();
 
     rewiremock.enable();
+    rewiremock.isolation();
 
-    const mockedBaz = require('./lib/a/test.js');
-    expect(mockedBaz()).to.be.equal('foobarbaz');
-    try {
-      rewiremock.disable();
-      expect('should not be called').to.equal.false();
-    } catch (e) {
+    require('./lib/c/foo.js');
 
-    }
+    rewiremock.disable();
+    rewiremock.clear();
+    _clearPlugins();
+  });
+
+  it('auto passby noParent', () => {
+    addPlugin(nodePlugin);
+    rewiremock.passBy(/node_modules/);
+    rewiremock('./lib/c/bar').callThrough();
+
+    rewiremock.enable();
+    rewiremock.isolation({
+      noParentPassBy: true
+    });
+
+    expect(() => require('./lib/c/foo.js')).to.throw();
+
+    rewiremock.disable();
     rewiremock.clear();
     _clearPlugins();
   });

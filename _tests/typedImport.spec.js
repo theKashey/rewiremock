@@ -8,12 +8,7 @@ describe('typed import ', () => {
     rewiremock.inScope(() => {
       rewiremock(() => import('./lib/typed/b.js')).with(() => 42);
       rewiremock.enable();
-      try {
-        require('./lib/typed/a.js');
-        expect("should throw").to.be.false();
-      } catch (e) {
-        expect(true).to.be.equal(true);
-      }
+      expect(() => require('./lib/typed/a.js')).to.throw();
       rewiremock.disable();
     });
   });
@@ -63,11 +58,7 @@ describe('typed import ', () => {
           .toBeUsed()
           .toMatchOrigin();
         rewiremock.enable();
-        try {
-          require('./lib/typed/a.js');
-        } catch (e) {
-          expect('should not be called').to.be.equal(false);
-        }
+        require('./lib/typed/a.js');
         rewiremock.disable();
       });
     });
@@ -81,12 +72,7 @@ describe('typed import ', () => {
           .toBeUsed()
           .toMatchOrigin();
         rewiremock.enable();
-        try {
-          require('./lib/typed/a.js');
-          expect('should not be called').to.be.equal(false);
-        } catch (e) {
-
-        }
+        expect(() => require('./lib/typed/a.js')).to.throw();
         rewiremock.disable();
       });
     });
@@ -100,12 +86,8 @@ describe('typed import ', () => {
           .toBeUsed()
           .toMatchOrigin();
         rewiremock.enable();
-        try {
-          require('./lib/typed/a.js');
-          expect('should not be called').to.be.equal(false);
-        } catch (e) {
+        expect(() => require('./lib/typed/a.js')).to.throw();
 
-        }
         rewiremock.disable();
       });
     });
