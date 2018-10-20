@@ -75,8 +75,8 @@
     "lodash.template": "^4.4.0",
     "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",
-    "wipe-node-cache": "^1.1.0",
-    "wipe-webpack-cache": "^1.0.3"
+    "wipe-node-cache": "^2.0.0",
+    "wipe-webpack-cache": "^2.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
