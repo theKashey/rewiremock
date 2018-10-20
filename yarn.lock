@@ -7437,9 +7437,9 @@ wipe-node-cache@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-1.1.0.tgz#cd407904d81f0a76e536a9376ed1b82800dc837c"
 
-wipe-webpack-cache@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/wipe-webpack-cache/-/wipe-webpack-cache-1.0.3.tgz#cac81dbba9223d14b46fb88e5e56f5eaa70a8776"
+wipe-webpack-cache@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/wipe-webpack-cache/-/wipe-webpack-cache-2.0.0.tgz#5fa45ba44893c2eba1d9fde78b9d778b89ac9a8c"
 
 with-callback@^1.0.2:
   version "1.0.2"
