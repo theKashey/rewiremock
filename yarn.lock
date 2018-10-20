@@ -7433,9 +7433,9 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
 
-wipe-node-cache@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-1.1.0.tgz#cd407904d81f0a76e536a9376ed1b82800dc837c"
+wipe-node-cache@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.0.0.tgz#43bb1b3dcaf5bb40d643752131f2dc37ad48690b"
 
 wipe-webpack-cache@^1.0.3:
   version "1.0.3"
