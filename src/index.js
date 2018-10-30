@@ -54,7 +54,7 @@ if (global['_REWIREMOCK_HOISTED_']) {
   });
 }
 global['_REWIREMOCK_HOISTED_'] = {
-  rewireAfter: getModuleParent(module),
+  rewiredFor: getModuleName(getModuleParent(module)),
   push(cb) {
     cb(API.mockModule);
   },

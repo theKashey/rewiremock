@@ -1,7 +1,7 @@
 'use strict';
 
 (function rwrmck() {
-  if (!global["_REWIREMOCK_HOISTED_"] || global["_REWIREMOCK_HOISTED_"].rewireAfter && global["_REWIREMOCK_HOISTED_"].rewireAfter !== module) {
+  if (!global["_REWIREMOCK_HOISTED_"] || global["_REWIREMOCK_HOISTED_"].rewiredFor && global["_REWIREMOCK_HOISTED_"].rewiredFor !== module.id) {
     global["_REWIREMOCK_HOISTED_"] = [];
   }
 
