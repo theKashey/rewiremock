@@ -10,7 +10,6 @@ rewiremock('./bar').callThrough().with({a:'mocked'}).dynamic();
 const fooMock = rewiremock.getMock('./foo');
 const barMock = rewiremock.getMock('./bar');
 
-
 describe('hoisted/dynamic', () => {
   describe('string', () => {
     it('mocked test', () => {

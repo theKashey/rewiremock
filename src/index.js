@@ -48,11 +48,11 @@ if (typeof __webpack_require__ !== "undefined") {
 
 applyDefaultConfig(API.mockModule);
 
-if (global['REWIREMOCK_HOISTED']) {
-  global['REWIREMOCK_HOISTED'].forEach(cb => {
+if (global['_REWIREMOCK_HOISTED_']) {
+  global['_REWIREMOCK_HOISTED_'].forEach(cb => {
     cb(API.mockModule)
   });
-  global['REWIREMOCK_HOISTED'] = [];
+  global['_REWIREMOCK_HOISTED_'] = [];
 }
 
 export {
