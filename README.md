@@ -160,6 +160,10 @@ all selectors by sinon stubs, with one configured.
 This is only possible via babel plugin, and without it this code will be executed without any sence, as long mocking
 will be configured after the files required.
 
+### Limitations
+- This babel plugin __does not work__ if "modules" are not handled by babel. Ie in case of webpack harmony imports.
+- Other babel plugins, including JSX, does not work inside webpack _hoisted_ code.
+
 1. Add `rewiremock/babel` into plugin section in `.babelrc`
 ```js
 // .babelrc
