@@ -8,7 +8,7 @@ const fooMock = rewiremock.getMock('./foo');
 describe('hoisted', () => {
   it('mocked test', () => {
     expect(foo).to.be.equal('mocked');
-  });
+  });//
 
   it('double mocked test', () => {
     fooMock.with('re mocked');

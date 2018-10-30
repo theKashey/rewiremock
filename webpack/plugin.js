@@ -31,7 +31,7 @@ class RewiremockPlugin {
         if (src.indexOf('rwrmck') > 0 && src.indexOf('harmony import') > 0) {
           const rewirePosition = src.indexOf('/*! rewiremock */');
           const endOfLine = src.indexOf(';', rewirePosition) + 1;
-          const match = src.match(/\(function rwrmck\(([\s\S]*)rwrm\+\'\);/g);
+          const match = src.match(/\(function rwrmck\(([\s\S]*)rwrmck\'\);/g);
 
           if (match && match.length) {
             moduleSource = [

@@ -1,14 +1,14 @@
 'use strict';
 
-(function () {
-  global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
+(function rwrmck() {
+  global["_REWIREMOCK_HOISTED_"] = [];
   global["_REWIREMOCK_HOISTED_"].push(function (rewiremock) {
     rewiremock.enable();
 
 
     rewiremock('foo').with('mocked');
   });
-})();
+})('rwrmck');
 
 var _chai = require('chai');
 
@@ -24,6 +24,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _rewiremock2.default.disable();
 
+global["_REWIREMOCK_HOISTED_"] = [];
 describe('hoisted', () => {
   it('mocked test', () => {
     (0, _chai.expect)(_foo2.default).to.be.equal('mocked');
