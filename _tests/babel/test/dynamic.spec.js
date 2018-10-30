@@ -3,7 +3,6 @@ import rewiremock from '../../../src/index';
 import foo from './foo';
 import bar from './bar';
 
-
 rewiremock('./foo').with('mocked').dynamic();
 rewiremock('./bar').callThrough().with({a:'mocked'}).dynamic();
 
