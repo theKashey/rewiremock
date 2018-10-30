@@ -25,7 +25,7 @@ module.exports = (args) => {
 
   const registrations = template(
 `(function rwrmck(){
-  global["_REWIREMOCK_HOISTED_"] = [];
+  global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function(rewiremock){     
     MOCKS 
    });
