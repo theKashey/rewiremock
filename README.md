@@ -160,9 +160,20 @@ all selectors by sinon stubs, with one configured.
 This is only possible via babel plugin, and without it this code will be executed without any sence, as long mocking
 will be configured after the files required.
 
-1. Add `rewiremock/babel' into plugin section in `.babelrc`
+1. Add `rewiremock/babel` into plugin section in `.babelrc`
+```js
+// .babelrc
+{
+  "presets": [
+    //.....
+  ],
+  "plugins": [
+    "rewiremock/babel"
+  ]
+}
+```
 2. This example will be transpiled into
-```jsjs
+```js
 import sinon from 'sinon';
 import rewiremock from 'rewiremock';
 
@@ -181,8 +192,8 @@ selectors.findUser.returns("cat"); // this is sinon stub.
 ``` 
 
 Keep in mind - rewiremock will hoist mock definition next to rewiremock import.
- - You can use anything above rewiremock import
- - You can mock anything below rewiremock import
+ - You can __use__ anything __above__ rewiremock import
+ - You can __mock__ anything __below__ rewiremock import
  
 ### Changing the mocks after the mocking
 It is possible to partially change mocking already being applied.
