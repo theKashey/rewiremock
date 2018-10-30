@@ -22,10 +22,28 @@ class RewiremockPlugin {
 
       compilation.moduleTemplate.plugin('render', function (moduleSource) {
         const source = new ConcatSource();
-        if (moduleSource.source().indexOf('require') > 0) {
-            source.add(injectString);
+        const src = moduleSource.source();
+        // and injection
+        if (src.indexOf('require') > 0) {
+          source.add(injectString);
         }
-        source.add(moduleSource);
+        // re-hoists mocks
+        if (src.indexOf('rwrmck') > 0 && src.indexOf('harmony import') > 0) {
+          const rewirePosition = src.indexOf('/*! rewiremock */');
+          const endOfLine = src.indexOf(';', rewirePosition) + 1;
+          const match = src.match(/\(function rwrmck\(([\s\S]*)rwrm\+\'\);/g);
+
+          if (match && match.length) {
+            moduleSource = [
+              src.substr(0, endOfLine),
+              match[0],
+              src.substr(endOfLine).replace(match[0], '')
+            ].join('');
+          }
+          source.add(moduleSource);
+        } else {
+          source.add(moduleSource);
+        }
         return source;
       });
     });

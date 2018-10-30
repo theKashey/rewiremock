@@ -52,7 +52,11 @@ if (global['_REWIREMOCK_HOISTED_']) {
   global['_REWIREMOCK_HOISTED_'].forEach(cb => {
     cb(API.mockModule)
   });
-  global['_REWIREMOCK_HOISTED_'] = [];
+}
+global['_REWIREMOCK_HOISTED_'] = {
+  push(cb) {
+    cb(API.mockModule);
+  }
 }
 
 export {
