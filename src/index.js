@@ -52,15 +52,8 @@ if (global['_REWIREMOCK_HOISTED_']) {
   global['_REWIREMOCK_HOISTED_'].forEach(cb => {
     cb(API.mockModule)
   });
+  global['_REWIREMOCK_HOISTED_'] = [];
 }
-global['_REWIREMOCK_HOISTED_'] = {
-  rewiredFor: getModuleName(getModuleParent(module)),
-  push(cb) {
-    cb(API.mockModule);
-  },
-  forEach() {
-  }
-};
 
 export {
   addPlugin,
