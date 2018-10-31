@@ -3,7 +3,6 @@ import rewiremock from '../../../src/index';
 import foo from './foo';
 import bar from './bar';
 
-
 rewiremock('./foo').with('mocked').dynamic();
 rewiremock('./bar').callThrough().with({a:'mocked'}).dynamic();
 
@@ -26,7 +25,7 @@ describe('hoisted/dynamic', () => {
     it('mocked test', () => {
       expect(bar.a).to.be.equal('mocked');
       expect(bar.b).to.be.equal('real b');
-    });
+    });//
 
     it('unmocked test', () => {
       barMock.with({});

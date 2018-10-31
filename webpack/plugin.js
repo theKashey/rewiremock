@@ -22,10 +22,26 @@ class RewiremockPlugin {
 
       compilation.moduleTemplate.plugin('render', function (moduleSource) {
         const source = new ConcatSource();
-        if (moduleSource.source().indexOf('require') > 0) {
-            source.add(injectString);
+        const src = moduleSource.source();
+        // and injection
+        if (src.indexOf('require') > 0) {
+          source.add(injectString);
         }
-        source.add(moduleSource);
+        // re-hoists mocks
+        const firstImport = src.indexOf('/* harmony import');
+        if (src.indexOf('rwrmck') > 0 && firstImport > 0) {
+          const match = src.match(/\(function rwrmck\(([\s\S]*)rwrmck\'\);/g);
+          if (match && match.length) {
+            moduleSource = [
+              src.substr(0, firstImport),
+              match[0],
+              src.substr(firstImport).replace(match[0], '')
+            ].join('');
+          }
+          source.add(moduleSource);
+        } else {
+          source.add(moduleSource);
+        }
         return source;
       });
     });

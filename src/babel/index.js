@@ -18,19 +18,18 @@ const isRewiremock = expr => {
 
 module.exports = (args) => {
 
-  const {template} = args
+  const {template} = args;
 
   const enable = template('rewiremock.enable();\n', templateOptions);
-  const disable = template('rewiremock.disable();\n', templateOptions);
+  const disable = template('rewiremock.disable();global["_REWIREMOCK_HOISTED_"] = [];\n', templateOptions);
 
   const registrations = template(
-`(function(){
+`(function rwrmck(){
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function(rewiremock){     
     MOCKS 
    });
-})();`
-    , templateOptions);
+})('rwrmck');`, templateOptions);
 
   const REGISTRATIONS = Symbol('registrations')
 

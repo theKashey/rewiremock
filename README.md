@@ -161,8 +161,8 @@ This is only possible via babel plugin, and without it this code will be execute
 will be configured after the files required.
 
 ### Limitations
-- This babel plugin __does not work__ if "modules" are not handled by babel. Ie in case of webpack harmony imports.
-- Other babel plugins, including JSX, does not work inside webpack _hoisted_ code.
+- Other babel plugins, including JSX, does not work inside webpack _hoisted_ code. But you may define
+any _specific_ code in a "functions", and let JavaScript to hoist it.
 
 1. Add `rewiremock/babel` into plugin section in `.babelrc`
 ```js
@@ -184,6 +184,10 @@ import rewiremock from 'rewiremock';
 rewiremock('common/Component1').by('common/Component2');
 rewiremock('common/Component2/action').with({ action: () => {} });
 rewiremock('common/selectors').mockThrough(() => sinon.stub());
+rewiremock('common/Component2/React').withDefault(ComponentMock);
+
+// "function" would be hoisted by js itself
+function ComponentMock({children}) { return <div>mock!</div>; }
 
 rewiremock.enabled();
 

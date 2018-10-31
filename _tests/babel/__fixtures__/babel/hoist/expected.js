@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function rwrmck() {
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function (rewiremock) {
     rewiremock.enable();
@@ -12,7 +12,7 @@
     });
     rewiremock('common/selectors').mockThrough(() => _sinon2.default.stub());
   });
-})();
+})('rwrmck');
 
 var _sinon = require('sinon');
 
@@ -34,5 +34,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _rewiremock2.default.disable();
 
+global["_REWIREMOCK_HOISTED_"] = [];
 const b = 1;
 let a = b;
