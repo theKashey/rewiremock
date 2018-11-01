@@ -146,7 +146,7 @@ function asyncTest() {
     /* eslint-disable no-console */
     console.error(
       'Rewiremock: listed async modules should finish loading first. Use async API of rewiremock.',
-      asyncModulesLeft.map(module => module.creator.toString())
+      asyncModulesLeft.map(module => module.creator)
     );
     /* eslint-enable */
     throw new Error('Rewiremock: listed async modules should finish loading first. Use async API of rewiremock.')

@@ -3,14 +3,15 @@
 (function rwrmck() {
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function (rewiremock) {
-    rewiremock.enable();
-
 
     rewiremock('common/Component1').by('common/Component2');
+
     rewiremock('common/Component2/action').with({
       action: () => {}
     });
     rewiremock('common/selectors').mockThrough(() => _sinon2.default.stub());
+
+    rewiremock.enable();
   });
 })('rwrmck');
 
@@ -35,5 +36,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _rewiremock2.default.disable();
 
 global["_REWIREMOCK_HOISTED_"] = [];
-const b = 1;
+_rewiremock2.default.getMock();const b = 1;
 let a = b;
+
+if (1) {
+  (0, _rewiremock2.default)('test');
+}
+
+(function () {
+  (0, _rewiremock2.default)('test');
+});

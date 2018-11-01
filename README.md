@@ -163,6 +163,8 @@ will be configured after the files required.
 ### Limitations
 - Other babel plugins, including JSX, does not work inside webpack _hoisted_ code. But you may define
 any _specific_ code in a "functions", and let JavaScript to hoist it.
+- Most of variables, you have define in the file, are not visible to __hoisted__ code, as long they are __not yet defined__.
+Only functions would be hoisted.
 
 1. Add `rewiremock/babel` into plugin section in `.babelrc`
 ```js
@@ -248,6 +250,28 @@ It is possible to partially change mocking already being applied.
      rewiremock.getMock('./foo').with({ });
    });
  })
+```
+
+### Guided mocking
+You may use `require` or `import` to let IDE help you to properly write fileName,
+and hide all filename resolution and transformation behind the scenes.
+But there are things you have to keep in mind
+
+1. Resolution of synchronous API happens on .enable
+```js
+rewiremock(() => require('./fileToMock1')); // this mock would work
+rewiremock.enable();
+rewiremock(() => require('./fileToMock2')); //this mock WOULD NOT WORK!
+```
+2. Using async API will throw an error
+```js
+rewiremock(() => import('./fileToMock1'));  
+rewiremock.enable(); // this is an exception
+```
+3. Async API requires async API
+```js
+rewiremock.module( () => import('file')) // this is ok
+rewiremock.around(..., rw => rw.mock(() => import('file2'))) // this is ok
 ```
 
 # Type safety
@@ -344,6 +368,12 @@ plugins: [
 ```
   That's all. Now all magic will happens at client side.
   > It is better to use .proxy/module command with direct require/import and leave all names conversion to webpack.
+
+#### Hint
+For better dev experience include special configuration of webpack
+```js
+import rewiremock from 'rewiremock/webpack';
+```
 
 ### webpack troubleshooting
 Currently there are 2 known problems, both for mocha+webpack, ie using nodejs to run webpack bundle:

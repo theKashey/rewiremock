@@ -111,6 +111,7 @@ mockModule.overrideEntryPoint = (parent) => {
  */
 mockModule.enable = () => {
     scope();
+    Module.probeSyncModules();
     Module.overloadRequire();
     storeCache();
     wipeCache();

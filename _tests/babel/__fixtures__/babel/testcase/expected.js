@@ -3,10 +3,10 @@
 (function rwrmck() {
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function (rewiremock) {
-    rewiremock.enable();
-
 
     rewiremock('foo').with('mocked');
+
+    rewiremock.enable();
   });
 })('rwrmck');
 

@@ -16,9 +16,12 @@ import __mock__ from './__mock__';
 
 const mockThroughByDefault = mockThoughByDefault;
 
+const webpack = nodejs;
+
 const exports = {
     childOnly,
     nodejs,
+    webpack,
     protectNodeModules,
     relative,
     webpackAlias,

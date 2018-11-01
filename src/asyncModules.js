@@ -2,12 +2,17 @@ import {getAllAsyncMocks, insertMock} from "./mocks";
 
 let currentModule;
 
-const loadInRoll = (mocks) => {
+const loadInRoll = (mocks, middleTick) => {
   if (mocks.length) {
     currentModule = mocks[0];
-    return Promise.resolve()
-      .then(currentModule.creator)
-      .then(() => loadInRoll(mocks.slice(1)))
+    currentModule.result = currentModule.creator();
+    if (currentModule.result && currentModule.result.then) {
+      return middleTick()
+        .then(() => currentModule.result)
+        .then(() => loadInRoll(mocks.slice(1), middleTick));
+    } else {
+      return loadInRoll(mocks.slice(1), middleTick);
+    }
   } else {
     return Promise.resolve();
   }
@@ -28,9 +33,9 @@ const probeAsyncModules = {
     insertMock(baseRequest, currentModule.mock);
   },
 
-  execute() {
+  execute(middleTick) {
     const mocks = getAllAsyncMocks();
-    return loadInRoll(mocks);
+    return loadInRoll(mocks, middleTick);
   }
 };
 
