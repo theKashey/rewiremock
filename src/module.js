@@ -20,10 +20,17 @@ const NodeModule = {
     const load = Module._load;
     Module._load = probeAsyncModules.load(this);
     return probeAsyncModules
-      .execute()
+      .execute(() => Promise.resolve(true))
       .then(() => {
         Module._load = load;
       })
+  },
+
+  probeSyncModules() {
+    const load = Module._load;
+    Module._load = probeAsyncModules.load(this);
+    probeAsyncModules.execute(() => Promise.reject('could not use dynamic imports with sync API'));
+    Module._load = load;
   },
 
   _resolveFilename(fileName, module) {

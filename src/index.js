@@ -50,7 +50,7 @@ applyDefaultConfig(API.mockModule);
 
 if (global['_REWIREMOCK_HOISTED_']) {
   global['_REWIREMOCK_HOISTED_'].forEach(cb => {
-    cb(API.mockModule)
+    cb(API.mockModule, { plugins, overrideEntryPoint })
   });
   global['_REWIREMOCK_HOISTED_'] = [];
 }

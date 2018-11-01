@@ -53,7 +53,7 @@ module.exports = (args) => {
             }
 
             const mocker = registrations({
-              MOCKS: [enable(), ...mocks]
+              MOCKS: [...mocks, enable()]
             });
 
             node.body.push(mocker);
