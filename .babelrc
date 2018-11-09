@@ -21,13 +21,14 @@
           "env",
           {
             "targets": {
-              "node": "7.0"
+              "node": "7.0",
+              "ie": 11
             }
           }
         ]
       ],
       "plugins": [
-        [
+	      [
           "transform-object-rest-spread",
           {
             "useBuiltIns": true
