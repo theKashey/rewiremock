@@ -20,8 +20,8 @@
     "build5": "BABEL_ENV=cjs babel src -d lib && cp src/index.js.flow lib/index.js.flow",
     "build6": "BABEL_ENV=ejs babel src -d es && cp src/index.js.flow es/index.js.flow",
     "prepublish": "npm run build",
-    "lint": "eslint src",
-    "lint:fix": "eslint src tests --fix"
+    "lint": "eslint src webpack",
+    "lint:fix": "eslint src webpack tests --fix"
   },
   "repository": {
     "type": "git",

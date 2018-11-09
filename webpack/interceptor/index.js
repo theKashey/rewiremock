@@ -1,7 +1,7 @@
-const requires = [];
-let Module;
+var requires = [];
+var Module;
 
-const loader = function baseLoader(request, parent, isMain) {
+var loader = function baseLoader(request/*, parent, isMain*/) {
   return requires[requires.length - 1](request);
 };
 
@@ -9,7 +9,7 @@ const loader = function baseLoader(request, parent, isMain) {
 function interceptor(superRequire, parentModule) {
   function RQ(fileName) {
     interceptor.pushLoader(superRequire);
-    const result = Module
+    var result = Module
       ? Module._load(fileName, parentModule)
       : loader(fileName, parentModule);
 
@@ -17,7 +17,7 @@ function interceptor(superRequire, parentModule) {
     return result;
   }
 
-  Object.getOwnPropertyNames(superRequire).forEach(key => {
+  Object.getOwnPropertyNames(superRequire).forEach(function(key) {
     try {
       RQ[key] = superRequire[key]
     } catch (e) {
@@ -27,15 +27,15 @@ function interceptor(superRequire, parentModule) {
   return RQ;
 }
 
-interceptor.pushLoader = (loader) => {
+interceptor.pushLoader = function(loader) {
   requires.push(loader)
 };
 
-interceptor.popLoader = (loader) => {
+interceptor.popLoader = function(/*loader*/) {
   requires.pop();
 };
 
-interceptor.provideModule = (_Module) => {
+interceptor.provideModule = function(_Module) {
   Module = _Module;
 };
 

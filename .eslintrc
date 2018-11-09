@@ -13,5 +13,6 @@
     "node": true,
     "es6": true,
     "mocha": true
-  }
+  },
+  "root": true
 }

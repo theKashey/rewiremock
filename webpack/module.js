@@ -18,6 +18,7 @@ const Module = {
       return asIndex;
     }
     if (!asFile && !asIs) {
+      // eslint-disable-next-line
       console.warn('rewiremock: ', fileName, 'requested from', parent.i, 'was not found');
     }
     return asFile || fileName;
