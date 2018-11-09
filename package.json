@@ -71,13 +71,13 @@
   "author": "Anton Korzunov (thekashey@gmail.com)",
   "license": "MIT",
   "dependencies": {
-    "compare-module-exports": "^2.0.0",
+    "compare-module-exports": "^2.1.0",
     "lodash.some": "^4.6.0",
     "lodash.template": "^4.4.0",
     "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",
-    "wipe-node-cache": "^2.0.0",
-    "wipe-webpack-cache": "^2.0.1"
+    "wipe-node-cache": "^2.1.0",
+    "wipe-webpack-cache": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

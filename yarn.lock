@@ -2056,10 +2056,10 @@ commondir@^1.0.1:
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
 
-compare-module-exports@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/compare-module-exports/-/compare-module-exports-2.0.1.tgz#0f733a8407554a512fb10e4a0aceec6787df4696"
-  integrity sha512-kpkXUcxwce4IyRpw83pWz53SzOFIISV3kEP4fI/UIBh7M8Isom539h8LYb7YlRXIUA67DhTH5zTLq2qRkq9THA==
+compare-module-exports@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/compare-module-exports/-/compare-module-exports-2.1.0.tgz#c4fcb8759e42fb19c52798c510d7f9206b81fa8e"
+  integrity sha512-3Lc0sTIuX1jmY2K2RrXRJOND6KsRTX2D4v3+eu1PDptsuJZVK4LZc852eZa9I+avj0NrUKlTNgqvccNOH6mbGg==
 
 compare-versions@^3.1.0:
   version "3.3.0"
@@ -8573,17 +8573,17 @@ window-size@0.1.0:
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
   integrity sha1-VDjNLqk7IC76Ohn+iIeu58lPnJ0=
 
-wipe-node-cache@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.0.0.tgz#43bb1b3dcaf5bb40d643752131f2dc37ad48690b"
-  integrity sha512-hhBPLLS0uolrqoyOaSQFWbBHNWYwrDDSuMy0xxzR9MNFgvSmNW86r97ibiT/4l96s8HYa+R+cTS0synaRQ6Kww==
+wipe-node-cache@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.1.0.tgz#9dc20a2f881c1e5fe3f4a6e8a98047079d97acf6"
+  integrity sha512-Vdash0WV9Di/GeYW9FJrAZcPjGK4dO7M/Be/sJybguEgcM7As0uwLyvewZYqdlepoh7Rj4ZJKEdo8uX83PeNIw==
 
-wipe-webpack-cache@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/wipe-webpack-cache/-/wipe-webpack-cache-2.0.1.tgz#890949573ab31ada521dbeda957d7b3c74589f87"
-  integrity sha512-wQyix9QGAbENHKTH52nnEKKw4HVwKvajlRqODw6wouLYsm2kDMRTA/IigAOGvriMXH2ba5TrZs4Umw3GP9HJcw==
+wipe-webpack-cache@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/wipe-webpack-cache/-/wipe-webpack-cache-2.1.0.tgz#bc26149f21cf1a3c34752997b96458b567d3e6a1"
+  integrity sha512-OXzQMGpA7MnQQ8AG+uMl5mWR2ezy6fw1+DMHY+wzYP1qkF1jrek87psLBmhZEj+er4efO/GD4R8jXWFierobaA==
   dependencies:
-    wipe-node-cache "^2.0.0"
+    wipe-node-cache "^2.1.0"
 
 with-callback@^1.0.2:
   version "1.0.2"
