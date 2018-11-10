@@ -1,3 +1,4 @@
+require('babel-polyfill');
 require.context(".", true, /.js$/);
 require('../webpack/interceptor')
 
