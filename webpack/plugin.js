@@ -3,7 +3,7 @@ const {ConcatSource} = require("webpack-sources");
 
 const normalizePath = a => a[0] === '.' ? a : './' + a;
 
-const file = normalizePath(relative(process.cwd(), __dirname + '/interceptor/index.js').replace(/\\/g, '/'));
+const file = normalizePath(relative(process.cwd(), __dirname + '/src/interceptor.js').replace(/\\/g, '/'));
 
 const injectString = `/***/if(typeof __webpack_require__!=='undefined') {
    try {
