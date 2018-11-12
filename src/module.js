@@ -60,7 +60,8 @@ export const pickModuleName = (fileName, parent) => {
     const targetFile = resolve(dirname(getModuleName(parent)), fileName);
     return Object
       .keys(__webpack_modules__)
-      .find(name => name.indexOf(targetFile) > 0);
+      .filter(name => name.indexOf(targetFile) > 0)
+      .shift();
   } else {
     return fileName;
   }
@@ -75,7 +76,7 @@ export const getModuleParents = (module) => module && (module.parent ? [getModul
 export const inParents = (a, b) => {
   const B = getModuleName(b)
   const parents = getModuleParents(a);
-  return !!parents.find(x => x === B);
+  return parents.some(x => x === B);
 }
 
 export default NodeModule;

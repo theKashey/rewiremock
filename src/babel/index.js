@@ -46,7 +46,7 @@ module.exports = (args) => {
           const {imports, mocks} = node[REGISTRATIONS];
           if (mocks.length) {
 
-            const rewiremock = imports.find(({node}) => node.source.value.indexOf('rewiremock') >= 0);
+            const rewiremock = imports.some(({node}) => node.source.value.indexOf('rewiremock') >= 0);
             if (!rewiremock) {
               /* eslint-disable no-console */
               console.warn('rewiremock not found in imports');

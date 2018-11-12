@@ -7,8 +7,8 @@ const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;
 export const relativeWipeCheck = (stubs, moduleName) => {
   if (Object
       .keys(stubs)
-      .find(key =>
-        extensions.find( ext => moduleName.endsWith(trimKey(key+ext)))
+      .some(key =>
+        extensions.some( ext => moduleName.endsWith(trimKey(key+ext)))
       )
   ) {
     return YES;

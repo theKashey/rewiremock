@@ -13,9 +13,9 @@ var Module = {
       .sort(function(a, b) { return a.length - b.length; });
     var targetFileIndex = targetFile + '/index';
 
-    var asIs = keys.find(function(name) { return name.indexOf(fileName) >= 0; });
-    var asFile = keys.find(function(name) { return name.indexOf(targetFile) >= 0; });
-    var asIndex = keys.find(function(name) { return name.indexOf(targetFileIndex) >= 0; });
+    var asIs = keys.filter(function(name) { return name.indexOf(fileName) >= 0; }).shift();
+    var asFile = keys.filter(function(name) { return name.indexOf(targetFile) >= 0; }).shift();
+    var asIndex = keys.filter(function(name) { return name.indexOf(targetFileIndex) >= 0; }).shift();
 
     if (asFile && asIndex && asFile.substr(targetFile.length + 1).indexOf('/') >= 0) {
       return asIndex;

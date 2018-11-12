@@ -15,7 +15,7 @@ const insertMock = (name, mock) => getScope().mocks[name] = mock;
 const resetMock = (name) => insertMock(name, genMock(name));
 
 const pickFrom = (mocks, name) => {
-  const ext = extensions.find(ext => mocks.hasOwnProperty(name + ext));
+  const ext = extensions.filter(ext => mocks.hasOwnProperty(name + ext)).shift();
   if (ext !== undefined) {
     return mocks[name + ext]
   }
