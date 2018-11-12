@@ -1,6 +1,6 @@
 require('babel-polyfill');
 require.context(".", true, /.js$/);
-require('../webpack/interceptor')
+require('../webpack/src/interceptor')
 
 var testsContext = require.context(".", false, /.spec.js$/);
 testsContext.keys().forEach(testsContext);
