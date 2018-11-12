@@ -19,7 +19,7 @@ const createPlugin = (plugin) => {
 }
 
 const standardWipeCheck = (stubs, moduleName) => {
-    if (extensions.find(ext => stubs[moduleName + ext]) !== undefined) {
+    if (extensions.some(ext => stubs[moduleName + ext])) {
         return YES;
     }
 };

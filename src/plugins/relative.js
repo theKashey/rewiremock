@@ -3,12 +3,13 @@ import {inParents} from '../module';
 import { extensions } from "../_common";
 
 const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;
+const endsWith = (a, b) => a.substring(a.length - b.length) === b;
 
 export const relativeWipeCheck = (stubs, moduleName) => {
   if (Object
       .keys(stubs)
-      .find(key =>
-        extensions.find( ext => moduleName.endsWith(trimKey(key+ext)))
+      .some(key =>
+        extensions.some( ext => endsWith(moduleName, trimKey(key+ext)))
       )
   ) {
     return YES;
