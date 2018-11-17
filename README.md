@@ -87,7 +87,7 @@ Rewiremock provides lots of APIs to help you setup mock, and get the mocked modu
   - If everything is simple - use __rewiremock.proxy__. (~proxyquire)
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
-  - If you advanced syntax and type checking - use __rewiremock.around__.
+  - If you need advanced syntax and type checking - use __rewiremock.around__.
   - You always can just use __.enable/.disable__ (~ mockery).
   
 > All the mocks await you to provide "stubs" to override the real implimentation.
