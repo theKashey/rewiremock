@@ -6,7 +6,7 @@
 
 The most powerful mocking library, inspired by the best libraries:
 - [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery.
-- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ it a better proxyquire.
+- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ a better proxyquire.
 - [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
 - [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
 
