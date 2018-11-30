@@ -5,8 +5,8 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
 
 The most powerful mocking library, inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery.
-- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ a better proxyquire.
+- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery, with the same interface.
+- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ a better proxyquire, with the same interface.
 - [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
 - [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
 
