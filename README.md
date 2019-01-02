@@ -5,8 +5,8 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
 
 The most powerful mocking library, inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery.
-- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ it a better proxyquire.
+- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery, with the same interface.
+- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ a better proxyquire, with the same interface.
 - [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
 - [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
 
@@ -87,7 +87,7 @@ Rewiremock provides lots of APIs to help you setup mock, and get the mocked modu
   - If everything is simple - use __rewiremock.proxy__. (~proxyquire)
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
-  - If you advanced syntax and type checking - use __rewiremock.around__.
+  - If you need advanced syntax and type checking - use __rewiremock.around__.
   - You always can just use __.enable/.disable__ (~ mockery).
   
 > All the mocks await you to provide "stubs" to override the real implimentation.
