@@ -20,6 +20,9 @@ const fileNameTransformer = (fileName/*, module*/) => fileName;
 //const wipeCheck = (stubs, moduleName) => relativeWipeCheck(stubs, moduleName);
 
 const shouldMock = (mock, request, parent, topModule) => {
+  if(mock.flag_directChildOnly === false) {
+    return PASS;
+  }
   return inParents(parent, topModule) ? PASS : NO;
 };
 
