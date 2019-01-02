@@ -32,6 +32,14 @@ class ModuleMock {
   }
 
   /**
+   * Bypass shouldMock and always mock
+   */
+  always () {
+    this.mock.alwaysMock = true;
+    return this;
+  }
+
+  /**
    * Enable automatic dependency mocking
    * @name ModuleMock.mockThrough
    * @param {Function} [mockFactory=() => emptyFunction] - mock constructor

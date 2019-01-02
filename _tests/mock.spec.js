@@ -220,17 +220,43 @@ describe('rewiremock ', () => {
         .then(mocked => expect(mocked()).to.be.equal('>+!mock'));
     });
 
+    it('should everything due to always: ', () => {
+      return rewiremock.around(() => require('./lib/c/barbaz.js'),
+        () => {
+          //addPlugin(nodePlugin);
+          rewiremock('./baz')
+            .with(() => 'mock')
+            .always()
+            .calledFromMock();
+        })
+        .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
+    });
+
     it('should mock all due to callThrough mocked / async : ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {
           //addPlugin(nodePlugin);
+          rewiremock(() => import('./lib/c/bar'))
+            .callThrough();
           rewiremock(() => import('./lib/c/baz'))
             .with(() => 'mock')
             .calledFromMock();
-          rewiremock(() => import('./lib/c/bar'))
-            .callThrough();
         })
         .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
+    });
+
+    it('should mock only direct child due to callThrough mocked / async : ', () => {
+      return rewiremock.around(() => require('./lib/c/barbaz.js'),
+        () => {
+          //addPlugin(nodePlugin);
+          rewiremock(() => import('./lib/c/bar'))
+            .callThrough();
+          rewiremock(() => import('./lib/c/baz'))
+            .with(() => 'mock')
+            .directChildOnly()
+            .calledFromMock();
+        })
+        .then(mocked => expect(mocked()).to.be.equal('>+!mock'));
     });
 
     it('should mock all due to callThrough mocked / sync: ', () => {

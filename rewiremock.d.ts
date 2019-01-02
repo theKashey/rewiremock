@@ -88,10 +88,15 @@ declare module 'rewiremock' {
         notToBeUsed(): this,
 
         /**
-         * checks mocks agains implementation
+         * checks mocks against implementation
          * @return {this}
          */
-        toMatchOrigin(): this
+        toMatchOrigin(): this,
+
+        /**
+         * Bypass shouldMock and always mock
+         */
+        always(): this,
     }
 
     interface NamedModuleMock<T> extends BaseMock {
@@ -256,5 +261,6 @@ declare module 'rewiremock' {
     export function addPlugin(plugin:Plugin):void;
     export function removePlugins(plugin:Plugin):void;
     export function overrideEntryPoint(module:any):void;
+    export function resolveExtensions(extensions: string[]):void;
     export var plugins: Plugins;
 }

@@ -1,6 +1,6 @@
 import createPlugin, {YES, PASS, NO} from './_common';
 import {inParents} from '../module';
-import { extensions } from "../_common";
+import { getExtensions } from "../constants";
 
 const trimKey = (key) => key[0] == '.' ? trimKey(key.substr(1)) : key;
 const endsWith = (a, b) => a.substring(a.length - b.length) === b;
@@ -9,7 +9,7 @@ export const relativeWipeCheck = (stubs, moduleName) => {
   if (Object
       .keys(stubs)
       .some(key =>
-        extensions.some( ext => endsWith(moduleName, trimKey(key+ext)))
+        getExtensions().some( ext => endsWith(moduleName, trimKey(key+ext)))
       )
   ) {
     return YES;

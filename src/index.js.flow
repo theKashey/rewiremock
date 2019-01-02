@@ -88,10 +88,15 @@ declare interface BaseMock {
   notToBeUsed(): *,
 
   /**
-   * checks mocks agains implementation
+   * checks mocks against implementation
    * @return {this}
    */
-  toMatchOrigin(): *
+  toMatchOrigin(): *,
+
+  /**
+   * Bypass shouldMock and always mock
+   */
+  always(): *,
 }
 
 declare interface MagicObjectWithRandomMethod {

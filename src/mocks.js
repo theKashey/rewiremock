@@ -1,7 +1,7 @@
 import {join} from 'path';
 import parse from 'path-parse';
 import getScope from './globals';
-import {extensions} from './_common';
+import {getExtensions} from './constants';
 import {getModuleName} from "./module";
 
 const genMock = (name) => {
@@ -15,7 +15,7 @@ const insertMock = (name, mock) => getScope().mocks[name] = mock;
 const resetMock = (name) => insertMock(name, genMock(name));
 
 const pickFrom = (mocks, name) => {
-  const ext = extensions.filter(ext => mocks.hasOwnProperty(name + ext)).shift();
+  const ext = getExtensions().filter(ext => mocks.hasOwnProperty(name + ext)).shift();
   if (ext !== undefined) {
     return mocks[name + ext]
   }

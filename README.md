@@ -711,6 +711,18 @@ Don't forget - you can write your own plugins.
  shouldMock: (mock, requestFilename, parentModule, entryPoint) => boolean
  }
  ```
+ 
+# Extensions
+Rewiremock will automatically try to resolve file
+- by specified name
+- adding .js, .jsx, .ts, .tsx, .mjs
+- you can override defaults
+```js
+import {resolveExtensions} from 'rewiremock';
+resolveExtensions(['.wasm', '.mjs', '.js', '.json']);
+```
+`resolveExtensions` is quite similar to [webpack's resolve extensions](https://webpack.js.org/configuration/resolve/#resolve-extensions). 
+ 
 # Not working?
  If something is not working - just check that you:
   - added a plugin to transform names (nodejs, webpackAlias or relative)

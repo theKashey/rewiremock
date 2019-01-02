@@ -184,7 +184,7 @@ function mockLoader(request, parent, isMain) {
   if (mock) {
     mock.wasRequired = true;
     const shouldResult = {};
-    if (shouldMock(mock, request, parent, parentModule, shouldResult)) {
+    if (mock.alwaysMock || shouldMock(mock, request, parent, parentModule, shouldResult)) {
       // this file fill be not cached, but it`s opener - will. And we have to remember it
       mockedModules[getModuleName(parent)] = true;
       mock.usedAs = (mock.usedAs || []);

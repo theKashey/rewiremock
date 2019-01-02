@@ -1,4 +1,4 @@
-import {extensions} from '../_common';
+import {getExtensions} from '../constants';
 
 const YES = 'yes';
 const NO = 'no';
@@ -19,7 +19,7 @@ const createPlugin = (plugin) => {
 }
 
 const standardWipeCheck = (stubs, moduleName) => {
-    if (extensions.some(ext => stubs[moduleName + ext])) {
+    if (getExtensions().some(ext => stubs[moduleName + ext])) {
         return YES;
     }
 };

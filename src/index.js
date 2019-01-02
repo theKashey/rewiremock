@@ -3,6 +3,7 @@ import {wipe} from './wipeCache';
 import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 import {getModuleName, getModuleParent} from './module';
+import {setExtensions as resolveExtensions} from './constants';
 
 const moduleName = getModuleName(module);
 if (!moduleName) {
@@ -50,7 +51,7 @@ applyDefaultConfig(API.mockModule);
 
 if (global['_REWIREMOCK_HOISTED_']) {
   global['_REWIREMOCK_HOISTED_'].forEach(cb => {
-    cb(API.mockModule, { plugins, overrideEntryPoint })
+    cb(API.mockModule, {plugins, overrideEntryPoint})
   });
   global['_REWIREMOCK_HOISTED_'] = [];
 }
@@ -58,7 +59,8 @@ if (global['_REWIREMOCK_HOISTED_']) {
 export {
   addPlugin,
   removePlugin,
-  plugins
+  plugins,
+  resolveExtensions
 };
 
 export default API.mockModule;
