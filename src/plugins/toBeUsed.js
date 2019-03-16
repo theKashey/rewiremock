@@ -15,7 +15,7 @@ const onDisable = ({mock}) => {
 
     const history = mock.rejected.map(({parent, plugins}) => getModuleName(parent) + '->' + plugins.join(','));
 
-    throw new Error(name + ' is set toBeUsed, was requied, by rejected by plugins.\n' + history.join('\n'))
+    throw new Error(name + ' is set toBeUsed, was required, but rejected by plugins.\n' + history.join('\n'))
 
   }
 };
