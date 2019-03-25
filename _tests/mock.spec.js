@@ -245,6 +245,15 @@ describe('rewiremock ', () => {
         .then(mocked => expect(mocked()).to.be.equal('>+mockmock'));
     });
 
+    it('should partially mock due to callThrough proxy:', () => {
+      const mocked = rewiremock.proxy('./lib/d',
+        (r) => ({
+          './a.js': r.callThrough().with({a:'mocked'}).toBeUsed()
+        })
+      );
+      expect(mocked()).to.be.equal('mocked|notmocked-b');
+    });
+
     it('should mock only direct child due to callThrough mocked / async : ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {

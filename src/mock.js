@@ -16,6 +16,7 @@ class ModuleMock {
       const originalName = this.mock.name;
       Object.assign(this.mock, source.mock);
       this.mock.name = originalName;
+      this.mock._parent = this;
     } else {
       return this.with(source);
     }
