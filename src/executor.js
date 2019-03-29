@@ -201,7 +201,8 @@ function mockLoader(request, parent, isMain) {
       if (mock.mockThrough) {
         const factory = mock.mockThrough === true ? getScopeOption('stubFactory') : mock.mockThrough;
         mock.override = mockThought(factory || standardStubFactory, mock.original);
-        return mockResult(request, mock, () => Object.assign({},
+        return mockResult(request, mock, () => Object.assign(
+          {},
           mock.override,
           mock.value,
           {__esModule: mock.original.__esModule}
@@ -237,10 +238,9 @@ function mockLoader(request, parent, isMain) {
               + request + '. Use overrideBy instead.');
           }
         }
-        return mockResult(request, mock, () => Object.assign({},
-          mock.original,
+        return mockResult(request, mock, () => Object.assign(
+          Object.create(mock.original),
           mock.value,
-          {__esModule: mock.original.__esModule}
         ));
       }
 
