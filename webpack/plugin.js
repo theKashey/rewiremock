@@ -18,9 +18,9 @@ const injectString = `/***/if(typeof __webpack_require__!=='undefined') {
 
 class RewiremockPlugin {
   apply(compiler) {
-    compiler.plugin('compilation', function (compilation) {
+    compiler.hooks.compilation.tap('RewiremockPlugin', function (compilation) {
 
-      compilation.moduleTemplate.plugin('render', function (moduleSource) {
+      compilation.moduleTemplates.javascript.hooks.render.tap('RewiremockPlugin', function (moduleSource) {
         const source = new ConcatSource();
         const src = moduleSource.source();
         // and injection
