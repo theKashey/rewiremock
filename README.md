@@ -1,17 +1,3 @@
-# rewiremock 
-[![Build Status](https://secure.travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
-[![coverage-badge](https://img.shields.io/codecov/c/github/thekashey/rewiremock.svg?style=flat-square)](https://codecov.io/github/thekashey/rewiremock)
-[![version-badge](https://img.shields.io/npm/v/rewiremock.svg?style=flat-square)](https://www.npmjs.com/package/rewiremock)
-[![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
-
-The most powerful mocking library, inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - Rewiremock __is__ a better mockery, with the same interface.
-- [proxyquire](https://github.com/theKashey/proxyquire) -Rewiremock __is__ a better proxyquire, with the same interface.
-- [mock-require](https://github.com/boblauer/mock-require) - Things must not be complex, Rewiremock __is__ not.
-- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - Jest is awesome. But rewiremock can do the same.
-
-Rewiremock __is a your favorite library__. The better version of it. For mocha, ava, karma, and anything not-jest.
-
 ```text
                      /$$      /$$ /$$                     /$$      /$$                     /$$      
                     | $$  /$ | $$|__/                    | $$$    /$$$                    | $$      
@@ -23,47 +9,138 @@ Rewiremock __is a your favorite library__. The better version of it. For mocha, 
 |__/       \_______/|__/     \__/|__/|__/       \_______/|__/     |__/ \______/  \_______/|__/  \__/
 ```
 
-By its nature rewiremock has same behavior as Mockery. But it can behave like others too.
-It covers _any_ case. It is the right way to mock your dependencies or perform dependency injection.
+[![Build Status](https://secure.travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
+[![coverage-badge](https://img.shields.io/codecov/c/github/thekashey/rewiremock.svg?style=flat-square)](https://codecov.io/github/thekashey/rewiremock)
+[![version-badge](https://img.shields.io/npm/v/rewiremock.svg?style=flat-square)](https://www.npmjs.com/package/rewiremock)
+[![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
+
+Dependency mocking, inspired by the best libraries:
+- [mockery](https://github.com/mfncooper/mockery) - `rewiremock` __is__ a better `mockery`, with the same interface.
+- [proxyquire](https://github.com/theKashey/proxyquire) - `rewiremock` __is__ a better `proxyquire`, with the same interface.
+- [mock-require](https://github.com/boblauer/mock-require) - things must not be complex, `rewiremock` __is__ not.
+- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - `Jest` is awesome. As well as `rewiremock`.
+
+Rewiremock is a better version of your favorite library__. For `mocha`, `ava`, `karma`, and anything not-`jest`.
+
+By desing rewiremock has same behavior as Mockery. But it can behave like other libraries too, exposing handly interfaces to make mocking a joy. Support type-safe mocking and provides TS/Flow types for itself.
  
-# Goal:
-- give ability to mock everything - CommonJS, ES6, inside nodejs or webpack.
-- give ability to do correctly - isolation, typechecking, powerfull API
-- give ability to do it easy - simple API to cover all the cases.
+# Quick start
+## 1. Install
+- `yarn add --dev rewiremock` or `npm i --save-dev rewiremock`
+## 2. Setup
+I would recoment not to import `rewiremock` directly in tests, but create `rewiremock.js` and require it - that would let you to _tune_ rewiremock, if you need it.
+### for ts/es6/esm use `import`
+```js
+// rewiremock.es6.js
+import rewiremock from 'rewiremock';
+/// settings
+rewiremock.overrideEntryPoint(module); // this is important
+export { rewiremock }
+```
+### for commonjs/nodejs use `require('rewiremock/node')`
+```js
+// rewiremock.cjs.js
+const rewiremock = require 'rewiremock/node';
+/// settings
+rewiremock.overrideEntryPoint(module); // this is important
+module.exports = rewiremock;
+```
+### for webpack
+```js
+// rewiremock.es6.js
+import rewiremock from 'rewiremock/webpack';
+/// settings
+rewiremock.overrideEntryPoint(module); // this is important
+export { rewiremock }
+```
+> If you import `rewiremock` dirrectly from your tests - you dont need `overrideEntryPoint`
 
-I have wrote some articles about these ideas - https://medium.com/tag/rewiremock/latest
+## 3. Use
+There are 3 ways to mock, all with some pros and cons.
+### proxyquire - like
+Simplest one. 
+```js
+ const file = rewiremock.proxy('file.js', {
+   'dependency':  stub
+ });
+```
+### mockery - like
+Most powerfull one
+```js
+ rewiremock('dependency').with(stub);
+ rewiremock.enable(); 
+ const file = require('file.js');
+ rewiremock.disable();
+```
+### jest - like
+Shortest one
+```js
+ rewiremock('dependency').with(stub); // if used next to imports
+```
+## 4. Tune
+There is a plenty of plugins to make your life easier. For example - this is my favorite setup
+```js
+import { resolve } from 'path';
+import rewiremock, { addPlugin, overrideEntryPoint, plugins } from 'rewiremock';
+import { configure } from 'rewiremock/lib/plugins/webpack-alias'; // could be better
 
+configure(resolve(`${__dirname}/../../webpack.config.test.js`));
+
+overrideEntryPoint(module);
+// we need webpack aliases
+addPlugin(plugins.webpackAlias);
+// and all stub names would be a relative
+addPlugin(plugins.relative);
+// and all stubs should be used. Lets make it default!
+addPlugin(plugins.usedByDefault);
+
+export { rewiremock };
+```
+
+## What command to use???!!!
+```js
+// use `require` instead of just filename to maintain type information
+const mock = rewiremock.proxy(() => require('somemodule'), r => {
+   'dep1': { name: 'override' },
+   // use all power of rewiremock to mock something as you want...
+   'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly(), // use all `mocking API`
+}));
+```
+
+Ok! Let's move forward!
+ 
+ 
 # API
  
  ## main API
- - rewiremock.enable() - wipes cache and enables interceptor.
- - rewiremock.disable() - wipes cache and disables interceptor.    
- - rewiremock.around(loader, creator):Promise< T > - loads a module in an **asynchronous** sandbox.
- - rewiremock.proxy(file, stubs):T - _proxyquire_ like mocking api, where file is file name, and stubs are an object or a function.
- - rewiremock.module(loader, stubs):Promise< T > - async version of proxy, where loader is a function.
+ - `rewiremock.enable()` - wipes cache and enables interceptor.
+ - `rewiremock.disable()` - wipes cache and disables interceptor.    
+ - `rewiremock.around(loader, creator):Promise< T >` - loads a module in an **asynchronous** sandbox.
+ - `rewiremock.proxy(file, stubs):T` - _proxyquire_ like mocking api, where file is file name, and stubs are an object or a function.
+ - `rewiremock.module(loader, stubs):Promise< T >` - async version of proxy, where loader is a function.
  ## mocking API 
- - rewiremock(moduleName: string) - fabric for a moduleNames's mock
- - rewiremock(moduleImport: loader) - async fabric for a module import function.
-    - .enable/disable() - to enable or disable mock (enabled by default).
-    - .with(stubs: function | Object) - overloads module with a value
-    - .withDefault(stub: function | Object) - overload `default` es6 export
-    - .es6() - marks module as ES6( __esModule )
-    - .by(otherModule: string| function) - overload by another module(if string provider) or by result of a function call. 
-    - .callThrough() - first load the original module, and next extend it by provided stub.
-    - .mockThrough([stubFactory]) - first load the original module, and then replaces all exports by stubs.
-    - .dynamic - enables hot mock updates.     
-    - .toBeUsed() - enables usage checking.  
-    - .directChildOnly - will do mock only direct dependencies.
-    - .calledFromMock - will do mock only dependencies of mocked dependencies.    
- - rewiremock.getMock(moduleName: string|loader) - returns existing mock (_rewiremock(moduleName)_ will _override_)   
+ - `rewiremock(moduleName: string)` - fabric for a moduleNames's mock
+ - `rewiremock(moduleImport: loader)` - async fabric for a module import function.
+    - `.enable/disable()` - to enable or disable mock (enabled by default).
+    - `.with(stubs: function | Object)` - overloads module with a value
+    - `.withDefault(stub: function | Object)` - overload `default` es6 export
+    - `.es6()` - marks module as ES6( __esModule )
+    - `.by(otherModule: string| function)` - overload by another module(if string provider) or by result of a function call. 
+    - `.callThrough()` - first load the original module, and next extend it by provided stub.
+    - `.mockThrough([stubFactory])` - first load the original module, and then replaces all exports by stubs.
+    - `.dynamic()` - enables hot mock updates.     
+    - `.toBeUsed()` - enables usage checking.  
+    - `.directChildOnly` - will do mock only direct dependencies.
+    - `.calledFromMock` - will do mock only dependencies of mocked dependencies.    
+ - `rewiremock.getMock(moduleName: string|loader)` - returns existing mock (_rewiremock(moduleName)_ will _override_)   
  ## isolation API
- - rewiremock.isolation() - enables isolation
- - rewiremock.withoutIsolation() - disables isolation
- - rewiremock.passBy(pattern or function) - enables some modules to pass throught isolation.
+ - `rewiremock.isolation()` - enables isolation
+ - `rewiremock.withoutIsolation()` - disables isolation
+ - `rewiremock.passBy(pattern or function)` - enables some modules to pass throught isolation.
  ## sandboxing
- - rewiremock.inScope(callback) - place synchronous callback inside a sandbox.
+ - `rewiremock.inScope(callback)` - place synchronous callback inside a sandbox.
  ## helper functions
- - rewiremock.stubFactory(factory) - define a stub factory for mockThrough command.
+ - `rewiremock.stubFactory(factory)` - define a stub factory for mockThrough command.
 
  ### Automocking
  Rewiremock supports (inspired by [Jest](https://facebook.github.io/jest/docs/en/manual-mocks.html)) auto `__mocks__`ing.
@@ -76,11 +153,7 @@ I have wrote some articles about these ideas - https://medium.com/tag/rewiremock
 ```
 
 # Which API to use?
-Yep - there is 4 top level ways to activate a mock - inScope, around, proxy or just enable.
-
-### 2 different APIs
- - (jest) one could mock everything, but requires babel plugin. And there is one way to use it. Refer to Hoisted mocking.
- - (common) second will _require_ a file, overriding dependencies. And there are many ways to use it. 
+Yep - there is 4 top level ways to activate a mock - `inScope`, `around`, `proxy` or just `enable`.
 
 ### A common way to mock.
 Rewiremock provides lots of APIs to help you setup mock, and get the mocked module.  
@@ -730,8 +803,14 @@ resolveExtensions(['.wasm', '.mjs', '.js', '.json']);
 And they actually were mocked. If not - rewiremock will throw an Error.
   
 
+# Goal
+- give ability to mock everything - CommonJS, ES6, inside nodejs or webpack.
+- give ability to do correctly - isolation, typechecking, powerfull API
+- give ability to do it easy - simple API to cover all the cases.
+
 # Wanna read something about?
  [Rewiremock - medium article](https://medium.com/@antonkorzunov/how-to-mock-dependency-in-a-node-js-and-why-2ad4386f6587)
+ [all by tag](https://medium.com/tag/rewiremock/latest)
  
 # Licence
  MIT
