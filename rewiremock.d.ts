@@ -4,7 +4,7 @@ declare module 'rewiremock' {
     type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'mockThroughByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
     type Plugins = {
         [Key in PluginNames]: any
-        };
+    };
 
     interface OverloadedModule {
         name: String,
@@ -16,6 +16,9 @@ declare module 'rewiremock' {
 
     type IStubFactory = (name: string, value: any) => any;
 
+    /**
+     * Base non-strict module interface
+     */
     interface BaseMock {
         /**
          * Enabled call thought original module, making all the original methods accessible.
@@ -99,6 +102,9 @@ declare module 'rewiremock' {
         always(): this,
     }
 
+    /**
+     * Typed mock interface
+     */
     interface NamedModuleMock<T> extends BaseMock {
         /**
          * Overriding export of a module
@@ -120,6 +126,9 @@ declare module 'rewiremock' {
         default: any
     }
 
+    /**
+     * Module with default export mock interface
+     */
     interface DefaultModuleMock<T extends HasDefault> extends NamedModuleMock<T> {
         /**
          * Setting es6 behavior for a current module and overriding default export
@@ -127,7 +136,10 @@ declare module 'rewiremock' {
         withDefault(fn: T['default']): this;
     }
 
-    interface AnyModuleMock {
+    /**
+     * Non-strict mock interface
+     */
+    interface AnyModuleMock extends BaseMock {
         /**
          * Setting es6 behavior for a current module and overriding default export
          */
@@ -156,10 +168,22 @@ declare module 'rewiremock' {
      * Proxies imports/require in order to allow overriding dependencies during testing.
      */
     interface rewiremock {
+        /**
+         * Define an overload for a given module
+         * @param {String} module
+         */
         (module: string): ModuleMock;
 
-        <T extends HasDefault>(module: ImportFunction<T>): DefaultModuleMock<T>
-        <T>(module: ImportFunction<T>): NamedModuleMock<T>
+        /**
+         * Define an overload for a given module with default export
+         * @param {Function} module
+         */
+          <T extends HasDefault>(module: ImportFunction<T>): DefaultModuleMock<T>
+        /**
+         * Define an overload for a given module using import or require function
+         * @param {Function} module
+         */
+          <T>(module: ImportFunction<T>): NamedModuleMock<T>
 
         /**
          * returns existing mock
@@ -169,8 +193,14 @@ declare module 'rewiremock' {
         getMock<T extends HasDefault>(module: ImportFunction<T>): DefaultModuleMock<T>
         getMock<T>(module: ImportFunction<T>): NamedModuleMock<T>
 
+        /**
+         * Enables rewiremock and prepares module system (cleans cache)
+         */
         enable(): rewiremock;
 
+        /**
+         * Disables rewiremock and cleans cache
+         */
         disable(): rewiremock;
 
         /**
@@ -257,10 +287,40 @@ declare module 'rewiremock' {
 
 
     var rewiremockdefault: rewiremock;
+    /**
+     * rewiremock main export
+     * @example
+     * rewiremock('module').with({});
+     * rewiremock.enable();
+     */
     export default rewiremockdefault;
+
+    /**
+     * Adds a plugin
+     * @param plugin
+     */
     export function addPlugin(plugin:Plugin):void;
+
+    /**
+     * Removes a plugin
+     * @param plugin
+     */
     export function removePlugins(plugin:Plugin):void;
+
+    /**
+     * Sets given module as a top level parent
+     * @param module
+     */
     export function overrideEntryPoint(module:any):void;
+
+    /**
+     * Configures extensions to handle
+     * @param extensions
+     */
     export function resolveExtensions(extensions: string[]):void;
+
+    /**
+     * List of available plugins
+     */
     export var plugins: Plugins;
 }

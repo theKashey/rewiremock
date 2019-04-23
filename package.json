@@ -37,7 +37,9 @@
     "webpack",
     "rewiremock.d.ts",
     "node.js",
+    "node.d.ts",
     "webpack.js",
+    "webpack.d.ts",
     "internal.js",
     "babel.js"
   ],
