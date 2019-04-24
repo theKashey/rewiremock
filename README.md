@@ -106,6 +106,23 @@ const mock = rewiremock.proxy(() => require('somemodule'), r => {
    'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly(), // use all `mocking API`
 }));
 ```
+There is two important things here:
+- you can use `require` or `import` to specify file to require and file to mock. This helps to resolve file names and maintain type information(if you have it). See `Guided Mocking` bellow.
+- you can mix simplified helpers (like `.proxy`) and the main API.
+
+### ESM modules
+In case to support ESM modules(powered by [@std/ESM](https://github.com/standard-things/esm/), not _native_ modules) you have to use `import` command.
+- use `.module` - an "async" version of `.proxy`
+```js
+const mock = await rewiremock.module(() => import('somemodule'), {...});
+```
+- or just use `import` - that would 
+```
+rewiremock(() => require('xxx').with({});
+rewiremock('yyy').with({});
+
+const file = await import('somemodule');
+```
 
 Ok! Let's move forward!
  
