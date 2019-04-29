@@ -63,11 +63,16 @@ Simplest one.
  const file = rewiremock.proxy('file.js', {
    'dependency':  stub
  });
+ // or
+ const file = rewiremock.proxy(() => require('file.js'), {
+    'dependency':  stub
+  });
 ```
 ### mockery - like
 Most powerfull one
 ```js
  rewiremock('dependency').with(stub);
+ rewiremock(() => require('dependency')).with(stub);
  rewiremock.enable(); 
  const file = require('file.js');
  rewiremock.disable();
@@ -75,7 +80,8 @@ Most powerfull one
 ### jest - like
 Shortest one
 ```js
- rewiremock('dependency').with(stub); // if used next to imports
+ // just place it next to `imports` and add a rewiremock/babel plugin 
+ rewiremock('dependency').with(stub); 
 ```
 ## 4. Tune
 There is a plenty of plugins to make your life easier. For example - this is my favorite setup
@@ -107,7 +113,7 @@ const mock = rewiremock.proxy(() => require('somemodule'), r => {
 }));
 ```
 There is two important things here:
-- you can use `require` or `import` to specify file to require and file to mock. This helps to resolve file names and maintain type information(if you have it). See `Guided Mocking` bellow.
+- you can use `require` or `import` to specify file to require and file to mock. This helps to __resolve file names__ and maintain type information(if you have it). See `Guided Mocking` bellow.
 - you can mix simplified helpers (like `.proxy`) and the main API.
 
 ### ESM modules

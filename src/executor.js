@@ -162,6 +162,35 @@ function tryOr(fn, failBack) {
   return failBack;
 }
 
+function protoCopy(source, override) {
+  const dest = Object.assign({}, override);
+  Object.setPrototypeOf(dest, source);
+  return dest;
+}
+
+function restoreProperties(dest, source) {
+  const values = Object.getOwnPropertyDescriptors(source);
+  Object.keys(values).forEach(key => {
+    if (!Object.getOwnPropertyDescriptor(dest, key)) {
+      Object.defineProperty(dest, key, values[key]);
+    }
+  });
+  return dest;
+}
+
+function restoreESModuleState(dest, original) {
+  if (original && original.__esModule) {
+    try {
+      Object.defineProperty(dest, "__esModule", {
+        value: true
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  return dest;
+}
+
 function mockLoader(request, parent, isMain) {
   const {
     parentModule,
@@ -201,12 +230,11 @@ function mockLoader(request, parent, isMain) {
       if (mock.mockThrough) {
         const factory = mock.mockThrough === true ? getScopeOption('stubFactory') : mock.mockThrough;
         mock.override = mockThought(factory || standardStubFactory, mock.original);
-        return mockResult(request, mock, () => Object.assign(
+        return mockResult(request, mock, () => restoreESModuleState(Object.assign(
           {},
           mock.override,
           mock.value,
-          {__esModule: mock.original.__esModule}
-        ));
+        ), mock.original));
       }
 
       if (mock.overrideBy) {
@@ -227,7 +255,7 @@ function mockLoader(request, parent, isMain) {
       }
 
       if (mock.allowCallThrough) {
-        if (typeof(mock.original) === 'function') {
+        if (typeof (mock.original) === 'function') {
           if (
             typeof mock.value === 'object' &&
             Object.keys(mock.value).length === 0
@@ -238,10 +266,7 @@ function mockLoader(request, parent, isMain) {
               + request + '. Use overrideBy instead.');
           }
         }
-        return mockResult(request, mock, () => Object.assign(
-          Object.create(mock.original),
-          mock.value,
-        ));
+        return mockResult(request, mock, () => restoreProperties(protoCopy(mock.original, mock.value), mock.original));
       }
 
       return mockResult(request, mock, () => mock.value);

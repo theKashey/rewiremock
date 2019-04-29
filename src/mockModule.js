@@ -139,12 +139,14 @@ mockModule.disable = () => {
  */
 mockModule.proxy = (file, overrides = {}) => {
     let result = 0;
-    const stubs =
-      typeof overrides === 'function'
-      ? overrides(ModuleMock.inlineConstructor)
-      : overrides;
 
     mockModule.inScope( () => {
+      const stubs = (
+        typeof overrides === 'function'
+          ? overrides(ModuleMock.inlineConstructor)
+          : overrides
+      ) || {};
+
       Object
         .keys(stubs)
         .forEach( key => mockModule(key).from(stubs[key]));
@@ -167,16 +169,17 @@ mockModule.proxy = (file, overrides = {}) => {
  * @return {Promise}
  */
 mockModule.module = (importFunction, overrides = {}) => {
-  const stubs =
-    typeof overrides === 'function'
-      ? overrides(ModuleMock.inlineConstructor)
-      : overrides;
+  return mockModule.around(importFunction, () => {
+    const stubs = (
+      typeof overrides === 'function'
+        ? overrides(ModuleMock.inlineConstructor)
+        : overrides
+    ) || {};
 
-  return mockModule.around(importFunction, () =>
     Object
       .keys(stubs)
-      .forEach( key => mockModule(key).from(stubs[key]))
-  );
+      .forEach(key => mockModule(key).from(stubs[key]))
+  });
 };
 
 /**

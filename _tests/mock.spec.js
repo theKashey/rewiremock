@@ -138,6 +138,11 @@ describe('rewiremock ', () => {
         });
         expect(withDefault.default).to.be.equal(42);
         expect(Object.keys(withDefault)).to.be.deep.equal(['default']);
+
+        const scopeDefault = rewiremock.proxy('./lib/a/getTest.js', () => {
+          rewiremock('./test').with({default: 44});
+        });
+        expect(scopeDefault.default).to.be.equal(44);
       });
     });
 

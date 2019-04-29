@@ -190,5 +190,19 @@ describe('scope ', () => {
         expect(mockedBaz.default()).to.be.equal('aabarcc')
       })
     });
+
+    it('import es6 inline: ', () => {
+      const unmockedBaz = require('./lib/a/test.js');
+      expect(unmockedBaz()).to.be.equal('foobarbaz');
+      const mockedBazLoad = rewiremock.module( () => import('./lib/a/test.es6.js'), r => {
+        rewiremock(() => require('./lib/a/foo')).with(() => 'aa');
+        rewiremock(() => require('./lib/b/baz')).with(() => 'cc');
+      });
+
+      return mockedBazLoad.then(mockedBaz => {
+        expect(mockedBaz.__esModule).to.be.equal(true);
+        expect(mockedBaz.default()).to.be.equal('aabarcc')
+      })
+    });
   });
 });
