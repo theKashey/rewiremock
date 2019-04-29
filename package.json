@@ -1,6 +1,6 @@
 {
   "name": "rewiremock",
-  "version": "3.13.5",
+  "version": "3.13.6",
   "description": "Advanced dependency mocking device.",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
