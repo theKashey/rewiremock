@@ -451,8 +451,9 @@ addPlugin(plugins.alwaysMatchOrigin);
   > Actually rewiremock is the first client side mocking library
   
   But not so fast, hanny. First you have to have 3(!) Plugins enabled.
-  1. webpack.NamedModulesPlugin(). To enlight the real names of modules. Not "numbers".
-  2. webpack.HotModuleReplacementPlugin(). To provide some information about connections between modules.
+  1. webpack.NamedModulesPlugin(). To enlight the real names of modules, not "numbers". __Enabled by default__ in webpack "dev" mode
+  2. webpack.HotModuleReplacementPlugin(). To provide some information about connections between modules. 
+  Might be (and usually) __already enabled__, double activation of this plugin might broke everything.
   3. rewiremock.webpackPlugin. To add some magic and make gears rolling.
   
 ```js
