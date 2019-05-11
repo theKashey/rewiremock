@@ -7,4 +7,4 @@ global['_REWIREMOCK_HOISTED_'].unshift( function (rewiremock, api) {
 const mock = require("./lib/index.js");
 
 
-module.exports = Object.assign({}, mock, mock.default);
+module.exports = Object.assign(mock.default, mock);
