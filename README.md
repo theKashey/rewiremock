@@ -53,6 +53,7 @@ import rewiremock from 'rewiremock/webpack';
 rewiremock.overrideEntryPoint(module); // this is important
 export { rewiremock }
 ```
+Plus add [a few plugins](https://github.com/theKashey/rewiremock#to-run-inside-webpack-enviroment) to your webpack test configuration (no need to keep them all in production).
 > If you import `rewiremock` dirrectly from your tests - you dont need `overrideEntryPoint`
 
 ## 3. Use
@@ -476,7 +477,7 @@ import rewiremock from 'rewiremock/webpack';
 Currently there are 2 known problems, both for mocha+webpack, ie using nodejs to run webpack bundle:
 - TypeError: Cannot read property 'webpackHotUpdate' of undefined
 
-  Caused by babel. Just dont use babel then running webpack bundles. Use babel them creating bundled.
+  Caused by babel. Just dont use babel then running webpack bundles (ie babel-register). Use babel to create bundles.
 - TypeError: Cannot read property 'call' of undefined 
 
   Caused by webpack. Sometimes is does not include some important files.
