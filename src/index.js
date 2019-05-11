@@ -7,7 +7,11 @@ import {setExtensions as resolveExtensions} from './constants';
 
 const moduleName = getModuleName(module);
 if (!moduleName) {
-  throw new Error('Rewiremock: while you using Jest - disable automocking')
+  throw new Error('Rewiremock: there is no "module name". If you are using Jest - disable automocking.');
+}
+
+if (!getModuleParent(module)) {
+  throw new Error('Rewiremock: there is no "parent module". Is there two HotModuleReplacementPlugins?');
 }
 
 delete require.cache[path.join(path.dirname(__filename), './mockModule.js')];
