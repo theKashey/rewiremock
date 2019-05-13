@@ -17,15 +17,4 @@ describe('Issue #80', () => {
     );
     expect(subject.default).to.be.equal('bar')
   });
-
-  it('mock B', () => {
-    const subject = rewiremock.proxy(
-      () => require('./B'),
-      () => {
-        rewiremock(() => require('./C'))
-          .with('baz')
-      }
-    );
-    expect(subject.default).to.be.equal('baz')
-  });
 });
