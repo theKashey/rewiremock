@@ -1,4 +1,4 @@
-import rewiremock, {addPlugin, plugins} from '../../../lib/index';
+import rewiremock, {addPlugin, plugins} from '../../../src/index';
 
 import {expect} from 'chai';
 
@@ -18,12 +18,23 @@ describe('Issue #80', () => {
     expect(subject.default).to.be.equal('bar')
   });
 
+  it.skip('mock C', () => {
+    const subject = rewiremock.proxy(
+      () => require('./A'),
+      () => {
+        rewiremock(() => require('./C'))
+          .with('bar')
+      }
+    );
+    expect(subject.default).to.be.equal('bar')
+  });
+
   it('mock B', () => {
     const subject = rewiremock.proxy(
       () => require('./B'),
       () => {
         rewiremock(() => require('./C'))
-          .with('baz')
+          .withDefault('baz')
       }
     );
     expect(subject.default).to.be.equal('baz')

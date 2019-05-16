@@ -1,4 +1,4 @@
-import rewiremock, {addPlugin, plugins} from '../../../lib/index';
+import rewiremock, {addPlugin, plugins} from '../../../src/index';
 
 import {expect} from 'chai';
 

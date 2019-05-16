@@ -18,7 +18,7 @@ const mockThroughByDefault = mockThoughByDefault;
 
 const webpack = nodejs;
 
-const exports = {
+const plugins = {
     childOnly,
     nodejs,
     webpack,
@@ -41,4 +41,4 @@ const exports = {
     nodeLibBrowser
 };
 
-export default exports;
+export default plugins;
