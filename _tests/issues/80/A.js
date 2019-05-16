@@ -1,1 +1,2 @@
-module.exports = require('./B');
+import B from './B';
+export default B;
