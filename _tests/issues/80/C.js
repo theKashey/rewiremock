@@ -1,1 +1,2 @@
-export default 42;
+import D from './D';
+export default D;
