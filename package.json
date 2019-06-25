@@ -100,7 +100,7 @@
     "chai": "^4.1.2",
     "codecov": "^3.0.2",
     "conventional-changelog-cli": "^2.0.21",
-    "eslint": "^4.19.1",
+    "eslint": "^6.0.1",
     "eslint-plugin-mocha": "^5.0.0",
     "esm": "^3.2.22",
     "flow-bin": "^0.75.0",
