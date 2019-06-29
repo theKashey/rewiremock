@@ -18,17 +18,17 @@ Dependency mocking, inspired by the best libraries:
 - [mockery](https://github.com/mfncooper/mockery) - `rewiremock` __is__ a better `mockery`, with the same interface.
 - [proxyquire](https://github.com/theKashey/proxyquire) - `rewiremock` __is__ a better `proxyquire`, with the same interface.
 - [mock-require](https://github.com/boblauer/mock-require) - things must not be complex, `rewiremock` __is__ not.
-- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - `Jest` is awesome. As well as `rewiremock`.
+- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - `jest` is awesome. As well as `rewiremock`.
 
-Rewiremock is a better version of your favorite library__. For `mocha`, `ava`, `karma`, and anything not-`jest`.
+Rewiremock is a better version of your favorite mocking library. It can be used with `mocha`, `ava`, `karma`, and anything that's not `jest`.
 
-By desing rewiremock has same behavior as Mockery. But it can behave like other libraries too, exposing handly interfaces to make mocking a joy. Support type-safe mocking and provides TS/Flow types for itself.
+By design, rewiremock has same behavior as Mockery. But it can behave like other libraries too, exposing handy interfaces to make mocking a joy. Supporst type-safe mocking and provides TS/Flow types for itself.
  
 # Quick start
 ## 1. Install
 - `yarn add --dev rewiremock` or `npm i --save-dev rewiremock`
 ## 2. Setup
-I would recoment not to import `rewiremock` directly in tests, but create `rewiremock.js` and require it - that would let you to _tune_ rewiremock, if you need it.
+I would recommend not to importing `rewiremock` directly from tests, but create a `rewiremock.js` file and require it - that way, you can preconfigure rewiremock for all tests.
 ### for ts/es6/esm use `import`
 ```js
 // rewiremock.es6.js
@@ -53,11 +53,11 @@ import rewiremock from 'rewiremock/webpack';
 rewiremock.overrideEntryPoint(module); // this is important
 export { rewiremock }
 ```
-Plus add [a few plugins](https://github.com/theKashey/rewiremock#to-run-inside-webpack-enviroment) to your webpack test configuration (no need to keep them all in production).
-> If you import `rewiremock` dirrectly from your tests - you dont need `overrideEntryPoint`
+You will also need to add [a few plugins](https://github.com/theKashey/rewiremock#to-run-inside-webpack-enviroment) to your webpack test configuration (no need to keep them all in production).
+> If you import `rewiremock` directly from your tests, you dont need `overrideEntryPoint`
 
 ## 3. Use
-There are 3 ways to mock, all with some pros and cons.
+There are 3 ways to mock, all with pros and cons.
 ### proxyquire - like
 Simplest one. 
 ```js
@@ -85,7 +85,7 @@ Shortest one
  rewiremock('dependency').with(stub); 
 ```
 ## 4. Tune
-There is a plenty of plugins to make your life easier. For example - this is my favorite setup
+There are plenty of plugins to make your life easier. For example - this is my favorite setup
 ```js
 import { resolve } from 'path';
 import rewiremock, { addPlugin, overrideEntryPoint, plugins } from 'rewiremock';
@@ -106,19 +106,19 @@ export { rewiremock };
 
 ## What command to use???!!!
 ```js
-// use `require` instead of just filename to maintain type information
+// use `require` instead of just the filename to maintain type information
 const mock = rewiremock.proxy(() => require('somemodule'), r => {
    'dep1': { name: 'override' },
    // use all power of rewiremock to mock something as you want...
    'dep2': r.with({name: 'override' }).toBeUsed().directChildOnly(), // use all `mocking API`
 }));
 ```
-There is two important things here:
-- you can use `require` or `import` to specify file to require and file to mock. This helps to __resolve file names__ and maintain type information(if you have it). See `Guided Mocking` bellow.
-- you can mix simplified helpers (like `.proxy`) and the main API.
+There are two important things here:
+- You can use `require` or `import` to specify the file to require and the file to mock. This helps to __resolve file names__ and maintain type information(if you have it). See `Guided Mocking` below.
+- You can mix simplified helpers (like `.proxy`) and the main API.
 
 ### ESM modules
-In case to support ESM modules(powered by [@std/ESM](https://github.com/standard-things/esm/), not _native_ modules) you have to use `import` command.
+If you want to support ESM modules(powered by [@std/ESM](https://github.com/standard-things/esm/), not _native_ modules) you have to use the `import` function.
 - use `.module` - an "async" version of `.proxy`
 ```js
 const mock = await rewiremock.module(() => import('somemodule'), {...});
@@ -169,18 +169,18 @@ Ok! Let's move forward!
  ### Automocking
  Rewiremock supports (inspired by [Jest](https://facebook.github.io/jest/docs/en/manual-mocks.html)) auto `__mocks__`ing.
  
- Just create `__mocks__/fileName.js`, and `fileName.js` will be replaced by mock. Please refer to Jest documentation for use cases.
+ Just create `__mocks__/fileName.js`, and `fileName.js` will be replaced by the mock. Please refer to Jest documentation for use cases.
  
- If you dont want some file to be replaced by mock - add it, and then - disable
+ If you dont want a particular file to be replaced by its mock - you can disable it with:
 ```js
  rewiremock('fileName.js').disable();
 ```
 
 # Which API to use?
-Yep - there is 4 top level ways to activate a mock - `inScope`, `around`, `proxy` or just `enable`.
+Yep - there are 4 top level ways to activate a mock - `inScope`, `around`, `proxy` or just `enable`.
 
 ### A common way to mock.
-Rewiremock provides lots of APIs to help you setup mock, and get the mocked module.  
+Rewiremock provides lots of APIs to help you setup mocks, and get the mocked module.  
   - If everything is simple - use __rewiremock.proxy__. (~proxyquire)
   - If you have issues with name resolve - use __rewiremock.module__ and resolve names by yourself.
   - If you need scope isolation - use __rewiremock.around__, or inScope.
@@ -258,12 +258,12 @@ This is only possible via babel plugin, and without it this code will be execute
 will be configured after the files required.
 
 ### Limitations
-- Other babel plugins, including JSX, does not work inside webpack _hoisted_ code. But you may define
-any _specific_ code in a "functions", and let JavaScript to hoist it.
-- Most of variables, you have define in the file, are not visible to __hoisted__ code, as long they are __not yet defined__.
-Only functions would be hoisted.
+- Other babel plugins, including JSX, won't work inside webpack _hoisted_ code. But you may define
+any _specific_ code in "functions", and let JavaScript to hoist it.
+- Most variables, that you have defined in the file, are not visible to __hoisted__ code, as long they are __not yet defined__.
+Only functions will be hoisted.
 
-1. Add `rewiremock/babel` into plugin section in `.babelrc`
+1. Add `rewiremock/babel` into the plugin section of your `.babelrc` or `babel.config.js` file
 ```js
 // .babelrc
 {
@@ -283,10 +283,6 @@ import rewiremock from 'rewiremock';
 rewiremock('common/Component1').by('common/Component2');
 rewiremock('common/Component2/action').with({ action: () => {} });
 rewiremock('common/selectors').mockThrough(() => sinon.stub());
-rewiremock('common/Component2/React').withDefault(ComponentMock);
-
-// "function" would be hoisted by js itself
-function ComponentMock({children}) { return <div>mock!</div>; }
 
 rewiremock.enabled();
 
