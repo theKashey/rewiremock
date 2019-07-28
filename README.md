@@ -40,7 +40,7 @@ export { rewiremock }
 ### for commonjs/nodejs use `require('rewiremock/node')`
 ```js
 // rewiremock.cjs.js
-const rewiremock = require 'rewiremock/node';
+const rewiremock = require('rewiremock/node');
 /// settings
 rewiremock.overrideEntryPoint(module); // this is important
 module.exports = rewiremock;
