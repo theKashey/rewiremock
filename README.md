@@ -258,7 +258,7 @@ This is only possible via babel plugin, and without it, this code will be execut
 will be configured after the files required.
 
 ### Limitations
-- Other babel plugins, including JSX, won't work inside Webpack _hoisted_ code. But you may define
+- Other babel plugins, including JSX, won't work inside webpack _hoisted_ code. But you may define
 any _specific_ code in "functions", and let JavaScript hoist it.
 - Most variables, that you have defined in the file, are not visible to __hoisted__ code, as long they are __not yet defined__.
 Only functions will be hoisted.
@@ -443,12 +443,12 @@ addPlugin(plugins.alwaysMatchOrigin);
    const rewiremock = require('rewiremock').default;
    ```
 
-## To run inside Webpack environment.
-  Rewiremock can `emulate` few Webpack features(like aliases) in node.js environment, but it also can be run inside Webpack.
+## To run inside webpack environment.
+  Rewiremock can `emulate` few webpack features(like aliases) in node.js environment, but it also can be run inside webpack.
   > Actually rewiremock is the first client-side mocking library
   
   But not so fast, handy. First, you have to have 3(!) Plugins enabled.
-  1. `webpack.NamedModulesPlugin()`. To enlight the real names of modules, not "numbers". __Enabled by default__ in Webpack "dev" mode
+  1. `webpack.NamedModulesPlugin()`. To enlight the real names of modules, not "numbers". __Enabled by default__ in webpack "dev" mode
   2. `webpack.HotModuleReplacementPlugin()`. To provide some information about connections between modules. 
   Might be (and usually) __already enabled__, double activation of this plugin might break everything.
   3. `rewiremock.webpackPlugin`. To add some magic and make gears rolling.
@@ -461,19 +461,19 @@ plugins: [
 ]
 ```
   That's all. Now all magic will happen at the client-side.
-  > It is better to use .proxy/module command with direct require/import and leaves all names conversion to Webpack.
+  > It is better to use .proxy/module command with direct require/import and leaves all names conversion to webpack.
 
 #### Hint
-For better dev experience include special configuration of Webpack
+For better dev experience include special configuration of webpack
 ```js
 import rewiremock from 'rewiremock/webpack';
 ```
 
-### Webpack troubleshooting
-Currently, there are 2 known problems, both for mocha+webpack, ie using node.js to run Webpack bundle:
+### webpack troubleshooting
+Currently, there are 2 known problems, both for mocha+webpack, ie using node.js to run webpack bundle:
 - TypeError: Cannot read property 'webpackHotUpdate' of undefined
 
-  Caused by babel. Just don't use babel then running Webpack bundles (ie babel-register). Use babel to create bundles.
+  Caused by babel. Just don't use babel then running webpack bundles (ie babel-register). Use babel to create bundles.
 - TypeError: Cannot read property 'call' of undefined 
 
   Caused by webpack. Sometimes it does not include some important files.
@@ -625,7 +625,7 @@ rewiremock.proxy('somemodule', {
  By default - rewiremock has limited features. You can extend its behavior via plugins.
  - `relative`. A bit simplistic, proxyquire-like behavior. Will override only first level dependencies, and will wipe a lot of modules from a cache.
  - `nodejs`. Common support to "usual" Node.js application. Will absolutize all paths. Will wipe cache very accurately. 
- - `webpack-alias`. Enabled you to use Webpack aliases as module names.
+ - `webpack-alias`. Enabled you to use webpack aliases as module names.
  - `childOnly`. Only first level dependencies will be mocked. 
  - `protectNodeModules`. Ensures that any module from node_modules will not be wiped from a cache.
  - `toBeUsed`. Adds feature. The only plugin enabled by default.
@@ -825,7 +825,7 @@ And they were mocked. If not - rewiremock will throw an Error.
   
 
 # Goal
-- give the ability to mock everything - CommonJS, ES6, inside Node.js or Webpack.
+- give the ability to mock everything - CommonJS, ES6, inside Node.js or webpack.
 - give the ability to do correctly - isolation, type checking, powerful API
 - give the ability to do it easy - simple API to cover all the cases.
 
