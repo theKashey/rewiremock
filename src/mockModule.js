@@ -249,7 +249,7 @@ const restoreCache = () => {
   if(oldCache) {
     Object
       .keys(oldCache)
-      .filter(key => !newCache[key])
+      //.filter(key => !newCache[key])
       .forEach(key => (newCache[key] = oldCache[key]));
 
     mockScope.requireCache = null;

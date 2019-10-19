@@ -1,11 +1,11 @@
 import createPlugin, {PASS, NO} from './_common';
 import getScope from '../globals';
 
-import {inParents, getModuleName} from '../module';
+import {isParent, getModuleName} from '../module';
 
 const shouldMock = (mock, request, parent, topModule) => {
   if (mock.flag_directChildOnly) {
-    return inParents(parent, topModule) ? PASS : NO;
+    return isParent(parent, topModule) ? PASS : NO;
   }
   if (mock.flag_toBeCalledFromMock) {
     const {mockedModules} = getScope();

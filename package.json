@@ -103,7 +103,7 @@
     "conventional-changelog-cli": "^2.0.21",
     "eslint": "^4.19.1",
     "eslint-plugin-mocha": "^5.0.0",
-    "esm": "^3.2.22",
+    "esm": "^3.2.25",
     "flow-bin": "^0.75.0",
     "jest-cli": "^23.0.0",
     "karma": "^2.0.2",
