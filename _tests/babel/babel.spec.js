@@ -12,7 +12,10 @@ const testFolders = readdirSync(FIXTURE_PATH).filter(file =>
 function testPlugin(code) {
   const result = transform(code, {
     presets: [["env", {"targets": {"node": "8.0"}}]],
-    plugins: [require.resolve('../../src/babel')],
+    plugins: [
+      'babel-plugin-transform-es2015-modules-commonjs',
+      require.resolve('../../src/babel'),
+    ],
   })
 
   return result.code

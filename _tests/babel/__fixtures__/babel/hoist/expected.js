@@ -9,7 +9,7 @@
     rewiremock('common/Component2/action').with({
       action: () => {}
     });
-    rewiremock('common/selectors').mockThrough(() => _sinon2.default.stub());
+    rewiremock('common/selectors').mockThrough(() => sinon.stub());
 
     rewiremock.enable();
   });

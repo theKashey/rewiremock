@@ -31,23 +31,25 @@ module.exports = (args) => {
    });
 })('rwrmck');`, templateOptions);
 
-  const REGISTRATIONS = Symbol('registrations')
+  const REGISTRATIONS = Symbol('registrations');
+
+  const disableStatement = disable();
 
   return {
     visitor: {
       Program: {
         enter({node}) {
           node[REGISTRATIONS] = {
+            hasRewiremock: false,
             imports: [],
             mocks: []
           }
         },
         exit({node}) {
-          const {imports, mocks} = node[REGISTRATIONS];
+          const {imports, mocks, hasRewiremock} = node[REGISTRATIONS];
           if (mocks.length) {
-
-            const rewiremock = imports.some(({node}) => node.source.value.indexOf('rewiremock') >= 0);
-            if (!rewiremock) {
+            
+            if (!hasRewiremock) {
               /* eslint-disable no-console */
               console.warn('rewiremock not found in imports');
             }
@@ -58,14 +60,21 @@ module.exports = (args) => {
 
             node.body.push(mocker);
 
-            mocker._blockHoist = Infinity
+            mocker._blockHoist = Infinity;
 
-            imports[imports.length - 1].insertAfter(disable());
+            //imports[imports.length - 1].insertAfter(disable());
           }
         }
       },
 
       ImportDeclaration(path) {
+        if(path.node.source.value.indexOf('rewiremock') >= 0){
+          path.parent[REGISTRATIONS].hasRewiremock=true;
+          
+          // rolling insert
+          path.insertAfter(disableStatement);
+        }
+        
         path.parent[REGISTRATIONS].imports.push(path);
       },
       ExpressionStatement(path) {
