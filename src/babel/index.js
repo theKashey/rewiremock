@@ -22,19 +22,16 @@ module.exports = (args) => {
 
   const enable = template('rewiremock.enable();\n', templateOptions);
   const disable = template('rewiremock.disable();global["_REWIREMOCK_HOISTED_"] = [];\n', templateOptions);
-  const placeholder = template('{}', templateOptions);
 
   const registrations = template(
-    `(function rwrmck(){
+`(function rwrmck(){
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function(rewiremock){     
     MOCKS 
    });
 })('rwrmck');`, templateOptions);
 
-  const REGISTRATIONS = Symbol('registrations');
-
-  // const disableStatement = disable();
+  const REGISTRATIONS = Symbol('registrations')
 
   return {
     visitor: {
@@ -47,8 +44,13 @@ module.exports = (args) => {
           }
         },
         exit({node}, {file}) {
-          const {mocks, hasRewiremock, slot} = node[REGISTRATIONS];
+          const {imports, mocks, hasRewiremock} = node[REGISTRATIONS];
           if (mocks.length) {
+
+            const hasImportsTransformed = imports.some(({node}) => !node);
+            if (hasImportsTransformed) {
+              throw new Error('rewiremock: another plugin transformed `imports`. Please hoist rewiremock/babel, see https://github.com/theKashey/rewiremock/issues/102');
+            }
 
             if (!hasRewiremock) {
               /* eslint-disable no-console */
@@ -61,28 +63,14 @@ module.exports = (args) => {
 
             node.body.push(mocker);
 
-            mocker._blockHoist = Infinity;
-            if (slot) {
-              slot.insertAfter(disable());
-            }
-          }
-          if (slot) {
-            slot.remove();
+            mocker._blockHoist = Infinity
+
+            imports[imports.length - 1].insertAfter(disable());
           }
         }
       },
 
       ImportDeclaration(path) {
-        if (path.node.source.value.indexOf('rewiremock') >= 0) {
-          path.parent[REGISTRATIONS].hasRewiremock = true;
-        }
-
-        // rolling insert
-        if(path.parent[REGISTRATIONS].slot){
-          path.parent[REGISTRATIONS].slot.remove();
-        }
-        path.parent[REGISTRATIONS].slot = path.insertAfter(placeholder())[0];
-
         path.parent[REGISTRATIONS].imports.push(path);
       },
       ExpressionStatement(path) {

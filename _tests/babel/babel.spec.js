@@ -13,8 +13,8 @@ function testPlugin(code) {
   const result = transform(code, {
     presets: [["env", {"targets": {"node": "8.0"}}]],
     plugins: [
-      // 'babel-plugin-transform-es2015-modules-commonjs',
       require.resolve('../../src/babel'),
+      'babel-plugin-transform-es2015-modules-commonjs',
     ],
   })
 
