@@ -31,9 +31,7 @@ module.exports = (args) => {
    });
 })('rwrmck');`, templateOptions);
 
-  const REGISTRATIONS = Symbol('registrations');
-
-  const disableStatement = disable();
+  const REGISTRATIONS = Symbol('registrations')
 
   return {
     visitor: {
@@ -45,13 +43,18 @@ module.exports = (args) => {
             mocks: []
           }
         },
-        exit({node}) {
+        exit({node}, {file}) {
           const {imports, mocks, hasRewiremock} = node[REGISTRATIONS];
           if (mocks.length) {
-            
+
+            const hasImportsTransformed = imports.some(({node}) => !node);
+            if (hasImportsTransformed) {
+              throw new Error('rewiremock: another plugin transformed `imports`. Please hoist rewiremock/babel, see https://github.com/theKashey/rewiremock/issues/102');
+            }
+
             if (!hasRewiremock) {
               /* eslint-disable no-console */
-              console.warn('rewiremock not found in imports');
+              console.warn('`rewiremock` was not found in imports at', file.opts.filename, ', but it was used.');
             }
 
             const mocker = registrations({
@@ -60,21 +63,14 @@ module.exports = (args) => {
 
             node.body.push(mocker);
 
-            mocker._blockHoist = Infinity;
+            mocker._blockHoist = Infinity
 
-            //imports[imports.length - 1].insertAfter(disable());
+            imports[imports.length - 1].insertAfter(disable());
           }
         }
       },
 
       ImportDeclaration(path) {
-        if(path.node.source.value.indexOf('rewiremock') >= 0){
-          path.parent[REGISTRATIONS].hasRewiremock=true;
-          
-          // rolling insert
-          path.insertAfter(disableStatement);
-        }
-        
         path.parent[REGISTRATIONS].imports.push(path);
       },
       ExpressionStatement(path) {
