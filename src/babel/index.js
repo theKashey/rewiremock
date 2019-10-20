@@ -22,9 +22,10 @@ module.exports = (args) => {
 
   const enable = template('rewiremock.enable();\n', templateOptions);
   const disable = template('rewiremock.disable();global["_REWIREMOCK_HOISTED_"] = [];\n', templateOptions);
+  const placeholder = template('{}', templateOptions);
 
   const registrations = template(
-`(function rwrmck(){
+    `(function rwrmck(){
   global["_REWIREMOCK_HOISTED_"] = global["_REWIREMOCK_HOISTED_"] || [];
   global["_REWIREMOCK_HOISTED_"].push(function(rewiremock){     
     MOCKS 
@@ -33,7 +34,7 @@ module.exports = (args) => {
 
   const REGISTRATIONS = Symbol('registrations');
 
-  const disableStatement = disable();
+  // const disableStatement = disable();
 
   return {
     visitor: {
@@ -45,13 +46,13 @@ module.exports = (args) => {
             mocks: []
           }
         },
-        exit({node}) {
-          const {imports, mocks, hasRewiremock} = node[REGISTRATIONS];
+        exit({node}, {file}) {
+          const {mocks, hasRewiremock, slot} = node[REGISTRATIONS];
           if (mocks.length) {
-            
+
             if (!hasRewiremock) {
               /* eslint-disable no-console */
-              console.warn('rewiremock not found in imports');
+              console.warn('`rewiremock` was not found in imports at', file.opts.filename, ', but it was used.');
             }
 
             const mocker = registrations({
@@ -61,20 +62,27 @@ module.exports = (args) => {
             node.body.push(mocker);
 
             mocker._blockHoist = Infinity;
-
-            //imports[imports.length - 1].insertAfter(disable());
+            if (slot) {
+              slot.insertAfter(disable());
+            }
+          }
+          if (slot) {
+            slot.remove();
           }
         }
       },
 
       ImportDeclaration(path) {
-        if(path.node.source.value.indexOf('rewiremock') >= 0){
-          path.parent[REGISTRATIONS].hasRewiremock=true;
-          
-          // rolling insert
-          path.insertAfter(disableStatement);
+        if (path.node.source.value.indexOf('rewiremock') >= 0) {
+          path.parent[REGISTRATIONS].hasRewiremock = true;
         }
-        
+
+        // rolling insert
+        if(path.parent[REGISTRATIONS].slot){
+          path.parent[REGISTRATIONS].slot.remove();
+        }
+        path.parent[REGISTRATIONS].slot = path.insertAfter(placeholder())[0];
+
         path.parent[REGISTRATIONS].imports.push(path);
       },
       ExpressionStatement(path) {
