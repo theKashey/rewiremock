@@ -70,7 +70,7 @@ Simplest one.
   });
 ```
 ### mockery - like
-Most powerfull one
+Most powerful one
 ```js
  rewiremock('dependency').with(stub);
  rewiremock(() => require('dependency')).with(stub);
