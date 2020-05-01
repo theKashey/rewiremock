@@ -14,15 +14,12 @@ const fileNameTransformer = (fileName) => {
     return processFile(fileName, settings);
 };
 
-const wipeCheck = (stubs, moduleName) => standardWipeCheck(stubs, moduleName);
-
 export {
     configure
 }
 
 export default createPlugin({
     fileNameTransformer,
-    wipeCheck,
 
     name: 'webpack-alias'
 });
