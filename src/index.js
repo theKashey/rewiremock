@@ -14,8 +14,20 @@ if (!getModuleParent(module)) {
   throw new Error('Rewiremock: there is no "parent module". Is there two HotModuleReplacementPlugins?');
 }
 
-delete require.cache[path.join(path.dirname(__filename), './mockModule.js')];
-delete require.cache[moduleName.replace('index.js', 'mockModule.js')];
+function safelyRemoveCache(moduleName) {
+  const m = require.cache[moduleName];
+  if(m) {
+    if(m.parent && m.parent.children){
+      m.parent.children = m.parent.children.filter(x => x!==m);
+    }
+    delete require.cache[moduleName]
+  }
+}
+
+// delete core
+safelyRemoveCache(path.join(path.dirname(__filename), './mockModule.js'));
+// delete self
+safelyRemoveCache(moduleName.replace('index.js', 'mockModule.js'));
 
 import * as API from './mockModule';
 import applyDefaultConfig from "./plugins/defaultConfig";
@@ -26,7 +38,7 @@ export const cleanup = () => {
 };
 
 export const overrideEntryPoint = (module) => {
-  delete require.cache[getModuleName(module)];
+  safelyRemoveCache(getModuleName(module));
   API.mockModule.overrideEntryPoint(getModuleParent(module));
   //API.cleanup();
 };
