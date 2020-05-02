@@ -9125,6 +9125,11 @@ wipe-node-cache@^2.1.0:
   resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.1.0.tgz#9dc20a2f881c1e5fe3f4a6e8a98047079d97acf6"
   integrity sha512-Vdash0WV9Di/GeYW9FJrAZcPjGK4dO7M/Be/sJybguEgcM7As0uwLyvewZYqdlepoh7Rj4ZJKEdo8uX83PeNIw==
 
+wipe-node-cache@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.1.2.tgz#f5aef4bc4366866f89536f3352eb6b9deda53ca0"
+  integrity sha512-m7NXa8qSxBGMtdQilOu53ctMaIBXy93FOP04EC1Uf4bpsE+r+adfLKwIMIvGbABsznaSNxK/ErD4xXDyY5og9w==
+
 wipe-webpack-cache@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/wipe-webpack-cache/-/wipe-webpack-cache-2.1.0.tgz#bc26149f21cf1a3c34752997b96458b567d3e6a1"

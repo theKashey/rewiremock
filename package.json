@@ -81,7 +81,7 @@
     "lodash.template": "^4.4.0",
     "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",
-    "wipe-node-cache": "^2.1.0",
+    "wipe-node-cache": "^2.1.2",
     "wipe-webpack-cache": "^2.1.0"
   },
   "devDependencies": {
