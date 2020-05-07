@@ -1,5 +1,5 @@
 import {readAliases, processFile} from './common/aliases'
-import createPlugin, {standardWipeCheck} from './_common';
+import createPlugin from './_common';
 
 let settings = null;
 
