@@ -256,8 +256,13 @@ declare module 'rewiremock' {
 
         /**
          * set aggressive politics to cache operation, restoring to the the previous values on end.
+         * false: (default) removes all new elements from the cache. Old data from "old" cache is transferred to a new one. New modules are kept.
+         * true: removes mocked modules from the cache. New modules are kept
+         * 'nocache': completely restores old modules
          */
-        forceCacheClear(): rewiremock;
+        forceCacheClear(mode?: boolean | 'nocache'): rewiremock;
+
+        setCacheControl(enable: boolean): rewiremock;
 
         /**
          * Adding new isolationpassby record

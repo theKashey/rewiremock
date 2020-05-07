@@ -3,12 +3,12 @@ import wipeCache from './wipeCache';
 import createScope from './scope';
 import {getScopeVariable, setScope} from './globals';
 import {
-    convertName,
-    onMockCreate,
-    onDisable,
-    onEnable,
-    addPlugin as addPluginAPI,
-    removePlugin as removePluginAPI
+  convertName,
+  onMockCreate,
+  onDisable,
+  onEnable,
+  addPlugin as addPluginAPI,
+  removePlugin as removePluginAPI
 } from './plugins';
 import {resetMock, getMock, getAsyncMock, getAsyncModuleName, getAllMocks} from './mocks';
 import ModuleMock from './mock';
@@ -17,8 +17,8 @@ let parentModule = getModuleParent(module);
 let mockScope = null;
 const scope = () => setScope(mockScope);
 const updateScope = (parentScope = null) => {
-    mockScope = createScope(parentScope, parentModule);
-    scope();
+  mockScope = createScope(parentScope, parentModule);
+  scope();
 };
 
 updateScope();
@@ -31,25 +31,25 @@ updateScope();
  * @return {ModuleMock}
  */
 function mockModule(moduleName) {
-    scope();
-    if(typeof moduleName === 'function'){
-      return onMockCreate(new ModuleMock(getAsyncMock(moduleName, parentModule)));
-    } else {
-      const name = convertName(moduleName, parentModule);
-      resetMock(name);
-      return onMockCreate(new ModuleMock(getMock(name)));
-    }
+  scope();
+  if (typeof moduleName === 'function') {
+    return onMockCreate(new ModuleMock(getAsyncMock(moduleName, parentModule)));
+  } else {
+    const name = convertName(moduleName, parentModule);
+    resetMock(name);
+    return onMockCreate(new ModuleMock(getMock(name)));
+  }
 }
 
 mockModule.getMock = (module) => {
   let moduleName = module;
-  if(typeof moduleName === 'function'){
+  if (typeof moduleName === 'function') {
     moduleName = getAsyncModuleName(moduleName, parentModule);
   } else {
     moduleName = convertName(moduleName, parentModule);
   }
   const mock = getMock(moduleName);
-  if(mock) {
+  if (mock) {
     return new ModuleMock(mock)
   }
   return null;
@@ -61,8 +61,8 @@ mockModule.getMock = (module) => {
  * @return {String} converted module name
  */
 mockModule.resolve = (module) => {
-    scope();
-    return convertName(module, parentModule);
+  scope();
+  return convertName(module, parentModule);
 };
 
 /** flags **/
@@ -74,20 +74,24 @@ mockModule.resolve = (module) => {
  * @param {Boolean} [options.noParentPassBy] disable allowing any module, with allowed parent
  */
 mockModule.isolation = (options = {}) => {
-    mockScope.isolation = Object.assign({}, options);
-    return mockModule;
+  mockScope.isolation = Object.assign({}, options);
+  return mockModule;
 };
 
 /**
  * Deactivates isolation
  */
 mockModule.withoutIsolation = () => {
-    mockScope.isolation = false;
-    return mockModule;
+  mockScope.isolation = false;
+  return mockModule;
 };
 
 mockModule.forceCacheClear = (mode) => {
-    mockScope.forceCacheClear = mode ? mode : true;
+  mockScope.forceCacheClear = mode !== undefined ? mode : true;
+};
+
+mockModule.setCacheControl = (mode) => {
+  mockScope.cacheControl = mode;
 };
 
 /**
@@ -95,12 +99,12 @@ mockModule.forceCacheClear = (mode) => {
  * @param {String|RegEx|Function} pattern
  */
 mockModule.passBy = (pattern) => {
-    mockScope.passBy.push(pattern);
-    return mockModule;
+  mockScope.passBy.push(pattern);
+  return mockModule;
 };
 
 mockModule.overrideEntryPoint = (parent) => {
-    mockScope.parentModule = parentModule = parent || getModuleParent(getModuleParent(module));
+  mockScope.parentModule = parentModule = parent || getModuleParent(getModuleParent(module));
 };
 
 
@@ -110,25 +114,27 @@ mockModule.overrideEntryPoint = (parent) => {
  * enabled rewiremock
  */
 mockModule.enable = () => {
-    scope();
-    Module.probeSyncModules();
-    Module.overloadRequire();
-    storeCache();
+  scope();
+  Module.probeSyncModules();
+  Module.overloadRequire();
+  storeCache();
+  if (getScopeVariable('cacheControl') !== false) {
     wipeCache();
-    onEnable(getAllMocks());
-    return mockModule;
+  }
+  onEnable(getAllMocks());
+  return mockModule;
 };
 
 /**
  * disabled rewiremock
  */
 mockModule.disable = () => {
-    scope();
-    Module.restoreRequire();
-    onDisable(getAllMocks());
-    mockModule.withoutIsolation();
-    mockModule.flush();
-    return mockModule;
+  scope();
+  Module.restoreRequire();
+  onDisable(getAllMocks());
+  mockModule.withoutIsolation();
+  mockModule.flush();
+  return mockModule;
 };
 
 
@@ -138,28 +144,28 @@ mockModule.disable = () => {
  * @param {Object|Function} overrides
  */
 mockModule.proxy = (file, overrides = {}) => {
-    let result = 0;
+  let result = 0;
 
-    mockModule.inScope( () => {
-      const stubs = (
-        typeof overrides === 'function'
-          ? overrides(ModuleMock.inlineConstructor)
-          : overrides
-      ) || {};
+  mockModule.inScope(() => {
+    const stubs = (
+      typeof overrides === 'function'
+        ? overrides(ModuleMock.inlineConstructor)
+        : overrides
+    ) || {};
 
-      Object
-        .keys(stubs)
-        .forEach( key => mockModule(key).from(stubs[key]));
+    Object
+      .keys(stubs)
+      .forEach(key => mockModule(key).from(stubs[key]));
 
-      mockModule.enable();
-      if(typeof file === 'string') {
-        result = mockModule.requireActual(file);
-      } else {
-        result = file();
-      }
-      mockModule.disable();
-    });
-    return result;
+    mockModule.enable();
+    if (typeof file === 'string') {
+      result = mockModule.requireActual(file);
+    } else {
+      result = file();
+    }
+    mockModule.disable();
+  });
+  return result;
 };
 
 /**
@@ -187,18 +193,18 @@ mockModule.module = (importFunction, overrides = {}) => {
  * @param callback
  */
 mockModule.inScope = (callback) => {
-    const currentScope = mockScope;
-    let error;
-    updateScope(currentScope);
-    try {
-      callback();
-    } catch(e) {
-        error = e;
-    }
+  const currentScope = mockScope;
+  let error;
+  updateScope(currentScope);
+  try {
+    callback();
+  } catch (e) {
+    error = e;
+  }
 
-    mockScope = currentScope;
-    if(error) throw error;
-    return mockModule;
+  mockScope = currentScope;
+  if (error) throw error;
+  return mockModule;
 };
 
 
@@ -209,29 +215,29 @@ mockModule.inScope = (callback) => {
  * @return {Promise}
  */
 mockModule.around = (loader, createCallback) => {
-    return new Promise((resolve, reject) => {
-        const currentScope = mockScope;
-        updateScope(currentScope);
+  return new Promise((resolve, reject) => {
+    const currentScope = mockScope;
+    updateScope(currentScope);
 
-        const restore = () => {
-          mockModule.disable();
-          mockScope = currentScope;
-        };
+    const restore = () => {
+      mockModule.disable();
+      mockScope = currentScope;
+    };
 
-        Promise.resolve(createCallback && createCallback(mockModule))
-            .then(() => Module.probeAsyncModules())
-            .then(() => mockModule.enable())
-            .then(() =>
-                Promise.resolve(loader())
-                  .then((mockedResult) => {
-                    restore();
-                    resolve(mockedResult);
-                }, (err) => {
-                    restore();
-                    reject(err)
-                })
-            );
-    });
+    Promise.resolve(createCallback && createCallback(mockModule))
+      .then(() => Module.probeAsyncModules())
+      .then(() => mockModule.enable())
+      .then(() =>
+        Promise.resolve(loader())
+          .then((mockedResult) => {
+            restore();
+            resolve(mockedResult);
+          }, (err) => {
+            restore();
+            reject(err)
+          })
+      );
+  });
 };
 
 mockModule.stubFactory = factory => {
@@ -240,13 +246,13 @@ mockModule.stubFactory = factory => {
 };
 
 const storeCache = () => {
-  mockScope.requireCache = mockScope.requireCache || Object.assign({},require.cache);
+  mockScope.requireCache = mockScope.requireCache || Object.assign({}, require.cache);
 };
 
 const restoreCache = () => {
   const oldCache = mockScope.requireCache;
   const newCache = require.cache;
-  if(oldCache) {
+  if (oldCache) {
     Object
       .keys(oldCache)
       //.filter(key => !newCache[key])
@@ -259,7 +265,7 @@ const restoreCache = () => {
 const swapCache = () => {
   const oldCache = mockScope.requireCache;
   const newCache = require.cache;
-  if(oldCache) {
+  if (oldCache) {
     Object
       .keys(newCache)
       .filter(key => !oldCache[key])
@@ -277,19 +283,19 @@ const swapCache = () => {
  * flushes all active overrides
  */
 mockModule.flush = () => {
-    const forceCacheClear = getScopeVariable('forceCacheClear');
-    // flush away soiled modules
-    wipeCache(mockScope.mockedModules);
-    mockScope.mockedModules = {};
-    if(forceCacheClear) {
-      if (forceCacheClear !== 'nocache') {
-        // restore cache completely
-        swapCache();
-      }
-    } else {
-        // merge caches
-        restoreCache();
+  const forceCacheClear = getScopeVariable('forceCacheClear');
+  // flush away soiled modules
+  wipeCache(mockScope.mockedModules);
+  mockScope.mockedModules = {};
+  if (forceCacheClear) {
+    if (forceCacheClear !== 'nocache') {
+      // restore cache completely
+      swapCache();
     }
+  } else {
+    // merge caches
+    restoreCache();
+  }
 };
 
 /**
@@ -309,37 +315,37 @@ mockModule.importActual = (fileName) => Promise.resolve(this.requireActual(fileN
  * flushes anything
  */
 mockModule.clear = () => {
-    updateScope();
-    scope();
-    mockModule.withoutIsolation();
-    mockModule.flush();
+  updateScope();
+  scope();
+  mockModule.withoutIsolation();
+  mockModule.flush();
 };
 
 const cleanup = () => {
-    delete require.cache[require.resolve(__filename)];
+  delete require.cache[require.resolve(__filename)];
 };
 
 
 const addPlugin = (plugin) => {
-    scope();
-    addPluginAPI(plugin);
+  scope();
+  addPluginAPI(plugin);
 };
 
 const removePlugin = (plugin) => {
-    scope();
-    removePluginAPI(plugin);
+  scope();
+  removePluginAPI(plugin);
 };
 
 mockModule.addPlugin = (plugin) => {
-    addPlugin(plugin);
-    return mockModule;
+  addPlugin(plugin);
+  return mockModule;
 };
 
 export {
-    mockModule,
-    addPlugin,
-    removePlugin,
-    cleanup
+  mockModule,
+  addPlugin,
+  removePlugin,
+  cleanup
 };
 
 
