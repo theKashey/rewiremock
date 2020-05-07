@@ -1,3 +1,31 @@
+# [3.14.0](https://github.com/theKashey/rewiremock/compare/v3.13.9...v3.14.0) (2020-05-07)
+
+
+### Bug Fixes
+
+* update cache controls ([dd9df1d](https://github.com/theKashey/rewiremock/commit/dd9df1d))
+* update wipe-node-cache to prevent memory leak in the cache management ([49ac22a](https://github.com/theKashey/rewiremock/commit/49ac22a))
+
+
+
+## [3.13.9](https://github.com/theKashey/rewiremock/compare/v3.13.8...v3.13.9) (2019-10-20)
+
+
+
+## [3.13.8](https://github.com/theKashey/rewiremock/compare/v3.13.7...v3.13.8) (2019-10-19)
+
+
+### Bug Fixes
+
+* don't parse imports at exit hook, fixes [#102](https://github.com/theKashey/rewiremock/issues/102) ([451b9e1](https://github.com/theKashey/rewiremock/commit/451b9e1))
+
+
+### Features
+
+* new cache management ([d9f164c](https://github.com/theKashey/rewiremock/commit/d9f164c))
+
+
+
 ## [3.13.7](https://github.com/theKashey/rewiremock/compare/v3.13.6...v3.13.7) (2019-05-11)
 
 
