@@ -8,7 +8,7 @@ import nodePlugin from '../src/plugins/nodejs';
 describe('scope ', () => {
 
     const webpackDefault = exports => {
-      return typeof __webpack_require__ !== 'undefined' ? exports.default: exports;
+      return exports.default || exports;
     };
 
     it('scope test: ', () => {
@@ -62,6 +62,7 @@ describe('scope ', () => {
                 mock('./lib/a/../b/baz').with(() => 'cc');
             })
             .then((mockedBaz) => {
+              console.log(webpackDefault, webpackDefault(mockedBaz));
                 expect(webpackDefault(mockedBaz)()).to.be.equal('aabbcc');
             });
     });

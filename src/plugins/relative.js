@@ -17,7 +17,6 @@ export const relativeWipeCheck = (stubs, moduleName) => {
 };
 
 const fileNameTransformer = (fileName/*, module*/) => fileName;
-//const wipeCheck = (stubs, moduleName) => relativeWipeCheck(stubs, moduleName);
 
 const shouldMock = (mock, request, parent, topModule) => {
   if(mock.flag_directChildOnly === false) {
@@ -28,7 +27,6 @@ const shouldMock = (mock, request, parent, topModule) => {
 
 const plugin = createPlugin({
   fileNameTransformer,
-  //wipeCheck,
   shouldMock,
 
   name: 'relative'

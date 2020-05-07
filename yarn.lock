@@ -3116,10 +3116,10 @@ eslint@^4.19.1:
     table "4.0.2"
     text-table "~0.2.0"
 
-esm@^3.2.22:
-  version "3.2.23"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.23.tgz#caa54cb844a5ea1b89f9aa6c39ef7afb940a78fd"
-  integrity sha512-p7iNpE0K3nLn1KE2O0Vz/2Gpg93U+JroVqAdHZwK7l3MmPKh4iu5CEvw1Gym9DT23BgNNvnY5wOf9vMjBFw7Ug==
+esm@^3.2.25:
+  version "3.2.25"
+  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
+  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
 
 espree@^3.5.4:
   version "3.5.4"
@@ -9124,6 +9124,11 @@ wipe-node-cache@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.1.0.tgz#9dc20a2f881c1e5fe3f4a6e8a98047079d97acf6"
   integrity sha512-Vdash0WV9Di/GeYW9FJrAZcPjGK4dO7M/Be/sJybguEgcM7As0uwLyvewZYqdlepoh7Rj4ZJKEdo8uX83PeNIw==
+
+wipe-node-cache@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/wipe-node-cache/-/wipe-node-cache-2.1.2.tgz#f5aef4bc4366866f89536f3352eb6b9deda53ca0"
+  integrity sha512-m7NXa8qSxBGMtdQilOu53ctMaIBXy93FOP04EC1Uf4bpsE+r+adfLKwIMIvGbABsznaSNxK/ErD4xXDyY5og9w==
 
 wipe-webpack-cache@^2.1.0:
   version "2.1.0"

@@ -259,10 +259,20 @@ describe('rewiremock ', () => {
       expect(mocked()).to.be.equal('mocked|notmocked-b');
     });
 
+    it('should mock only direct child : ', () => {
+      return rewiremock.around(() => require('./lib/c/barbaz.js'),
+        () => {
+          rewiremock(() => import('./lib/c/baz'))
+            .with(() => 'mock')
+            .directChildOnly()
+            .calledFromMock();
+        })
+        .then(mocked => expect(mocked()).to.be.equal('>+!mock'));
+    });
+
     it('should mock only direct child due to callThrough mocked / async : ', () => {
       return rewiremock.around(() => require('./lib/c/barbaz.js'),
         () => {
-          //addPlugin(nodePlugin);
           rewiremock(() => import('./lib/c/bar'))
             .callThrough();
           rewiremock(() => import('./lib/c/baz'))

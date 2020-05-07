@@ -79,5 +79,12 @@ export const inParents = (a, b) => {
   return parents.some(x => x === B);
 }
 
+export const isParent = (a, b) => {
+  const B = getModuleName(b)
+  const parents = getModuleParents(a);
+  return parents[0] === B;
+}
+
+
 export default NodeModule;
 

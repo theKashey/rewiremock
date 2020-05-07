@@ -185,6 +185,7 @@ function restoreESModuleState(dest, original) {
         value: true
       });
     } catch (e) {
+      // eslint-disable-next-line  no-console
       console.error(e);
     }
   }
@@ -271,6 +272,7 @@ function mockLoader(request, parent, isMain) {
 
       return mockResult(request, mock, () => mock.value);
     } else {
+      // console.error('reject', baseRequest, parent.id, parent.parent.id);
       mock.rejected = mock.rejected || [];
       if (shouldResult.plugins) {
         mock.rejected.push({

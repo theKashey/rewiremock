@@ -1,5 +1,5 @@
 import {readAliases, processFile} from './common/aliases'
-import createPlugin, {standardWipeCheck} from './_common';
+import createPlugin from './_common';
 
 let settings = null;
 
@@ -14,15 +14,12 @@ const fileNameTransformer = (fileName) => {
     return processFile(fileName, settings);
 };
 
-const wipeCheck = (stubs, moduleName) => standardWipeCheck(stubs, moduleName);
-
 export {
     configure
 }
 
 export default createPlugin({
     fileNameTransformer,
-    wipeCheck,
 
     name: 'webpack-alias'
 });

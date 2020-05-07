@@ -20,9 +20,14 @@ const resolver = (stubs, moduleName) => {
     relativeWipeCheck(stubs, moduleName);
 };
 
-const wipeCache = (primaryCache = {}) => {
-  wipe(primaryCache, primaryResolver);
-  wipe(getAllMocks(), resolver);
+const wipeCache = (primaryCache) => {
+  if(primaryCache) {
+    // post clean
+    wipe(primaryCache, primaryResolver);
+  } else {
+    // pre clean
+    wipe(getAllMocks(), resolver);
+  }
 };
 
 export default wipeCache;
