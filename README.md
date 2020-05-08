@@ -9,38 +9,30 @@
 |__/       \_______/|__/     \__/|__/|__/       \_______/|__/     |__/ \______/  \_______/|__/  \__/
 ```
 
-[![Build Status](https://secure.travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
+[![Build Status](https://travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
 [![coverage-badge](https://img.shields.io/codecov/c/github/thekashey/rewiremock.svg?style=flat-square)](https://codecov.io/github/thekashey/rewiremock)
 [![version-badge](https://img.shields.io/npm/v/rewiremock.svg?style=flat-square)](https://www.npmjs.com/package/rewiremock)
 [![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
-
-Dependency mocking, inspired by the best libraries:
-- [mockery](https://github.com/mfncooper/mockery) - `rewiremock` __is__ a better `mockery`, with the same interface.
-- [proxyquire](https://github.com/theKashey/proxyquire) - `rewiremock` __is__ a better `proxyquire`, with the same interface.
-- [mock-require](https://github.com/boblauer/mock-require) - things must not be complex, `rewiremock` __is__ not.
-- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - `jest` is awesome. As well as `rewiremock`.
-
-Rewiremock is a better version of your favorite mocking library. It can be used with `mocha`, `ava`, `karma`, and anything that's not `jest`.
-
-By design, rewiremock has the same behavior as Mockery. But it can behave like other libraries too, exposing handy interfaces to make mocking a joy. Supports type-safe mocking and provides TS/Flow types for itself.
  
 # Quick start
 ## 1. Install
 - `yarn add --dev rewiremock` or `npm i --save-dev rewiremock`
 ## 2. Setup
-I would recommend not to importing `rewiremock` directly from tests, but create a `rewiremock.js` file and require it - that way, you can preconfigure rewiremock for all tests.
+I would recommend not importing `rewiremock` directly from tests, but create a `rewiremock.js` file and require it - in this way, you can _preconfigure_ rewiremock for all tests.
 ### for ts/es6/esm use `import`
 ```js
 // rewiremock.es6.js
 import rewiremock from 'rewiremock';
-/// settings
-rewiremock.overrideEntryPoint(module); // this is important
+// settings
+// ....
+rewiremock.overrideEntryPoint(module); // this is important. This command is "transfering" this module parent to rewiremock
 export { rewiremock }
 ```
 ### for commonjs/nodejs use `require('rewiremock/node')`
 ```js
 // rewiremock.cjs.js
-const rewiremock = require('rewiremock/node');
+const rewiremock = require('rewiremock/node'); 
+// nothng more than `plugins.node`, but it might change how filename resolution works
 /// settings
 rewiremock.overrideEntryPoint(module); // this is important
 module.exports = rewiremock;
@@ -69,11 +61,17 @@ Simplest one.
     'dependency':  stub
   });
 ```
+💡to make it really "proxyquire like" - add `.relative` plugin. Which will allow mocking of direct dependencies only, like  with `proxyquire`
+```js
+import rewiremock, { addPlugin, plugins } from 'rewiremock';
+addPlugin(plugins.relative);
+```
 ### mockery - like
 Most powerfull one
 ```js
  rewiremock('dependency').with(stub);
  rewiremock(() => require('dependency')).with(stub);
+ rewiremock(() => import('dependency')).with(stub); // works with async API only
  rewiremock.enable(); 
  const file = require('file.js');
  rewiremock.disable();
@@ -84,12 +82,13 @@ Shortest one
  // just place it next to `imports` and add a rewiremock/babel plugin 
  rewiremock('dependency').with(stub); 
 ```
+💡 requires `rewiremock/babel` plugin 
 ## 4. Tune
 There are plenty of plugins to make your life easier. For example - this is my favorite setup
 ```js
 import { resolve } from 'path';
 import rewiremock, { addPlugin, overrideEntryPoint, plugins } from 'rewiremock';
-import { configure } from 'rewiremock/lib/plugins/webpack-alias'; // could be better
+import { configure } from 'rewiremock/lib/plugins/webpack-alias'; // actually dont use it
 
 configure(resolve(`${__dirname}/../../webpack.config.test.js`));
 
@@ -623,9 +622,9 @@ rewiremock.proxy('somemodule', {
 
 # Plugins
  By default - rewiremock has limited features. You can extend its behavior via plugins.
- - `relative`. A bit simplistic, proxyquire-like behavior. Will override only first level dependencies, and will wipe a lot of modules from a cache.
+ - `relative`. A bit simplistic, proxyquire-like behavior. Will override only first level dependencies, and will wipe a lot of modules from a cache. If you need override at other place - use `.atAnyPlace` modificator.
  - `nodejs`. Common support to "usual" Node.js application. Will absolutize all paths. Will wipe cache very accurately. 
- - `webpack-alias`. Enabled you to use webpack aliases as module names.
+ - `webpack-alias`. __deprecated__. Enables you to use webpack aliases as module names. Please [use node-js resolution](https://github.com/theKashey/rewiremock/issues/7#issuecomment-621666559) for this.
  - `childOnly`. Only first level dependencies will be mocked. 
  - `protectNodeModules`. Ensures that any module from node_modules will not be wiped from a cache.
  - `toBeUsed`. Adds feature. The only plugin enabled by default.
@@ -828,6 +827,18 @@ And they were mocked. If not - rewiremock will throw an Error.
 - give the ability to mock everything - CommonJS, ES6, inside Node.js or webpack.
 - give the ability to do correctly - isolation, type checking, powerful API
 - give the ability to do it easy - simple API to cover all the cases.
+
+# Other libraries
+Dependency mocking, inspired by the best libraries:
+- [mockery](https://github.com/mfncooper/mockery) - `rewiremock` __is__ a better `mockery`, with the same interface.
+- [proxyquire](https://github.com/theKashey/proxyquire) - `rewiremock` __is__ a better `proxyquire`, with the same interface.
+- [mock-require](https://github.com/boblauer/mock-require) - things must not be complex, `rewiremock` __is__ not.
+- [jest.mocks](https://facebook.github.io/jest/docs/en/manual-mocks.html) - `jest` is awesome. As well as `rewiremock`.
+
+Rewiremock is a better version of your favorite mocking library. It can be used with `mocha`, `ava`, `karma`, and anything that's not `jest`.
+
+By design, rewiremock has the same behavior as Mockery. But it can behave like other libraries too, exposing handy interfaces to make mocking a joy. Supports type-safe mocking and provides TS/Flow types for itself.
+
 
 # Wanna read something about?
  [Rewiremock - medium article](https://medium.com/@antonkorzunov/how-to-mock-dependency-in-a-node-js-and-why-2ad4386f6587)
