@@ -141,4 +141,28 @@ describe('isolation ', () => {
     rewiremock.clear();
     _clearPlugins();
   });
+
+  describe('proxy', () => {
+    it('fail case', () => {
+      rewiremock.inScope(() => {
+        rewiremock.isolation();
+        expect(() => rewiremock.proxy(() => require('./lib/a/test.js'))).to.throw();
+      })
+    });
+    it('pass case', () => {
+      rewiremock.inScope(() => {
+        rewiremock.isolation();
+        rewiremock.passBy(module => module.indexOf('b/bar') >= 0);
+        rewiremock.passBy(/b\/baz/);
+        // throw node_modules
+        expect(() => rewiremock.proxy(() => require('./lib/a/test.js'), {
+          './lib/a/foo':() => 'aa',
+        })).to.throw();
+        rewiremock.passBy(/node_modules/);
+        expect(() => rewiremock.proxy(() => require('./lib/a/test.js'), {
+          './lib/a/foo':() => 'aa',
+        })).not.to.throw();
+      })
+    })
+  })
 });

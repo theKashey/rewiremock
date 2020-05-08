@@ -42,7 +42,7 @@ const NodeModule = {
   },
 
   relativeFileName(name, parent) {
-    if (name[0] == '.') {
+    if (name[0] === '.') {
       return this._resolveFilename(name, parent);
     }
     return name;
