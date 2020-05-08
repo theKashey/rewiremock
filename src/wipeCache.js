@@ -1,6 +1,7 @@
 import {getAllMocks} from './mocks';
 import {shouldWipe} from './plugins'
 import {relativeWipeCheck} from "./plugins/relative";
+import Module from './module';
 
 // which one?
 export const wipe = typeof __webpack_require__ === 'function'
@@ -29,5 +30,15 @@ const wipeCache = (primaryCache) => {
     wipe(getAllMocks(), resolver);
   }
 };
+
+export function safelyRemoveCache(moduleName) {
+  const m = Module._cache[moduleName];
+  if(m) {
+    if(m.parent && m.parent.children){
+      m.parent.children = m.parent.children.filter(x => x!==m);
+    }
+    delete Module._cache[moduleName]
+  }
+}
 
 export default wipeCache;

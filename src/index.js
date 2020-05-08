@@ -1,5 +1,5 @@
 import path from 'path'
-import {wipe} from './wipeCache';
+import {safelyRemoveCache, wipe} from './wipeCache';
 import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 import {getModuleName, getModuleParent} from './module';
@@ -12,16 +12,6 @@ if (!moduleName) {
 
 if (!getModuleParent(module)) {
   throw new Error('Rewiremock: there is no "parent module". Is there two HotModuleReplacementPlugins?');
-}
-
-function safelyRemoveCache(moduleName) {
-  const m = require.cache[moduleName];
-  if(m) {
-    if(m.parent && m.parent.children){
-      m.parent.children = m.parent.children.filter(x => x!==m);
-    }
-    delete require.cache[moduleName]
-  }
 }
 
 // delete core
