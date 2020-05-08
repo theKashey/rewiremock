@@ -8,6 +8,7 @@ import asyncModules from './asyncModules';
 import ModuleLoader from './getModule';
 import matchOriginFabric from 'compare-module-exports';
 import {NO} from "./plugins/_common";
+import {safelyRemoveCache} from "./wipeCache";
 
 const matchOrigin = matchOriginFabric('rewiremock');
 const thisModule = module;
@@ -196,8 +197,8 @@ function mockLoader(request, parent, isMain) {
   const {
     parentModule,
     mockedModules,
-    isolation
   } = getScope();
+  const isolation = getScopeVariable('isolation');
 
   asyncTest();
 
@@ -205,7 +206,7 @@ function mockLoader(request, parent, isMain) {
   const shortRequest = monkeyPatchPath(relative(getModuleName(parent), request));
 
   if (moduleCompare(parent, parentModule) || moduleCompare(parent, thisModule)) {
-    delete Module._cache[baseRequest];
+    safelyRemoveCache(baseRequest);
     mockedModules[baseRequest] = true;
   }
 
