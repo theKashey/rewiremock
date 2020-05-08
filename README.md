@@ -9,7 +9,7 @@
 |__/       \_______/|__/     \__/|__/|__/       \_______/|__/     |__/ \______/  \_______/|__/  \__/
 ```
 
-[![Build Status](https://secure.travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
+[![Build Status](https://travis-ci.org/theKashey/rewiremock.svg)](http://travis-ci.org/theKashey/rewiremock)
 [![coverage-badge](https://img.shields.io/codecov/c/github/thekashey/rewiremock.svg?style=flat-square)](https://codecov.io/github/thekashey/rewiremock)
 [![version-badge](https://img.shields.io/npm/v/rewiremock.svg?style=flat-square)](https://www.npmjs.com/package/rewiremock)
 [![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/rewiremock.svg)](https://greenkeeper.io/)
