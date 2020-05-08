@@ -1,3 +1,12 @@
+## [3.14.1](https://github.com/theKashey/rewiremock/compare/v3.14.0...v3.14.1) (2020-05-08)
+
+
+### Bug Fixes
+
+* isolation is working only for the current scope ([5d5a07f](https://github.com/theKashey/rewiremock/commit/5d5a07f))
+
+
+
 # [3.14.0](https://github.com/theKashey/rewiremock/compare/v3.13.9...v3.14.0) (2020-05-07)
 
 
