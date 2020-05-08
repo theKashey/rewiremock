@@ -1,17 +1,10 @@
 language: node_js
 node_js:
-  - '6'
-  - '7'
-  - '9'
-env:
-  - CXX=g++-4.8
+  - '10'
 cache: yarn
 script:
   - yarn
+  - yarn lint
   - yarn test:ci
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
+notifications:
+  email: false
