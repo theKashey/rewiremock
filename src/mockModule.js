@@ -1,5 +1,5 @@
-import Module, {getModuleParent} from './module';
-import wipeCache from './wipeCache';
+import Module, {getModuleName, getModuleParent} from './module';
+import wipeCache, {safelyRemoveCache} from './wipeCache';
 import createScope from './scope';
 import {getScopeVariable, setScope} from './globals';
 import {
@@ -322,11 +322,12 @@ mockModule.clear = () => {
 };
 
 const cleanup = () => {
-  delete require.cache[require.resolve(__filename)];
+  safelyRemoveCache(getModuleName(module));
 };
 
 
 const addPlugin = (plugin) => {
+  plugin.init();
   scope();
   addPluginAPI(plugin);
 };
