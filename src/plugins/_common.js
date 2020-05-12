@@ -6,11 +6,11 @@ const PASS = true;
 
 const onetoone = a => a;
 const pass = () => PASS;
-
-
+const empty = () => null;
 
 const createPlugin = (plugin) => {
     const result = Object.assign({
+        init: empty,
         fileNameTransformer: onetoone,
         wipeCheck: pass,
         shouldMock: pass,
