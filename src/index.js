@@ -4,6 +4,9 @@ import {_clearPlugins} from './plugins';
 import plugins from './plugins/index';
 import {getModuleName, getModuleParent} from './module';
 import {setExtensions as resolveExtensions} from './constants';
+import * as API from './mockModule';
+import applyDefaultConfig from "./plugins/defaultConfig";
+
 
 const moduleName = getModuleName(module);
 if (!moduleName) {
@@ -15,22 +18,23 @@ if (!getModuleParent(module)) {
 }
 
 // delete core
-safelyRemoveCache(path.join(path.dirname(__filename), './mockModule.js'));
+API.cleanup();
 // delete self
-safelyRemoveCache(moduleName.replace('index.js', 'mockModule.js'));
-
-import * as API from './mockModule';
-import applyDefaultConfig from "./plugins/defaultConfig";
+safelyRemoveCache(getModuleName(module));
 
 export const cleanup = () => {
   const wipeAll = (stubs, moduleName) => moduleName.indexOf(stubs) === 0;
   wipe(path.dirname(__filename), wipeAll);
 };
 
-export const overrideEntryPoint = (module) => {
-  safelyRemoveCache(getModuleName(module));
-  API.mockModule.overrideEntryPoint(getModuleParent(module));
-  //API.cleanup();
+/**
+ * override "parent" for rewiremock. Will wipe given parent from a cache
+ * by default parent for rewiremock is rewiremock entrypoont, once wrapped - wrapper should set itself as a parent.
+ * @param {Module} parentModule
+ */
+export const overrideEntryPoint = (parentModule) => {
+  safelyRemoveCache(getModuleName(parentModule));
+  API.mockModule.overrideEntryPoint(getModuleParent(parentModule));
 };
 
 overrideEntryPoint(module);
