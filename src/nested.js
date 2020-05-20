@@ -1,3 +1,5 @@
 import * as API from './mockModule';
-delete require.cache[require.resolve(__filename)];
+import {safelyRemoveCache} from "./wipeCache";
+import {getModuleName} from "./module";
+safelyRemoveCache(getModuleName(module));
 export default API.mockModule;
