@@ -1,3 +1,12 @@
+## [3.14.2](https://github.com/theKashey/rewiremock/compare/v3.14.1...v3.14.2) (2020-05-20)
+
+
+### Bug Fixes
+
+* on cache wipe delete self from children, fixes [#116](https://github.com/theKashey/rewiremock/issues/116) ([c5478f0](https://github.com/theKashey/rewiremock/commit/c5478f0))
+
+
+
 ## [3.14.1](https://github.com/theKashey/rewiremock/compare/v3.14.0...v3.14.1) (2020-05-08)
 
 
