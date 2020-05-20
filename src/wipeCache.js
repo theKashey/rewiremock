@@ -2,7 +2,6 @@ import {getAllMocks} from './mocks';
 import {shouldWipe} from './plugins'
 import {relativeWipeCheck} from "./plugins/relative";
 import Module from './module';
-import {toModule} from "./utils/modules";
 
 // which one?
 export const wipe = typeof __webpack_require__ === 'function'
