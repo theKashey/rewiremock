@@ -27,14 +27,18 @@ export const cleanup = () => {
   wipe(path.dirname(__filename), wipeAll);
 };
 
+
+// overrideEntryPoint would be "poisoned" in nodejs entrypoint
+// store the real reference to it
+const overrideMockEntryPoint = API.mockModule.overrideEntryPoint;
 /**
  * override "parent" for rewiremock. Will wipe given parent from a cache
  * by default parent for rewiremock is rewiremock entrypoont, once wrapped - wrapper should set itself as a parent.
  * @param {Module} parentModule
  */
-export const overrideEntryPoint = (parentModule) => {
+  export const overrideEntryPoint = (parentModule) => {
   safelyRemoveCache(getModuleName(parentModule));
-  API.mockModule.overrideEntryPoint(getModuleParent(parentModule));
+  overrideMockEntryPoint(getModuleParent(parentModule));
 };
 
 overrideEntryPoint(module);
