@@ -1,9 +1,18 @@
+## [3.14.3](https://github.com/theKashey/rewiremock/compare/v3.14.2...v3.14.3) (2020-06-25)
+
+
+### Bug Fixes
+
+* node entry point poisoning ([2348073](https://github.com/theKashey/rewiremock/commit/23480734b560b55dbcbbb1abae3d013ba469b5df))
+
+
+
 ## [3.14.2](https://github.com/theKashey/rewiremock/compare/v3.14.1...v3.14.2) (2020-05-20)
 
 
 ### Bug Fixes
 
-* on cache wipe delete self from children, fixes [#116](https://github.com/theKashey/rewiremock/issues/116) ([c5478f0](https://github.com/theKashey/rewiremock/commit/c5478f0))
+* on cache wipe delete self from children, fixes [#116](https://github.com/theKashey/rewiremock/issues/116) ([c5478f0](https://github.com/theKashey/rewiremock/commit/c5478f048559aa21ca6cb7e68b5950522711234a))
 
 
 
@@ -12,7 +21,7 @@
 
 ### Bug Fixes
 
-* isolation is working only for the current scope ([5d5a07f](https://github.com/theKashey/rewiremock/commit/5d5a07f))
+* isolation is working only for the current scope ([5d5a07f](https://github.com/theKashey/rewiremock/commit/5d5a07f9426daeb2646a1bb9a3f86ebae5bd7af3))
 
 
 
@@ -21,8 +30,13 @@
 
 ### Bug Fixes
 
-* update cache controls ([dd9df1d](https://github.com/theKashey/rewiremock/commit/dd9df1d))
-* update wipe-node-cache to prevent memory leak in the cache management ([49ac22a](https://github.com/theKashey/rewiremock/commit/49ac22a))
+* update cache controls ([dd9df1d](https://github.com/theKashey/rewiremock/commit/dd9df1d278fea2f5eeae658d604b152625036e0b))
+* update wipe-node-cache to prevent memory leak in the cache management ([49ac22a](https://github.com/theKashey/rewiremock/commit/49ac22ae6fa8406ee63e5499972e3bfc2eb60df1))
+
+
+### Features
+
+* new cache management ([d9f164c](https://github.com/theKashey/rewiremock/commit/d9f164c56730184b8642cb0299b172040b5c57c5))
 
 
 
@@ -35,12 +49,7 @@
 
 ### Bug Fixes
 
-* don't parse imports at exit hook, fixes [#102](https://github.com/theKashey/rewiremock/issues/102) ([451b9e1](https://github.com/theKashey/rewiremock/commit/451b9e1))
-
-
-### Features
-
-* new cache management ([d9f164c](https://github.com/theKashey/rewiremock/commit/d9f164c))
+* don't parse imports at exit hook, fixes [#102](https://github.com/theKashey/rewiremock/issues/102) ([451b9e1](https://github.com/theKashey/rewiremock/commit/451b9e1b58c5da8dd0e3f421dde9220a2ed09b51))
 
 
 
@@ -49,8 +58,8 @@
 
 ### Bug Fixes
 
-* improve error reporting ([61c82c5](https://github.com/theKashey/rewiremock/commit/61c82c5))
-* special endpoins were missing function signature ([15687e1](https://github.com/theKashey/rewiremock/commit/15687e1))
+* improve error reporting ([61c82c5](https://github.com/theKashey/rewiremock/commit/61c82c503c21ef3fc6061efa6133332a54d66f62))
+* special endpoins were missing function signature ([15687e1](https://github.com/theKashey/rewiremock/commit/15687e110f1d8930baa47ed6e245b6c708714261))
 
 
 
@@ -67,7 +76,7 @@
 
 ### Bug Fixes
 
-* migrate to webpack v4 plugin api, fixes [#21](https://github.com/theKashey/rewiremock/issues/21) ([199f887](https://github.com/theKashey/rewiremock/commit/199f887))
+* migrate to webpack v4 plugin api, fixes [#21](https://github.com/theKashey/rewiremock/issues/21) ([199f887](https://github.com/theKashey/rewiremock/commit/199f8870a8932733531eff1e41f6c924fe9cb560))
 
 
 
@@ -76,7 +85,7 @@
 
 ### Bug Fixes
 
-* move original exports to prototype for callThought, fixes [#74](https://github.com/theKashey/rewiremock/issues/74) ([f4a22d2](https://github.com/theKashey/rewiremock/commit/f4a22d2))
+* move original exports to prototype for callThought, fixes [#74](https://github.com/theKashey/rewiremock/issues/74) ([f4a22d2](https://github.com/theKashey/rewiremock/commit/f4a22d2d272907b28d24d0123b480a62166bc22d))
 
 
 
@@ -85,7 +94,7 @@
 
 ### Bug Fixes
 
-* wrong reference to a _parent with proxy advanced syntax ([41acdf8](https://github.com/theKashey/rewiremock/commit/41acdf8))
+* wrong reference to a _parent with proxy advanced syntax ([41acdf8](https://github.com/theKashey/rewiremock/commit/41acdf891507709fdb758326d40759ffacc73ae0))
 
 
 
@@ -98,7 +107,7 @@
 
 ### Features
 
-* add mock.always to bypass shouldMock ([3ba02da](https://github.com/theKashey/rewiremock/commit/3ba02da))
+* add mock.always to bypass shouldMock ([3ba02da](https://github.com/theKashey/rewiremock/commit/3ba02dacad331829c878884ea1df98b0253980ed))
 
 
 
@@ -143,8 +152,8 @@
 
 ### Bug Fixes
 
-* allow require non-existing files, fixes [#46](https://github.com/theKashey/rewiremock/issues/46) ([f581ea4](https://github.com/theKashey/rewiremock/commit/f581ea4))
-* proper isolation modes. fixes [#47](https://github.com/theKashey/rewiremock/issues/47) ([4cdc616](https://github.com/theKashey/rewiremock/commit/4cdc616))
+* allow require non-existing files, fixes [#46](https://github.com/theKashey/rewiremock/issues/46) ([f581ea4](https://github.com/theKashey/rewiremock/commit/f581ea4577436e59e2c3f65f534ca381ccdf9d30))
+* proper isolation modes. fixes [#47](https://github.com/theKashey/rewiremock/issues/47) ([4cdc616](https://github.com/theKashey/rewiremock/commit/4cdc6160e392631bfec8b59977eb3d213ce5a723))
 
 
 
@@ -165,7 +174,7 @@
 
 ### Bug Fixes
 
-* relative path to webpack plugin ([ac869fd](https://github.com/theKashey/rewiremock/commit/ac869fd))
+* relative path to webpack plugin ([ac869fd](https://github.com/theKashey/rewiremock/commit/ac869fd957a59fda698e2fc900ebe865188399c9))
 
 
 
@@ -222,7 +231,7 @@
 
 ### Bug Fixes
 
-* webpack directory index ([251ae83](https://github.com/theKashey/rewiremock/commit/251ae83))
+* webpack directory index ([251ae83](https://github.com/theKashey/rewiremock/commit/251ae8346ae143e981905e77b9c8697780247beb))
 
 
 

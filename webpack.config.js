@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 const mockPlugin = require("./webpack/plugin");
 
 module.exports = {
@@ -8,16 +8,20 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['babel-loader']
-      }
+        use: ["babel-loader"],
+      },
     ],
-    optimization: {
-      chunkIds: 'named',
-    }
+  },
+  optimization: {
+    chunkIds: "named",
+  },
+  resolve: {
+    fallback: {
+      path: require.resolve("path-browserify"),
+      stream: require.resolve("stream-browserify"),
+      "http": require.resolve("stream-http")
+    },
   },
   // webpack configuration
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new mockPlugin()
-  ]
-}
+  plugins: [new webpack.HotModuleReplacementPlugin(), new mockPlugin()],
+};
