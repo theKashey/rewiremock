@@ -11,10 +11,12 @@ module.exports = {
         use: ['babel-loader']
       }
     ],
+    optimization: {
+      chunkIds: 'named',
+    }
   },
   // webpack configuration
   plugins: [
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new mockPlugin()
   ]
