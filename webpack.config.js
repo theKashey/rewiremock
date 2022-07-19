@@ -8,7 +8,23 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        use: ["babel-loader"],
+        use: {
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true,
+            sourceType: "module",
+            presets: [
+              [
+                "babel-preset-env",
+                {
+                  useBuiltIns: "usage",
+                  corejs: 3,
+                },
+              ],
+            ],
+            plugins: [],
+          },
+        },
       },
     ],
   },
@@ -19,7 +35,7 @@ module.exports = {
     fallback: {
       path: require.resolve("path-browserify"),
       stream: require.resolve("stream-browserify"),
-      "http": require.resolve("stream-http")
+      http: require.resolve("stream-http"),
     },
   },
   // webpack configuration
