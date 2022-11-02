@@ -1,12 +1,12 @@
 declare module 'rewiremock' {
 
-    type Plugin = any;
-    type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'mockThroughByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
-    type Plugins = {
+    export type Plugin = any;
+    export type PluginNames =  'childOnly' | 'nodejs' | 'protectNodeModules' | 'relative' | 'webpackAlias' | 'toBeUsed' | 'disabledByDefault' | 'mockThroughByDefault' | 'usedByDefault' | 'alwaysMatchOrigin' | 'directChild';
+    export type Plugins = {
         [Key in PluginNames]: any
     };
 
-    interface OverloadedModule {
+    export interface OverloadedModule {
         name: String,
         fileName: String,
         parent: Object,
@@ -14,12 +14,12 @@ declare module 'rewiremock' {
         requireActual: Function
     }
 
-    type IStubFactory = (name: string, value: any) => any;
+    export type IStubFactory = (name: string, value: any) => any;
 
     /**
-     * Base non-strict module interface
+     * Base non-strict module export interface
      */
-    interface BaseMock {
+    export interface BaseMock {
         /**
          * Enabled call thought original module, making all the original methods accessible.
          * @example
@@ -103,9 +103,9 @@ declare module 'rewiremock' {
     }
 
     /**
-     * Typed mock interface
+     * Typed mock export interface
      */
-    interface NamedModuleMock<T> extends BaseMock {
+    export interface NamedModuleMock<T> extends BaseMock {
         /**
          * Overriding export of a module
          */
@@ -122,14 +122,14 @@ declare module 'rewiremock' {
         nonStrict(): AnyModuleMock;
     }
 
-    interface HasDefault {
+    export interface HasDefault {
         default: any
     }
 
     /**
-     * Module with default export mock interface
+     * Module with default export mock export interface
      */
-    interface DefaultModuleMock<T extends HasDefault> extends NamedModuleMock<T> {
+    export interface DefaultModuleMock<T extends HasDefault> extends NamedModuleMock<T> {
         /**
          * Setting es6 behavior for a current module and overriding default export
          */
@@ -137,9 +137,9 @@ declare module 'rewiremock' {
     }
 
     /**
-     * Non-strict mock interface
+     * Non-strict mock export interface
      */
-    interface AnyModuleMock extends BaseMock {
+    export interface AnyModuleMock extends BaseMock {
         /**
          * Setting es6 behavior for a current module and overriding default export
          */
@@ -156,18 +156,18 @@ declare module 'rewiremock' {
         append(stubs: any): this;
     }
 
-    type ModuleMock = AnyModuleMock;
-    type ProxyFunction = (r: ModuleMock) => Object;
-    type RequireFunction<T> = () => T;
-    type ImportFunction<T> = () => Promise<T>;
-    type AnyImportFunction<T> = RequireFunction<T> | ImportFunction<T>;
+    export type ModuleMock = AnyModuleMock;
+    export type ProxyFunction = (r: ModuleMock) => Object;
+    export type RequireFunction<T> = () => T;
+    export type ImportFunction<T> = () => Promise<T>;
+    export type AnyImportFunction<T> = RequireFunction<T> | ImportFunction<T>;
 
     /**
      * @name rewiremock
      * @class
      * Proxies imports/require in order to allow overriding dependencies during testing.
      */
-    interface rewiremock {
+    export interface Rewiremock {
         /**
          * Define an overload for a given module
          * @param {String} module
@@ -196,21 +196,21 @@ declare module 'rewiremock' {
         /**
          * Enables rewiremock and prepares module system (cleans cache)
          */
-        enable(): rewiremock;
+        enable(): Rewiremock;
 
         /**
          * Disables rewiremock and cleans cache
          */
-        disable(): rewiremock;
+        disable(): Rewiremock;
 
         /**
          * executes module in a sandbox
          * @param {Function} loader - loader of target module. You can use import or require. May return a Promise
          * @param {Function} [creator] - mock creator. You may add any mocks inside.
          */
-        around<T>(loader: AnyImportFunction<T>, creator?: (r: rewiremock) => any): Promise<T>;
+        around<T>(loader: AnyImportFunction<T>, creator?: (r: Rewiremock) => any): Promise<T>;
 
-        inScope(callback: Function): rewiremock;
+        inScope(callback: Function): Rewiremock;
 
         /**
          * Loads a file and hooks deps in a `proxyquire` way
@@ -247,12 +247,12 @@ declare module 'rewiremock' {
          * @param {Boolean} [options.noAutoPassBy] excludes mocked modules to a isolation scope. Use it with mock.callThrough.
          * @param {Boolean} [options.noParentPassBy] disable allowing any module, with allowed parent
          */
-        isolation(options?: { noAutoPassBy?: boolean, noParentPassBy?: boolean}): rewiremock;
+        isolation(options?: { noAutoPassBy?: boolean, noParentPassBy?: boolean}): Rewiremock;
 
         /**
          * Deactivates isolation
          */
-        withoutIsolation(): rewiremock;
+        withoutIsolation(): Rewiremock;
 
         /**
          * set aggressive politics to cache operation, restoring to the the previous values on end.
@@ -260,19 +260,19 @@ declare module 'rewiremock' {
          * true: removes mocked modules from the cache. New modules are kept
          * 'nocache': completely restores old modules
          */
-        forceCacheClear(mode?: boolean | 'nocache'): rewiremock;
+        forceCacheClear(mode?: boolean | 'nocache'): Rewiremock;
 
-        setCacheControl(enable: boolean): rewiremock;
+        setCacheControl(enable: boolean): Rewiremock;
 
         /**
          * Adding new isolationpassby record
          */
-        passBy(pattern: any): rewiremock;
+        passBy(pattern: any): Rewiremock;
 
         /**
          * Adds a plugin
          */
-        addPlugin(plugin: any): rewiremock;
+        addPlugin(plugin: any): Rewiremock;
 
         /**
          * low-level require
@@ -291,7 +291,7 @@ declare module 'rewiremock' {
     }
 
 
-    var rewiremockdefault: rewiremock;
+    var rewiremockdefault: Rewiremock;
     /**
      * rewiremock main export
      * @example
