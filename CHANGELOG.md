@@ -1,3 +1,16 @@
+## [3.14.4](https://github.com/theKashey/rewiremock/compare/v3.14.3...v3.14.4) (2022-11-10)
+
+
+
+## [3.14.3](https://github.com/theKashey/rewiremock/compare/v3.14.2...v3.14.3) (2020-06-25)
+
+
+### Bug Fixes
+
+* node entry point poisoning ([2348073](https://github.com/theKashey/rewiremock/commit/2348073))
+
+
+
 ## [3.14.2](https://github.com/theKashey/rewiremock/compare/v3.14.1...v3.14.2) (2020-05-20)
 
 
