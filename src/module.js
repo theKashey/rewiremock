@@ -30,7 +30,9 @@ const NodeModule = {
   probeSyncModules() {
     const load = Module._load;
     Module._load = probeAsyncModules.load(this);
-    probeAsyncModules.execute(() => Promise.reject('could not use dynamic imports with sync API'));
+    probeAsyncModules.execute(() => {
+      throw new Error('could not use dynamic imports with sync API')
+    });
     Module._load = load;
   },
 

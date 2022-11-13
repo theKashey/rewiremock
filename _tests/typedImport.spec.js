@@ -7,8 +7,7 @@ describe('typed import ', () => {
   it('should throw: ', () => {
     rewiremock.inScope(() => {
       rewiremock(() => import('./lib/typed/b.js')).with(() => 42);
-      rewiremock.enable();
-      expect(() => require('./lib/typed/a.js')).to.throw();
+      expect(() => rewiremock.enable()).to.throw();
       rewiremock.disable();
     });
   });
