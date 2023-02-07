@@ -38,23 +38,17 @@ module.exports = (args) => {
       Program: {
         enter({node}) {
           node[REGISTRATIONS] = {
-            hasRewiremock: false,
             imports: [],
             mocks: []
           }
         },
         exit({node}, {file}) {
-          const {imports, mocks, hasRewiremock} = node[REGISTRATIONS];
+          const {imports, mocks} = node[REGISTRATIONS];
           if (mocks.length) {
 
             const hasImportsTransformed = imports.some(({node}) => !node);
             if (hasImportsTransformed) {
               throw new Error('rewiremock: another plugin transformed `imports`. Please hoist rewiremock/babel, see https://github.com/theKashey/rewiremock/issues/102');
-            }
-
-            if (!hasRewiremock) {
-              /* eslint-disable no-console */
-              console.warn('`rewiremock` was not found in imports at', file.opts.filename, ', but it was used.');
             }
 
             const mocker = registrations({
