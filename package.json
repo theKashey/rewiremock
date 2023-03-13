@@ -87,7 +87,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.24.1",
-    "babel-eslint": "^8.2.3",
+    "babel-eslint": "^9.0.0",
     "babel-jest": "^23.0.0",
     "babel-loader": "7",
     "babel-plugin-dynamic-import-node": "^1.0.2",
