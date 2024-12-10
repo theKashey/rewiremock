@@ -1,5 +1,4 @@
 import {join, resolve, isAbsolute, dirname, basename, sep} from 'path';
-import template from 'lodash.template';
 import {requireModule} from '../../executor';
 import {fileExists} from "./utils";
 
@@ -13,10 +12,7 @@ function getConfigPath(configPaths) {
   for (let configPath of configPaths) {
     if (!configPath) continue;
 
-    // Compile config using environment variables
-    const compiledConfigPath = template(configPath)(process.env);
-
-    let resolvedConfigPath = resolve(process.cwd(), compiledConfigPath);
+    let resolvedConfigPath = resolve(process.cwd(), configPath);
     const resolvedName = fileExists(resolvedConfigPath);
 
     if (resolvedConfigPath && resolvedName) {
