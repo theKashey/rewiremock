@@ -77,7 +77,6 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "compare-module-exports": "^2.1.0",
-    "lodash.some": "^4.6.0",
     "lodash.template": "^4.4.0",
     "node-libs-browser": "^2.1.0",
     "path-parse": "^1.0.5",

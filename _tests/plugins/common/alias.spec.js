@@ -13,7 +13,7 @@ describe('aliases', () => {
                 'my-absolute-test-lib': join(process.cwd(), '/_tests/lib/a'),
                 'same-folder-lib': join(process.cwd(), '/_tests/lib/b')
             },
-            extensionsConf: null
+            extensionsConf: ['', '.js']
         };
         expect(aliases).to.deep.equal(targetConfig);
     });
