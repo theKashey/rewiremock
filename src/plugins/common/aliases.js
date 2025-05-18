@@ -1,6 +1,4 @@
 import {join, resolve, isAbsolute, dirname, basename, sep} from 'path';
-import template from 'lodash.template';
-import some from 'lodash.some';
 import {requireModule} from '../../executor';
 import {fileExists} from "./utils";
 
@@ -10,26 +8,19 @@ const DEFAULT_CONFIG_NAMES = ['webpack.config.js', 'webpack.config.babel.js'];
 // just cos we emulate its behavior
 
 function getConfigPath(configPaths) {
-  let conf = null;
-
   // Try all config paths and return for the first found one
-  some(configPaths, configPath => {
-    if (!configPath) return;
+  for (let configPath of configPaths) {
+    if (!configPath) continue;
 
-    // Compile config using environment variables
-    const compiledConfigPath = template(configPath)(process.env);
-
-    let resolvedConfigPath = resolve(process.cwd(), compiledConfigPath);
+    let resolvedConfigPath = resolve(process.cwd(), configPath);
     const resolvedName = fileExists(resolvedConfigPath);
 
     if (resolvedConfigPath && resolvedName) {
-      conf = resolvedName;
+      return resolvedName;
     }
+  }
 
-    return conf;
-  });
-
-  return conf;
+  return null;
 }
 
 function readAliases(configPath) {
@@ -171,16 +162,13 @@ function processFile(filePath, {aliasConf, extensionsConf}) {
           // Get an absolute path to the file
           const absoluteRequire = join(aliasTo, basename(filePath));
 
-          let extension = null;
-          some(extensionsConf, ext => {
-            if (!ext) return;
+          let extension = extensionsConf.find(ext => {
+            if (!ext) return false;
 
             // If the file with this extension exists set it
             if (fileExists(absoluteRequire + ext)) {
-              extension = ext;
+              return true;
             }
-
-            return extension;
           });
 
           // Set the extension to the file path, or keep the original one

@@ -5,6 +5,7 @@ module.exports = {
         alias: {
             'my-absolute-test-lib': path.join(__dirname, 'lib/a'),
             'same-folder-lib': path.resolve(__dirname, 'lib/b'),
-        }
+        },
+        extensions: ['', '.js']
     }
 };

@@ -42,7 +42,7 @@ module.exports = (args) => {
             mocks: []
           }
         },
-        exit({node}, {file}) {
+        exit({node}) {
           const {imports, mocks} = node[REGISTRATIONS];
           if (mocks.length) {
 
